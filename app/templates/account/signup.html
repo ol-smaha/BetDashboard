@@ -6,10 +6,8 @@
 
 <form class="splash-container" method="post">
     <div class="card">
-        <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="logo"></a></div>
-        <div class="card-header">
-            <h3 class="mb-1">Registrations Form</h3>
-            <p>Please enter your user information.</p>
+        <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="logo"></a>
+            <span class="splash-description">Please enter your user information.</span>
         </div>
         <div class="card-body">
             {% csrf_token %}
