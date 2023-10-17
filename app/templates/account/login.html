@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static%}
+{% load socialaccount %}
 
+{% block title %} Sing In Bet Dashboard {% endblock title%}
 
 {% block content %}
 
@@ -28,6 +30,15 @@
                 <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
             </form>
         </div>
+
+        <div class="card-body ">
+            <a href="{% provider_login_url 'google' %}">
+                <button class="btn btn-block btn-social btn-twitter " type="button">
+                    Google
+                </button>
+            </a>
+        </div>
+
         <div class="card-footer bg-white p-0  ">
             <div class="card-footer-item card-footer-item-bordered">
                 <a href="{% url 'account_signup' %}" class="footer-link">Create An Account</a></div>

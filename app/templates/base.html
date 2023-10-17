@@ -7,13 +7,15 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
     {% block title %}
         {% if title %}
-            <title> {{ title }} </title>
+            {{ title }}
         {% else %}
-            <title> Bet Dashboard </title>
+            Bet Dashboard
         {% endif%}
     {% endblock title %}
+    </title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/fonts/circular-std/style.css' %}" >

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="splash-container">
+    <div class="card">
+        <div class="card-header text-center"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="logo">
+            <span class="splash-description">
+                You are about to sign in using a third-party account from {{ provider.name }}.
+            </span>
+
+        </div>
+
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Continue</button>
+            </form>
+        </div>
+
+        <div class="card-footer text-center">
+            <span>Don't have an account? <a href="{% url 'account_signup' %}">Sign Up</a></span>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
