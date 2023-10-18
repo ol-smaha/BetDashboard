@@ -27,7 +27,9 @@ class TariffPlan(models.Model):
 
 class CustomUser(AbstractUser):
     tariff_plan = models.ForeignKey(to=TariffPlan,
-                                    on_delete=models.PROTECT)
+                                    on_delete=models.PROTECT,
+                                    null=True,
+                                    blank=True)
 
     def __str__(self):
         return self.email
