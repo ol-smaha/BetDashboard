@@ -1,0 +1,53 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+    {% block title %}
+        {% if title %}
+            {{ title }}
+        {% else %}
+            Bet Dashboard
+        {% endif%}
+    {% endblock title %}
+    </title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/fonts/circular-std/style.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/fonts/fontawesome/css/fontawesome-all.css' %}">
+    <style>
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+    </style>
+</head>
+
+<body>
+    {% block content %}
+    {% endblock content %}
+
+    <!-- js scripts -->
+    <script src="{% static 'vendor/jquery/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'vendor/slimscroll/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'js/main-js.js' %}"></script>
+    <script src="{% static 'vendor/shortable-nestable/Sortable.min.js' %}"></script>
+    <script src="{% static 'vendor/shortable-nestable/sort-nest.js' %}"></script>
+    <script src="{% static 'vendor/shortable-nestable/jquery.nestable.js' %}"></script>
+</body>
