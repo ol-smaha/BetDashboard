@@ -20,6 +20,8 @@ class TariffPlan(models.Model):
     name = models.CharField(max_length=16, choices=TariffPlanVariant.choices())
     description = models.TextField(null=True, blank=True)
     max_service_count = models.IntegerField()
+    price = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
