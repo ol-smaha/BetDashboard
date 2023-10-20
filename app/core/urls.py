@@ -19,13 +19,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from users.views import HomePageView
+from users.views import HomePageView, Tariff
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', HomePageView.as_view(), name='home'),
-
+    path('tariff/', Tariff.as_view(), name='tariff')
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

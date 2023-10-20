@@ -26,7 +26,15 @@ class CustomUserAdmin(UserAdmin):
 
 
 class TariffPlanAdmin(admin.ModelAdmin):
-    list_display = ['name', 'max_service_count']
+    list_display = ['name', 'max_service_count', 'is_active', 'price']
+
+    @admin.action(description='Зробити активним')
+    def tariff_set_active(self, request, queryset):
+        queryset.update(is_active=True)
+
+    @admin.action(description='Зробити неактивним')
+    def tariff_set_active(self, request, queryset):
+        queryset.update(is_active=False)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
