@@ -1,0 +1,81 @@
+from django.db import models
+
+from bet.constants import (BetResultEnum, GameStatusEnum, BetTypeEnum,
+                           CompetitionFootballCategoryEnum, TeamCategoryEnum)
+from users.models import CustomUser
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=64)
+    code2 = models.CharField(max_length=2, null=True, blank=True)
+    code3 = models.CharField(max_length=4, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class SportKind(models.Model):
+    name = models.CharField(unique=True, max_length=128)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=128, unique=True)
+    name_extended = models.CharField(max_length=256, unique=True)
+    category = models.CharField(max_length=32, choices=TeamCategoryEnum.choices(),
+                                default=TeamCategoryEnum.UNKNOWN)
+    country = models.ForeignKey(to=Country, on_delete=models.SET_NULL,
+                                related_name='teams', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class CompetitionBase(models.Model):
+    name = models.CharField(max_length=128, unique=True)
+    sport_kind = models.ForeignKey(to=SportKind, on_delete=models.SET_NULL,
+                                   related_name='competitions', null=True, blank=True)
+    country = models.ForeignKey(to=Country, on_delete=models.SET_NULL,
+                                related_name='competitions', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class CompetitionFootball(CompetitionBase):
+    category = models.CharField(max_length=32, choices=CompetitionFootballCategoryEnum.choices(),
+                                default=CompetitionFootballCategoryEnum.UNKNOWN)
+
+
+class BetBase(models.Model):
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
+                             related_name='bets')
+    bet = models.CharField(max_length=128)
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
+    coefficient = models.DecimalField(max_digits=10, decimal_places=2)
+    result = models.CharField(max_length=32, choices=BetResultEnum.choices())
+    sport_kind = models.ForeignKey(to=SportKind, on_delete=models.SET_NULL,
+                                   related_name='bets', null=True, blank=True)
+    date_game = models.DateField(null=True, blank=True)
+    date_betting = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.result} - {self.coefficient} - {self.amount}"
+
+
+class BetFootball(BetBase):
+    team_home = models.ForeignKey(to=Team, on_delete=models.SET_NULL,
+                                  related_name='home_bets', null=True, blank=True)
+    team_guest = models.ForeignKey(to=Team, on_delete=models.SET_NULL,
+                                   related_name='guest_bets', null=True, blank=True)
+    bet_type = models.CharField(max_length=64, choices=BetTypeEnum.choices(),
+                                default=BetTypeEnum.UNKNOWN)
+    competition = models.ForeignKey(to=CompetitionFootball, on_delete=models.SET_NULL,
+                                    related_name='bets_football', null=True, blank=True)
+    game_status = models.CharField(max_length=16, choices=GameStatusEnum.choices(),
+                                   default=GameStatusEnum.UNKNOWN)
+    is_home_guest = models.BooleanField(default=True)
+
