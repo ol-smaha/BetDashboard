@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+    <div class="dashboard-influence">
+		<div class="container-fluid dashboard-content">
+			<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="page-header">
+						<h3 class="mb-2">Infulencer Dashboard Template </h3>
+						<p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+						<div class="page-breadcrumb">
+							<nav aria-label="breadcrumb">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Influencer Dashboard Template</li>
+								</ol>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-inline-block">
+								<h5 class="text-muted">Total Bets</h5>
+								<h2 class="mb-0">{{ total_bets_count }}</h2>
+							</div>
+							<div class="float-right icon-circle-medium  icon-box-lg  bg-secondary-light mt-1">
+								<i class="fa fa-handshake fa-fw fa-sm text-secondary"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-inline-block">
+								<h5 class="text-muted">Total Amount</h5>
+								<h2 class="mb-0"> {{ total_bets_amount }}</h2>
+							</div>
+							<div class="float-right icon-circle-medium  icon-box-lg  bg-primary-light mt-1">
+								<i class="fa fa-money-bill-alt fa-fw fa-sm text-primary"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-inline-block">
+								<h5 class="text-muted">Total ROI</h5>
+								<h2 class="mb-0"> {{ total_roi }}</h2>
+							</div>
+							<div class="float-right icon-circle-medium  icon-box-lg  bg-info-light mt-1">
+								<i class="fa fa-percent fa-fw fa-sm text-info"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-inline-block">
+								<h5 class="text-muted">Total Profit</h5>
+								<h2 class="mb-0"> {{ total_bets_profit }}</h2>
+							</div>
+							<div class="float-right icon-circle-medium  icon-box-lg  bg-success-light mt-1">
+								<i class="fa fa-hand-holding-usd fa-fw fa-sm text-success"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <h5 class="card-header">Bet History</h5>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered first">
+                                        <thead>
+                                            <tr>
+												{% for field in bet_fields %}
+                                                <th>{{ field }}</th>
+												{% endfor %}
+												<th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for bet in bets %}
+											<tr>
+												<td>{{ bet.date_game }}</td>
+												<td>{{ bet.bet }}</td>
+												<td>{{ bet.amount }} $</td>
+												<td>{{ bet.coefficient }}</td>
+												<td>{{ bet.result }}</td>
+												<td>{{ bet.sport_kind }}</td>
+												<td>{{ bet.date_betting }}</td>
+												<td>
+													<div class="dropdown float-right">
+														<a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="true">
+																<i class="mdi mdi-dots-vertical"></i>
+																	 </a>
+														<div class="dropdown-menu dropdown-menu-right">
+															<!-- item-->
+															<a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+															<!-- item-->
+															<a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+															<!-- item-->
+															<a href="javascript:void(0);" class="dropdown-item">Profit</a>
+															<!-- item-->
+															<a href="javascript:void(0);" class="dropdown-item">Action</a>
+														</div>
+													</div>
+												</td>
+											</tr>
+										{% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                {% for field in bet_fields %}
+                                                <th>{{ field }}</th>
+												{% endfor %}
+												<th>Actions</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+		</div>
+	</div>
+{% endblock main %}
+
+

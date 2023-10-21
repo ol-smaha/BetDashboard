@@ -12,10 +12,9 @@ class Tariff(ListView):
     template_name = 'tariff/tariff_plan.html'
 
     def get_queryset(self):
-        self.queryset = self.model.objects.filter(is_active=True)
-        return self.queryset
+        return self.model.objects.filter(is_active=True)
 
-    def get_context_data(self):
+    def get_context_data(self, **kwargs):
         context_data = {
             'tariffs': self.queryset,
             'title': 'Tariffs',
