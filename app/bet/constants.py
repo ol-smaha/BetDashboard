@@ -80,3 +80,14 @@ class CompetitionFootballCategoryEnum(StrEnum):
             (cls.UNKNOWN, cls.UNKNOWN),
         )
         return res
+
+
+BET_BASE_TABLE_FIELD_NAMES = {
+    'date_game': 'Date Of Game',
+    'bet': 'Bet',
+    'amount': 'Amount',
+    'coefficient': 'Coefficient',
+    'result': 'Bet Result',
+    'sport_kind': 'Kind Of Sport',
+    'date_betting': 'Date Of Bet',
+}

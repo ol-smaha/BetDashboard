@@ -24,13 +24,21 @@ class CompetitionFootballAdmin(admin.ModelAdmin):
 
 
 class BetBaseAdmin(admin.ModelAdmin):
-    list_display = ['bet', 'amount', 'coefficient', 'result']
+    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'result']
+
+    @admin.display(ordering='user__username', description='User')
+    def get_user_username(self, obj):
+        return obj.user.username
 
 
 class BetFootballAdmin(admin.ModelAdmin):
-    list_display = ['bet', 'amount', 'coefficient', 'result',
+    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'result',
                     'team_home', 'team_guest', 'bet_type',
                     'competition', 'game_status', 'is_home_guest']
+
+    @admin.display(ordering='user__username', description='User')
+    def get_user_username(self, obj):
+        return obj.user.username
 
 
 admin.site.register(Country, CountryAdmin)
