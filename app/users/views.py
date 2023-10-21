@@ -20,3 +20,5 @@ class Tariff(ListView):
             'title': 'Tariffs',
         }
         return context_data
+
+
