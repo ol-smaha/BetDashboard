@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% load static%}
+{% load static %}
+{% load tariff_tags %}
+
 
 {% block title %} Tariff Plan {% endblock title %}
 
@@ -41,7 +43,9 @@
                     </div>
                     <div class="card-body border-top">
                         <ul class="list-unstyled bullet-check font-14">
-                            <li>{{ tariff.description }}</li>
+                            {% for text in tariff.description|split_text:'|' %}
+                            <li>{{ text }}</li>
+                            {% endfor %}
                         </ul>
                         <a href="#" class="btn btn-outline-secondary btn-block btn-lg">Get Started</a>
                     </div>

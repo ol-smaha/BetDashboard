@@ -16,7 +16,7 @@ class Tariff(ListView):
 
     def get_context_data(self, **kwargs):
         context_data = {
-            'tariffs': self.queryset,
+            'tariffs': self.get_queryset(),
             'title': 'Tariffs',
         }
         return context_data
