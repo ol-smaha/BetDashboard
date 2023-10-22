@@ -20,7 +20,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from users.views import HomePageView, Tariff
-from bet.views import Graphs
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,8 +27,6 @@ urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
     path('tariff/', Tariff.as_view(), name='tariff'),
     path('bet/', include('bet.urls')),
-    path('graphs/', Graphs.as_view(), name='graphs'),
-
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
