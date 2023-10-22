@@ -26,3 +26,18 @@ class BetHistory(ListView):
             'bets': self.get_queryset(),
         }
         return context_data
+
+
+class Graphs(ListView):
+    model = BetBase
+    template_name = 'bet/bet_graphs.html'
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context_data = {
+            'bets': self.get_queryset(),
+            'title': 'Bets Graphs'
+        }
+        return context_data
