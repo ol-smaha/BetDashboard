@@ -24,7 +24,7 @@ class CompetitionFootballAdmin(admin.ModelAdmin):
 
 
 class BetBaseAdmin(admin.ModelAdmin):
-    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'result']
+    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'result', 'date_game']
 
     @admin.display(ordering='user__username', description='User')
     def get_user_username(self, obj):

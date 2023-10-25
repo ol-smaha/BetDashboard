@@ -29,23 +29,14 @@
 
 
         if ($('#morris_line').length) {
-            // Use Morris.Area instead of Morris.Line
+            const element = document.getElementById("morris_line")
             Morris.Line({
                 element: 'morris_line',
                 behaveLikeLine: true,
-                data: [
-                    { y: '2006', a: 10, b: 20 },
-                    { y: '2007', a: 65, b: 45 },
-                    { y: '2008', a: 50, b: 40 },
-                    { y: '2009', a: 75, b: 65 },
-                    { y: '2010', a: 50, b: 40 },
-                    { y: '2011', a: 75, b: 65 },
-                    { y: '2012', a: 100, b: 90 }
-                ],
-
-                xkey: 'y',
-                ykeys: ['a', 'b'],
-                labels: ['Series A', 'Series B'],
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
                    lineColors: ['#5969ff', '#ff407b'],
                      resize: true,
                         gridTextSize: '14px'
@@ -79,18 +70,13 @@
 
 
         if ($('#morris_stacked').length) {
-            // Use Morris.Bar
+            const element = document.getElementById("morris_stacked")
             Morris.Bar({
                 element: 'morris_stacked',
-                data: [
-                    { x: '2011 Q1', y: 3, z: 2, a: 3 },
-                    { x: '2011 Q2', y: 2, z: null, a: 1 },
-                    { x: '2011 Q3', y: 0, z: 2, a: 4 },
-                    { x: '2011 Q4', y: 2, z: 4, a: 3 }
-                ],
+                data: JSON.parse(element.dataset.data),
                 xkey: 'x',
-                ykeys: ['y', 'z', 'a'],
-                labels: ['Y', 'Z', 'A'],
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
                 stacked: true,
                    barColors: ['#5969ff', '#ff407b', '#25d5f2'],
                      resize: true,
@@ -138,37 +124,22 @@
 
 
         if ($('#morris_donut').length) {
+            const element = document.getElementById("morris_donut")
+
             Morris.Donut({
                 element: 'morris_donut',
-                data: [
-                    { value: 70, label: 'foo' },
-                    { value: 15, label: 'bar' },
-                    { value: 10, label: 'baz' },
-                    { value: 5, label: 'A really really long label' }
-                ],
-             
-                labelColor: '#2e2f39',
+                data: JSON.parse(element.dataset.data),
+                labelColor: "#1e8728",
                    gridTextSize: '14px',
                 colors: [
                      "#5969ff",
-                                "#ff407b",
-                                "#25d5f2",
-                                "#ffc750"
-                               
+                     "#ff407b",
+                     "#25d5f2",
+                     "#ffc750",
                 ],
-
-                formatter: function(x) { return x + "%" },
-                  resize: true
+                resize: true
             });
         }
-
-
-
-
-
-
-
-
     });
 
 })(window, document, window.jQuery);
