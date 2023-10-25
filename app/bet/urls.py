@@ -1,8 +1,8 @@
 from django.urls import path
 
-from bet.views import BetHistory, Graphs
+from bet.views import BetHistoryView, BetGraphsView
 
 urlpatterns = [
-    path('history/', BetHistory.as_view(), name='bet_history'),
-    path('graphs/', Graphs.as_view(), name='graphs'),
+    path('history/', BetHistoryView.as_view(), name='bet_history'),
+    path('graphs/', BetGraphsView.as_view(), name='bet_graphs'),
 ]

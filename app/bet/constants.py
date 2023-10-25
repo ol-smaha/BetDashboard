@@ -17,6 +17,11 @@ class BetResultEnum(StrEnum):
         )
         return res
 
+    @classmethod
+    def values(cls):
+        res = [cls.WIN, cls.DRAWN, cls.LOSE, cls.UNKNOWN]
+        return res
+
 
 class BetTypeEnum(StrEnum):
     WDL = '1-X-2'
@@ -91,3 +96,9 @@ BET_BASE_TABLE_FIELD_NAMES = {
     'sport_kind': 'Kind Of Sport',
     'date_betting': 'Date Of Bet',
 }
+
+
+DEFAULT_MORRIS_CHART_COLORS = [
+    '#5969ff',
+    '#ff407b',
+]

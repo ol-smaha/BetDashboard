@@ -22,21 +22,39 @@
         </div>
     </div>
         <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
                 <div class="card">
                     <h5 class="card-header">Line Chart</h5>
                     <div class="card-body">
-                        <div id="morris_line"></div>
+                        <div id="morris_line"
+                             data-data="{{ morris_line_data }}"
+                             data-ykeys="{{ morris_line_ykeys }}"
+                             data-labels="{{ morris_line_labels }}">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Stacked Chart</h5>
+                    <div class="card-body">
+                        <div id="morris_stacked"
+                             data-data="{{ morris_stacked_data }}"
+                             data-ykeys="{{ morris_stacked_ykeys }}"
+                             data-labels="{{ morris_stacked_labels }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
                 <div class="card">
                     <h5 class="card-header">Donut Chart </h5>
                     <div class="card-body">
-                        <div id="morris_donut"></div>
+                        <div id="morris_donut" data-data="{{ morris_donut_data }}"></div>
                     </div>
                 </div>
             </div>
