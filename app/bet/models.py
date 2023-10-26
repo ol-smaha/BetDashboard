@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 
 from bet.constants import (BetResultEnum, GameStatusEnum, BetTypeEnum,
@@ -57,10 +59,24 @@ class BetBase(models.Model):
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     coefficient = models.DecimalField(max_digits=10, decimal_places=2)
     result = models.CharField(max_length=32, choices=BetResultEnum.choices())
+    profit = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     sport_kind = models.ForeignKey(to=SportKind, on_delete=models.SET_NULL,
                                    related_name='bets', null=True, blank=True)
     date_game = models.DateField(null=True, blank=True)
     date_betting = models.DateField(null=True, blank=True)
+
+    def calculate_profit(self):
+        profit = Decimal('0.00')
+        if self.result == BetResultEnum.WIN:
+            profit = round(Decimal(self.amount * self.coefficient - self.amount), 2)
+        elif self.result == BetResultEnum.LOSE:
+            profit = Decimal(f'-{self.amount}')
+        return profit
+
+    def save(self, *args, **kwargs):
+        if self.profit is None:
+            self.profit = self.calculate_profit()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.result} - {self.coefficient} - {self.amount}"
