@@ -17,11 +17,9 @@ class BetHistoryView(ListView):
     def filtered_queryset(self, qs):
         print(" --- 111111 --- ")
         print(self.request.GET)
-        print(self.request.POST)
         sport_kind_value = self.request.GET.get('sport_kind')
         if sport_kind_value:
             qs = qs.filter(sport_kind__name=sport_kind_value)
-        print(sport_kind_value)
         print(" --- 222222 --- ")
         return qs.order_by('date_game')
 
@@ -41,7 +39,6 @@ class BetHistoryView(ListView):
             'filter_form': filter_form,
             'bets': self.get_queryset(),
         }
-        print(SportKind.objects.all().values_list('name', flat=True).distinct())
         return context_data
 
 
