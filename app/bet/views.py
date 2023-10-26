@@ -4,7 +4,8 @@ from django.views.generic.list import ListView
 
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked
 from .constants import BET_BASE_TABLE_FIELD_NAMES, BetResultEnum
-from .models import BetBase
+from .forms import BetHistoryFilterForm
+from .models import BetBase, SportKind
 from django.db.models import Sum
 from bet.constants import BetResultEnum
 
@@ -13,17 +14,34 @@ class BetHistoryView(ListView):
     model = BetBase
     template_name = 'bet/bet_history.html'
 
-    def get_queryset(self):
+    def filtered_queryset(self, qs):
+        print(" --- 111111 --- ")
+        print(self.request.GET)
+        print(self.request.POST)
+        sport_kind_value = self.request.GET.get('sport_kind')
+        if sport_kind_value:
+            qs = qs.filter(sport_kind__name=sport_kind_value)
+        print(sport_kind_value)
+        print(" --- 222222 --- ")
+        return qs.order_by('date_game')
+
+    def base_queryset(self):
         return self.model.objects.all()
 
+    def get_queryset(self):
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs.order_by('date_game')
+
     def get_context_data(self, **kwargs):
-        total_bets_count = self.model.objects.all().count()
+        filter_form = BetHistoryFilterForm
         context_data = {
             'title': 'Bet History',
-            'total_bets_count': total_bets_count,
+            'total_bets_count': self.get_queryset().count(),
             'bet_fields': BET_BASE_TABLE_FIELD_NAMES.values(),
+            'filter_form': filter_form,
             'bets': self.get_queryset(),
         }
+        print(SportKind.objects.all().values_list('name', flat=True).distinct())
         return context_data
 
 
