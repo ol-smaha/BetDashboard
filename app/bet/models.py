@@ -20,6 +20,12 @@ class SportKind(models.Model):
     name = models.CharField(unique=True, max_length=128)
     is_active = models.BooleanField(default=False)
 
+    @classmethod
+    def name_choices(cls):
+        qs = cls.objects.all().values_list('name', flat=True).distinct()
+        choices = tuple([(name, name) for name in qs])
+        return choices
+
     def __str__(self):
         return f"{self.name}"
 

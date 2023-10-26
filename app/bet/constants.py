@@ -93,8 +93,8 @@ BET_BASE_TABLE_FIELD_NAMES = {
     'amount': 'Amount',
     'coefficient': 'Coefficient',
     'result': 'Bet Result',
+    'profit': 'Profit',
     'sport_kind': 'Kind Of Sport',
-    'date_betting': 'Date Of Bet',
 }
 
 
