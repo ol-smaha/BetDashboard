@@ -15,6 +15,11 @@ class BetHistoryFilterForm(forms.Form):
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
+    is_favourite = forms.MultipleChoiceField(
+        choices=BetBase.is_favourite_choices(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
 
     class Meta:
-        fields = ('sport_kind', 'result')
+        fields = ('sport_kind', 'result', 'is_favourite')
