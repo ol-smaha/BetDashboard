@@ -35,6 +35,21 @@ jQuery(document).ready(function($) {
         });
 
     }
+
+    if ($("#dategamestartdatepicker").length) {
+        $('#dategamestartdatepicker').datetimepicker({
+            format: 'L'
+        });
+
+    }
+
+    if ($("#dategameenddatepicker").length) {
+        $('#dategameenddatepicker').datetimepicker({
+            format: 'L'
+        });
+
+    }
+
     if ($("#datetimepicker5").length) {
         $('#datetimepicker5').datetimepicker();
 

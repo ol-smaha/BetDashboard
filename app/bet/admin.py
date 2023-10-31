@@ -12,7 +12,7 @@ class SportKindAdmin(admin.ModelAdmin):
 
 
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'country']
+    list_display = ['name', 'category', 'sport_kind', 'country']
 
 
 class CompetitionBaseAdmin(admin.ModelAdmin):
