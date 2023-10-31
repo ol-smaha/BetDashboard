@@ -173,4 +173,11 @@ BET_BASE_ORDERING_FIELDS_CHOICES = (
     ('result', 'Результат ставки'),
     ('profit', 'Профіт'),
     ('sport_kind', 'Вид спорту'),
+    ('is_favourite', 'Улюблене'),
+
+)
+
+BOOL_FIELD_CHOICES = (
+    (True, 'Так'),
+    (False, 'Ні'),
 )

@@ -1,6 +1,6 @@
 from django import forms
 
-from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES
+from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES
 from bet.models import BetBase, SportKind
 
 
@@ -36,8 +36,9 @@ class BetHistoryFilterForm(forms.Form):
         widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input'})
     )
     is_favourite = forms.MultipleChoiceField(
-        choices=BetBase.is_favourite_choices(),
+        choices=BOOL_FIELD_CHOICES,
         required=False,
+        label='Улюблене',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
 

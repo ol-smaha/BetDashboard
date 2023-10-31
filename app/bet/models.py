@@ -80,12 +80,6 @@ class BetBase(models.Model):
     date_betting = models.DateField(null=True, blank=True)
     is_favourite = models.BooleanField(default=False)
 
-    @classmethod
-    def is_favourite_choices(cls):
-        qs = cls.objects.all().values_list('is_favourite', flat=True).distinct()
-        choices = tuple([(is_favourite, is_favourite) for is_favourite in qs])
-        return choices
-
     def calculate_profit(self):
         profit = Decimal('0.00')
         if self.result == BetResultEnum.WIN:
