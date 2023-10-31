@@ -21,7 +21,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xl-9 col-lg-6 col-md-6 col-sm-12 col-12">
+				<div class="col-xl-10 col-lg-6 col-md-6 col-sm-12 col-12">
 					<div class="card">
 						<h5 class="card-header">Bet History</h5>
 						<div class="card-body">
@@ -70,14 +70,26 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-xl-3 col-lg-8 col-md-8 col-sm-12 col-12">
+				<div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
 					<form>
 						<div class="card">
 							{% for field in filter_form.visible_fields %}
+								{% if field.name in 'dategamestart,dategameend' %}
 								<div class="card-body border-top">
 									<h3 class="font-14">{{ field.label }}:</h3>
-									{{ field }}
+									<div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
+										{{ field }}
+										<div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
+											<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+										</div>
+									</div>
 								</div>
+								{% else %}
+									<div class="card-body border-top">
+										<h3 class="font-14">{{ field.label }}:</h3>
+										{{ field }}
+									</div>
+								{% endif %}
 							{% endfor %}
 							<div class="card-body border-top">
 								<button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>

@@ -3,14 +3,20 @@ from decimal import Decimal
 from django.db import models
 
 from bet.constants import (BetResultEnum, GameStatusEnum, BetTypeEnum,
-                           CompetitionFootballCategoryEnum, TeamCategoryEnum)
+                           CompetitionFootballCategoryEnum, TeamCategoryEnum, BetVariant)
 from users.models import CustomUser
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     code2 = models.CharField(max_length=2, null=True, blank=True)
     code3 = models.CharField(max_length=4, null=True, blank=True)
+
+    @classmethod
+    def name_choices(cls):
+        qs = cls.objects.all().values_list('name', flat=True).distinct()
+        choices = tuple([(name, name) for name in qs])
+        return choices
 
     def __str__(self):
         return f"{self.name}"
@@ -22,7 +28,7 @@ class SportKind(models.Model):
 
     @classmethod
     def name_choices(cls):
-        qs = cls.objects.all().values_list('name', flat=True).distinct()
+        qs = cls.objects.filter(is_active=True).values_list('name', flat=True).distinct()
         choices = tuple([(name, name) for name in qs])
         return choices
 
@@ -35,6 +41,8 @@ class Team(models.Model):
     name_extended = models.CharField(max_length=256, unique=True)
     category = models.CharField(max_length=32, choices=TeamCategoryEnum.choices(),
                                 default=TeamCategoryEnum.UNKNOWN)
+    sport_kind = models.ForeignKey(to=SportKind, on_delete=models.SET_NULL,
+                                   null=True, blank=True)
     country = models.ForeignKey(to=Country, on_delete=models.SET_NULL,
                                 related_name='teams', null=True, blank=True)
 
@@ -61,7 +69,7 @@ class CompetitionFootball(CompetitionBase):
 class BetBase(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
                              related_name='bets')
-    bet = models.CharField(max_length=128)
+    bet = models.CharField(max_length=128, choices=BetVariant.choices())
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     coefficient = models.DecimalField(max_digits=10, decimal_places=2)
     result = models.CharField(max_length=32, choices=BetResultEnum.choices())
