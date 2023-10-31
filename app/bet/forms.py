@@ -35,6 +35,12 @@ class BetHistoryFilterForm(forms.Form):
         label='Дата по',
         widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input'})
     )
+    is_favourite = forms.MultipleChoiceField(
+        choices=BetBase.is_favourite_choices(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
 
     class Meta:
-        fields = ('ordering', 'sport_kind', 'result', 'dategamestart', 'dategameend')
+        fields = ('ordering', 'sport_kind', 'result', 'dategamestart', 'dategameend', 'is_favourite')
+
