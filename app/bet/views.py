@@ -29,7 +29,15 @@ class BetHistoryView(ListView):
         date_game_end = self.request.GET.get('dategameend')
         if date_game_end:
             qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-        
+
+        amount_min = self.request.GET.get('amount_min')
+        if amount_min:
+            qs = qs.filter(amount__gte=amount_min)
+
+        amount_max = self.request.GET.get('amount_max')
+        if amount_max:
+            qs = qs.filter(amount__lte=amount_max)
+
         result_value = self.request.GET.getlist('result')
         if result_value:
             qs = qs.filter(result__in=result_value)
