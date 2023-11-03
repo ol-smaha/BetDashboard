@@ -50,6 +50,14 @@ class BetHistoryView(ListView):
         if ordering:
             qs = qs.order_by(ordering)
 
+        coefficient_min = self.request.GET.get('coefficient_min')
+        if coefficient_min:
+            qs = qs.filter(coefficient__gte=coefficient_min)
+
+        coefficient_max = self.request.GET.get('coefficient_max')
+        if coefficient_max:
+            qs = qs.filter(coefficient__lte=coefficient_max)
+
         print(" --- 222222 --- ")
         return qs
 

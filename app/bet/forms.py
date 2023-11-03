@@ -49,6 +49,22 @@ class BetHistoryFilterForm(forms.Form):
         label='Сума по',
         widget=forms.DateInput(attrs={'class': 'form-control'})
     )
+    coefficient_min = forms.DecimalField(
+        required=False,
+        min_value='0.00',
+        decimal_places=2,
+        label='Коефіцієнт з',
+        widget=forms.DateInput(attrs={'class': 'form-control'})
+    )
+
+    coefficient_max = forms.DecimalField(
+        required=False,
+        min_value='0.00',
+        decimal_places=2,
+        label='Коефіцієнт по',
+        widget=forms.DateInput(attrs={'class': 'form-control'})
+    )
+
     is_favourite = forms.MultipleChoiceField(
         choices=BOOL_FIELD_CHOICES,
         required=False,
@@ -59,5 +75,5 @@ class BetHistoryFilterForm(forms.Form):
     class Meta:
         fields = ('ordering', 'sport_kind', 'result',
                   'dategamestart', 'dategameend', 'is_favourite',
-                  'amount_min', 'amount_max')
+                  'amount_min', 'amount_max', 'coefficient_min', 'coefficient_max')
 
