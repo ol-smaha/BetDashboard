@@ -18,64 +18,68 @@
 
         }
 
-        if ($('#morris_area_1').length) {
-            const element = document.getElementById("morris_area_1")
-            Morris.Area({
-                element: 'morris_area_1',
+        if ($('#morris_line_1').length) {
+            const element = document.getElementById("morris_line_1")
+            Morris.Line({
+                element: 'morris_line_1',
                 behaveLikeLine: true,
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#5969ff', '#ff407b'],
+                lineColors: ['#69696b', '#5969ff'],
+                trendLineColors: ['#69696b', '#5969ff'],
                 resize: true,
                 gridTextSize: '14px'
             });
 
         }
 
-        if ($('#morris_area_2').length) {
-            const element = document.getElementById("morris_area_2")
-            Morris.Area({
-                element: 'morris_area_2',
+        if ($('#morris_line_2').length) {
+            const element = document.getElementById("morris_line_2")
+            Morris.Line({
+                element: 'morris_line_2',
                 behaveLikeLine: true,
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#5969ff', '#ff407b'],
+                lineColors: ['#69696b', '#5969ff'],
+                trendLineColors: ['#69696b', '#5969ff'],
                 resize: true,
                 gridTextSize: '14px'
             });
 
         }
 
-        if ($('#morris_area_3').length) {
-            const element = document.getElementById("morris_area_3")
-            Morris.Area({
-                element: 'morris_area_3',
+        if ($('#morris_line_3').length) {
+            const element = document.getElementById("morris_line_3")
+            Morris.Line({
+                element: 'morris_line_3',
                 behaveLikeLine: true,
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#5969ff', '#ff407b'],
+                lineColors: ['#69696b', '#5969ff'],
+                trendLineColors: ['#69696b', '#5969ff'],
                 resize: true,
                 gridTextSize: '14px'
             });
 
         }
 
-        if ($('#morris_area_4').length) {
-            const element = document.getElementById("morris_area_4")
-            Morris.Area({
-                element: 'morris_area_4',
+        if ($('#morris_line_4').length) {
+            const element = document.getElementById("morris_line_4")
+            Morris.Line({
+                element: 'morris_line_4',
                 behaveLikeLine: true,
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#5969ff', '#ff407b'],
+                lineColors: ['#69696b', '#5969ff'],
+                trendLineColors: ['#69696b', '#5969ff'],
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -91,7 +95,7 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                   lineColors: ['#5969ff', '#ff407b'],
+                   lineColors: ['#5969ff', '#FEE589'],
                      resize: true,
                         gridTextSize: '14px'
             });
@@ -138,63 +142,59 @@
             });
         }
 
-        if ($('#morris_stacked_1').length) {
-            const element = document.getElementById("morris_stacked_1")
+        if ($('#morris_bar_1').length) {
+            const element = document.getElementById("morris_bar_1")
             Morris.Bar({
-                element: 'morris_stacked_1',
+                element: 'morris_bar_1',
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                stacked: true,
-                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
-                     resize: true,
-                        gridTextSize: '14px'
+                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                resize: true,
+                gridTextSize: '14px'
             });
         }
 
-        if ($('#morris_stacked_2').length) {
-            const element = document.getElementById("morris_stacked_2")
+        if ($('#morris_bar_2').length) {
+            const element = document.getElementById("morris_bar_2")
             Morris.Bar({
-                element: 'morris_stacked_2',
+                element: 'morris_bar_2',
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                stacked: true,
-                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
-                     resize: true,
-                        gridTextSize: '14px'
+                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                resize: true,
+                gridTextSize: '14px'
             });
         }
 
-        if ($('#morris_stacked_3').length) {
-            const element = document.getElementById("morris_stacked_3")
+        if ($('#morris_bar_3').length) {
+            const element = document.getElementById("morris_bar_3")
             Morris.Bar({
-                element: 'morris_stacked_3',
+                element: 'morris_bar_3',
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                stacked: true,
-                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
-                     resize: true,
-                        gridTextSize: '14px'
+                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                resize: true,
+                gridTextSize: '14px'
             });
         }
 
-        if ($('#morris_stacked_4').length) {
-            const element = document.getElementById("morris_stacked_4")
+        if ($('#morris_bar_4').length) {
+            const element = document.getElementById("morris_bar_4")
             Morris.Bar({
-                element: 'morris_stacked_4',
+                element: 'morris_bar_4',
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                stacked: true,
-                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
-                     resize: true,
-                        gridTextSize: '14px'
+                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                resize: true,
+                gridTextSize: '14px'
             });
         }
 
@@ -255,29 +255,29 @@
         }
     });
 
-    const BetProfitGraphNowProfitAreaTab = document.getElementById("now-profit-area-tab");
-    BetProfitGraphNowProfitAreaTab.addEventListener('click', updateTab);
+    const BetProfitGraphNowProfitLineTab = document.getElementById("now-profit-line-tab");
+    BetProfitGraphNowProfitLineTab.addEventListener('click', updateTab);
 
-    const BetProfitGraphLastProfitAreaTab = document.getElementById("last-profit-area-tab");
-    BetProfitGraphLastProfitAreaTab.addEventListener('click', updateTab);
+    const BetProfitGraphLastProfitLineTab = document.getElementById("last-profit-line-tab");
+    BetProfitGraphLastProfitLineTab.addEventListener('click', updateTab);
 
-    const BetProfitGraphMonthProfitAreaTab = document.getElementById("month-profit-area-tab");
-    BetProfitGraphMonthProfitAreaTab.addEventListener('click', updateTab);
+    const BetProfitGraphMonthProfitLineTab = document.getElementById("month-profit-line-tab");
+    BetProfitGraphMonthProfitLineTab.addEventListener('click', updateTab);
 
-    const BetProfitGraphYearProfitAreaTab = document.getElementById("year-profit-area-tab");
-    BetProfitGraphYearProfitAreaTab.addEventListener('click', updateTab);
+    const BetProfitGraphYearProfitLineTab = document.getElementById("year-profit-line-tab");
+    BetProfitGraphYearProfitLineTab.addEventListener('click', updateTab);
 
-    const BetProfitGraphNowProfitStackedTab = document.getElementById("now-profit-stacked-tab");
-    BetProfitGraphNowProfitStackedTab.addEventListener('click', updateTab);
+    const BetProfitGraphNowProfitBarTab = document.getElementById("now-profit-bar-tab");
+    BetProfitGraphNowProfitBarTab.addEventListener('click', updateTab);
 
-    const BetProfitGraphLastProfitStackedTab = document.getElementById("last-profit-stacked-tab");
-    BetProfitGraphLastProfitStackedTab.addEventListener('click', updateTab);
+    const BetProfitGraphLastProfitBarTab = document.getElementById("last-profit-bar-tab");
+    BetProfitGraphLastProfitBarTab.addEventListener('click', updateTab);
 
-    const BetProfitGraphMonthProfitStackedTab = document.getElementById("month-profit-stacked-tab");
-    BetProfitGraphMonthProfitStackedTab.addEventListener('click', updateTab);
+    const BetProfitGraphMonthProfitBarTab = document.getElementById("month-profit-bar-tab");
+    BetProfitGraphMonthProfitBarTab.addEventListener('click', updateTab);
 
-    const BetProfitGraphYearProfitStackedTab = document.getElementById("year-profit-stacked-tab");
-    BetProfitGraphYearProfitStackedTab.addEventListener('click', updateTab);
+    const BetProfitGraphYearProfitBarTab = document.getElementById("year-profit-bar-tab");
+    BetProfitGraphYearProfitBarTab.addEventListener('click', updateTab);
 
     function updateTab(){
         setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 500);

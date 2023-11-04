@@ -25,7 +25,7 @@ class CompetitionFootballAdmin(admin.ModelAdmin):
 
 
 class BetBaseAdmin(admin.ModelAdmin):
-    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'profit', 'result', 'date_game',
+    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'profit', 'result', 'date_game', 'sport_kind',
                     'is_favourite']
     actions = ["generate_bet_base"]
 
