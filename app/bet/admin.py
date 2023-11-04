@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from bet.models import Country, SportKind, Team, CompetitionBase, CompetitionFootball, BetBase, BetFootball
+from bet.utils import generate_bets
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -26,10 +27,15 @@ class CompetitionFootballAdmin(admin.ModelAdmin):
 class BetBaseAdmin(admin.ModelAdmin):
     list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'profit', 'result', 'date_game',
                     'is_favourite']
+    actions = ["generate"]
 
     @admin.display(ordering='user__username', description='User')
     def get_user_username(self, obj):
         return obj.user.username
+
+    @admin.action(description="Generate Bets")
+    def generate(self, request, queryset):
+        generate_bets()
 
 
 class BetFootballAdmin(admin.ModelAdmin):

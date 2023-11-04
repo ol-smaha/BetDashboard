@@ -181,3 +181,25 @@ BOOL_FIELD_CHOICES = (
     (True, 'Так'),
     (False, 'Ні'),
 )
+
+
+class ChartDateType(StrEnum):
+    NOW = 'Поточний місяць'
+    LAST_30_DAYS = 'Останні 30 діб'
+    MONTHS = 'По місяцях'
+    YEARS = 'По роках'
+
+    @classmethod
+    def choices(cls):
+        res = tuple([(e.value, e.value) for e in cls])
+        return res
+
+    @classmethod
+    def values(cls):
+        res = [e.value for e in cls]
+        return res
+
+    @classmethod
+    def items(cls):
+        res = [e.value for e in cls]
+        return res
