@@ -3,30 +3,84 @@
     $(function() {
 
         if ($('#morris_area').length) {
-            // Use Morris.Area instead of Morris.Line
+            const element = document.getElementById("morris_area")
             Morris.Area({
                 element: 'morris_area',
                 behaveLikeLine: true,
-                data: [
-                    { x: '2011 Q1', y: 4, z: 3 },
-                    { x: '2011 Q2', y: 2, z: 1 },
-                    { x: '2011 Q3', y: 2, z: 3 },
-                    { x: '2011 Q4', y: 4, z: 1 }
-                ],
+                data: JSON.parse(element.dataset.data),
                 xkey: 'x',
-                ykeys: ['y', 'z'],
-                labels: ['Y', 'Z'],
-                 lineColors: ['#5969ff', '#ff407b'],
-                   resize: true,
-                   gridTextSize: '14px'
-
-                
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: ['#5969ff', '#ff407b'],
+                resize: true,
+                gridTextSize: '14px'
             });
 
         }
 
+        if ($('#morris_area_1').length) {
+            const element = document.getElementById("morris_area_1")
+            Morris.Area({
+                element: 'morris_area_1',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: ['#5969ff', '#ff407b'],
+                resize: true,
+                gridTextSize: '14px'
+            });
 
+        }
 
+        if ($('#morris_area_2').length) {
+            const element = document.getElementById("morris_area_2")
+            Morris.Area({
+                element: 'morris_area_2',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: ['#5969ff', '#ff407b'],
+                resize: true,
+                gridTextSize: '14px'
+            });
+
+        }
+
+        if ($('#morris_area_3').length) {
+            const element = document.getElementById("morris_area_3")
+            Morris.Area({
+                element: 'morris_area_3',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: ['#5969ff', '#ff407b'],
+                resize: true,
+                gridTextSize: '14px'
+            });
+
+        }
+
+        if ($('#morris_area_4').length) {
+            const element = document.getElementById("morris_area_4")
+            Morris.Area({
+                element: 'morris_area_4',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: ['#5969ff', '#ff407b'],
+                resize: true,
+                gridTextSize: '14px'
+            });
+
+        }
 
         if ($('#morris_line').length) {
             const element = document.getElementById("morris_line")
@@ -84,6 +138,65 @@
             });
         }
 
+        if ($('#morris_stacked_1').length) {
+            const element = document.getElementById("morris_stacked_1")
+            Morris.Bar({
+                element: 'morris_stacked_1',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                stacked: true,
+                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
+                     resize: true,
+                        gridTextSize: '14px'
+            });
+        }
+
+        if ($('#morris_stacked_2').length) {
+            const element = document.getElementById("morris_stacked_2")
+            Morris.Bar({
+                element: 'morris_stacked_2',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                stacked: true,
+                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
+                     resize: true,
+                        gridTextSize: '14px'
+            });
+        }
+
+        if ($('#morris_stacked_3').length) {
+            const element = document.getElementById("morris_stacked_3")
+            Morris.Bar({
+                element: 'morris_stacked_3',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                stacked: true,
+                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
+                     resize: true,
+                        gridTextSize: '14px'
+            });
+        }
+
+        if ($('#morris_stacked_4').length) {
+            const element = document.getElementById("morris_stacked_4")
+            Morris.Bar({
+                element: 'morris_stacked_4',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                stacked: true,
+                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
+                     resize: true,
+                        gridTextSize: '14px'
+            });
+        }
 
         if ($('#morris_udateing').length) {
             var nReloads = 0;
@@ -141,5 +254,34 @@
             });
         }
     });
+
+    const BetProfitGraphNowProfitAreaTab = document.getElementById("now-profit-area-tab");
+    BetProfitGraphNowProfitAreaTab.addEventListener('click', updateTab);
+
+    const BetProfitGraphLastProfitAreaTab = document.getElementById("last-profit-area-tab");
+    BetProfitGraphLastProfitAreaTab.addEventListener('click', updateTab);
+
+    const BetProfitGraphMonthProfitAreaTab = document.getElementById("month-profit-area-tab");
+    BetProfitGraphMonthProfitAreaTab.addEventListener('click', updateTab);
+
+    const BetProfitGraphYearProfitAreaTab = document.getElementById("year-profit-area-tab");
+    BetProfitGraphYearProfitAreaTab.addEventListener('click', updateTab);
+
+    const BetProfitGraphNowProfitStackedTab = document.getElementById("now-profit-stacked-tab");
+    BetProfitGraphNowProfitStackedTab.addEventListener('click', updateTab);
+
+    const BetProfitGraphLastProfitStackedTab = document.getElementById("last-profit-stacked-tab");
+    BetProfitGraphLastProfitStackedTab.addEventListener('click', updateTab);
+
+    const BetProfitGraphMonthProfitStackedTab = document.getElementById("month-profit-stacked-tab");
+    BetProfitGraphMonthProfitStackedTab.addEventListener('click', updateTab);
+
+    const BetProfitGraphYearProfitStackedTab = document.getElementById("year-profit-stacked-tab");
+    BetProfitGraphYearProfitStackedTab.addEventListener('click', updateTab);
+
+    function updateTab(){
+        setTimeout(function() { window.dispatchEvent(new Event('resize')); }, 500);
+    };
+
 
 })(window, document, window.jQuery);

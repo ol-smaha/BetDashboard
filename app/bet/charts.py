@@ -73,7 +73,7 @@ class MorrisChartLine:
 
             clean_values_dict = {}
             for key, value in values_dict.items():
-                if value:
+                if value is not None:
                     clean_values_dict.update({key: value})
 
             row_dict.update(clean_values_dict)
@@ -81,11 +81,14 @@ class MorrisChartLine:
 
         try:
             json_data = json.dumps(data)
-            print(json_data)
             return json_data
         except Exception as e:
             print(e)
             return '[]'
+
+
+class MorrisChartArea(MorrisChartLine):
+    """ For #morris_area in 'static/vendor/charts/morris-bundle/Morrisjs.js' """
 
 
 class MorrisChartStacked:

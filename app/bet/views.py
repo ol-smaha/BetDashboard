@@ -1,12 +1,16 @@
-from datetime import datetime
-from django.db.models import Count
-from django.views.generic.list import ListView
+from datetime import datetime, timedelta, date
+from pprint import pprint
 
-from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked
-from .constants import BET_BASE_TABLE_FIELD_NAMES
+from dateutil.relativedelta import relativedelta
+
+from django.db.models import Count, Sum
+from django.views.generic.list import ListView
+from django.utils.timezone import now
+
+from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartArea
+from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType
 from .forms import BetHistoryFilterForm
 from .models import BetBase
-from django.db.models import Sum
 from bet.constants import BetResultEnum
 
 
@@ -67,7 +71,7 @@ class BetHistoryView(ListView):
             'total_bets_count': self.get_queryset().count(),
             'bet_fields': BET_BASE_TABLE_FIELD_NAMES.values(),
             'filter_form': filter_form,
-            'bets': self.get_queryset(),
+            'bets': self.get_queryset()[:50],
         }
         return context_data
 
@@ -138,6 +142,135 @@ class BetGraphsView(ListView):
                                      f'"{BetResultEnum.LOSE}", "{BetResultEnum.UNKNOWN}"]',
             'morris_donut_data': morris_donut_json,
             'title': 'Bets Graphs'
+        }
+        return context_data
+
+
+class BetGraphsProfitView(ListView):
+    model = BetBase
+    template_name = 'bet/bet_graphs_profit.html'
+
+    def _get_profit_all_morris_chart_area_data(self, date_type=ChartDateType.NOW):
+        data = {}
+
+        if date_type == ChartDateType.NOW:
+            # всі ставки від найпершої по кожен день поточного місяця
+            now_date = now().date()
+            for day in range(1, now_date.day+1):
+                day_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__lte=day_date)
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit)}})
+
+        elif date_type == ChartDateType.LAST_30_DAYS:
+            # всі ставки від найпершої по кожен день останніх 30 днів
+            start_date = now() - relativedelta(days=30)
+            for day in range(0, 31):
+                day_date = start_date + timedelta(days=day)
+                qs = self.get_queryset().filter(date_game__lte=day_date)
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit)}})
+
+        elif date_type == ChartDateType.MONTHS:
+            # всі ставки від найпершої по останній день місяця останніх 12 місяців
+            start_date = now() - relativedelta(years=1)
+            start_date = start_date.replace(day=1)
+            for month in range(1, 13):
+                month_date_start = start_date + relativedelta(months=month)
+                month_date_end = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__lte=month_date_end)
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({month_date_start.strftime('%Y-%m'): {'Прибуток': float(profit)}})
+
+        elif ChartDateType.YEARS:
+            # всі ставки від найпершої по останній день року всіх років
+            earliest_bet = self.get_queryset().earliest('date_game')
+            start_year = earliest_bet.date_game.year
+            end_year = now().year
+
+            for year in range(start_year, end_year+1):
+                end_year_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__lte=end_year_date)
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({year: {'Прибуток': float(profit)}})
+
+        return data
+
+    def _get_profit_period_morris_chart_stacked_data(self, date_type=ChartDateType.NOW):
+        data = {}
+
+        if date_type == ChartDateType.NOW:
+            # ставки за кожен окремий день поточного місяця
+            now_date = now().date()
+            for day in range(1, now_date.day+1):
+                day_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__range=[day_date, day_date])
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit)}})
+
+        elif date_type == ChartDateType.LAST_30_DAYS:
+            # ставки за кожен окремий день останніх 30 днів
+            start_date = now() - relativedelta(days=30)
+            for day in range(0, 31):
+                day_date = start_date + timedelta(days=day)
+                qs = self.get_queryset().filter(date_game__range=[day_date, day_date])
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit)}})
+
+        elif date_type == ChartDateType.MONTHS:
+            # ставки за кожен окремий місяць останніх 12 місяців
+            start_date = now() - relativedelta(years=1)
+            start_date = start_date.replace(day=1)
+            for month in range(1, 13):
+                month_date_start = start_date + relativedelta(months=month)
+                month_date_end = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__range=[month_date_start, month_date_end])
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({month_date_start.strftime('%Y-%m'): {'Прибуток': float(profit)}})
+
+        elif ChartDateType.YEARS:
+            # ставки за кожен окремий рік
+            earliest_bet = self.get_queryset().earliest('date_game')
+            start_year = earliest_bet.date_game.year
+            end_year = now().year
+
+            for year in range(start_year, end_year+1):
+                start_year_date = date(year=year, month=1, day=1)
+                end_year_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__range=[start_year_date, end_year_date])
+                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+                data.update({year: {'Прибуток': float(profit)}})
+
+        return data
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context_data = {
+            'profit_now_area_data': MorrisChartArea.to_json_data(
+                self._get_profit_all_morris_chart_area_data(date_type=ChartDateType.NOW)),
+            'profit_last_area_data': MorrisChartArea.to_json_data(
+                self._get_profit_all_morris_chart_area_data(date_type=ChartDateType.LAST_30_DAYS)),
+            'profit_month_area_data': MorrisChartArea.to_json_data(
+                self._get_profit_all_morris_chart_area_data(date_type=ChartDateType.MONTHS)),
+            'profit_year_area_data': MorrisChartArea.to_json_data(
+                self._get_profit_all_morris_chart_area_data(date_type=ChartDateType.YEARS)),
+            'profit_area_ykeys': '["Прибуток"]',
+            'profit_area_labels': '["Прибуток"]',
+
+            'profit_now_stacked_data': MorrisChartStacked.to_json_data(
+                self._get_profit_period_morris_chart_stacked_data(date_type=ChartDateType.NOW)),
+            'profit_last_stacked_data': MorrisChartStacked.to_json_data(
+                self._get_profit_period_morris_chart_stacked_data(date_type=ChartDateType.LAST_30_DAYS)),
+            'profit_month_stacked_data': MorrisChartStacked.to_json_data(
+                self._get_profit_period_morris_chart_stacked_data(date_type=ChartDateType.MONTHS)),
+            'profit_year_stacked_data': MorrisChartStacked.to_json_data(
+                self._get_profit_period_morris_chart_stacked_data(date_type=ChartDateType.YEARS)),
+            'profit_stacked_ykeys': '["Прибуток"]',
+            'profit_stacked_labels': '["Прибуток"]',
+
+            'title': 'Profit Graphs'
         }
         return context_data
 
