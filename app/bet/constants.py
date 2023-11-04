@@ -104,6 +104,11 @@ class BetTypeEnum(StrEnum):
         res = tuple([(e.value, e.value) for e in cls])
         return res
 
+    @classmethod
+    def values(cls):
+        res = [e.value for e in cls]
+        return res
+
 
 class GameStatusEnum(StrEnum):
     OFFICIAL = 'OFFICIAL'
@@ -113,6 +118,11 @@ class GameStatusEnum(StrEnum):
     @classmethod
     def choices(cls):
         res = tuple([(e.value, e.value) for e in cls])
+        return res
+
+    @classmethod
+    def values(cls):
+        res = [e.value for e in cls]
         return res
 
 
