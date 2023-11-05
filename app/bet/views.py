@@ -8,9 +8,9 @@ from django.views.generic.list import ListView
 from django.utils.timezone import now
 
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartArea
-from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType
-from .forms import BetHistoryFilterForm
-from .models import BetBase
+from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
+from .forms import BetHistoryFilterForm, FootballBetHistoryFilterForm
+from .models import BetBase, BetFootball
 from bet.constants import BetResultEnum
 
 
@@ -314,3 +314,46 @@ class Statistic(ListView):
 
         }
         return context_data
+
+
+class FootballBetHistoryView(ListView):
+    model = BetFootball
+    template_name = 'bet/bet_football_history.html'
+
+    def filtered_queryset(self, qs):
+
+        bet_values = self.request.GET.getlist('bet_value')
+        if bet_values:
+            qs = qs.filter(bet_value__in=bet_values)
+
+        game_status = self.request.GET.getlist('game_status')
+        if game_status:
+            qs = qs.filter(game_status__in=game_status)
+
+        competition_values = self.request.GET.getlist('competition')
+        if competition_values:
+            qs = qs.filter(competition__name__in=competition_values)
+
+
+
+        return qs
+
+    def base_queryset(self):
+        return self.model.objects.filter(sport_kind__name='Футбол')
+
+    def get_queryset(self):
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs
+
+    def get_context_data(self, **kwargs):
+        filter_form = FootballBetHistoryFilterForm
+
+        context_data = {
+            'title': 'Football Bet History',
+            'bets': self.get_queryset()[:50],
+            'football_bet_fields': BET_FOOTBALL_FIELDS_NAMES.values(),
+            'filter_form': filter_form
+        }
+        return context_data
+
+
