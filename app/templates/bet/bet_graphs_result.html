@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block main %}
+
+<div class="container-fluid  dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">Profit Graphs </h2>
+                <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Bet Graphs</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-xl-10 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
+                <div class="section-block">
+                    <h4 class="section-title">Прибуток за весь час:</h4>
+                </div>
+                <div class="tab-regular">
+                    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link show active" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
+                                Поточний місяць
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                                Останні 30 днів
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="month-profit-line-tab" href="#month-profit-line" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
+                                По місяцях
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="year-profit-line-tab" href="#year-profit-line" data-toggle="tab" role="tab" aria-controls="year" aria-selected="false">
+                                По роках
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
+                            <div id="morris_line_1"
+                                 data-data="{{ profit_now_line_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
+                            <div id="morris_line_2"
+                                 data-data="{{ profit_last_line_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
+                            <div id="morris_line_3"
+                                 data-data="{{ profit_month_line_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="year-profit-line" role="tabpanel" aria-labelledby="year-profit-line-tab">
+                            <div id="morris_line_4"
+                                 data-data="{{ profit_year_line_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-block">
+                    <h4 class="section-title">Прибуток за період:</h4>
+                </div>
+                <div class="tab-regular">
+                    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link show active" id="now-profit-bar-tab" href="#now-profit-bar" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
+                                Поточний місяць
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="last-profit-bar-tab" href="#last-profit-bar" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                                Останні 30 днів
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="month-profit-bar-tab" href="#month-profit-bar" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
+                                По місяцях
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="year-profit-bar-tab" href="#year-profit-bar" data-toggle="tab" role="tab" aria-controls="year" aria-selected="false">
+                                По роках
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="now-profit-bar" role="tabpanel" aria-labelledby="now-profit-bar-tab">
+                            <div id="morris_bar_1"
+                                 data-data="{{ profit_now_bar_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="last-profit-bar" role="tabpanel" aria-labelledby="last-profit-bar-tab">
+                            <div id="morris_bar_2"
+                                 data-data="{{ profit_last_bar_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="month-profit-bar" role="tabpanel" aria-labelledby="month-profit-bar-tab">
+                            <div id="morris_bar_3"
+                                 data-data="{{ profit_month_bar_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="year-profit-bar" role="tabpanel" aria-labelledby="year-profit-bar-tab">
+                            <div id="morris_bar_4"
+                                 data-data="{{ profit_year_bar_data }}"
+                                 data-ykeys="{{ profit_bar_ykeys }}"
+                                 data-labels="{{ profit_bar_labels }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
+                <form>
+                    <div class="card">
+                        {% for field in filter_form.visible_fields %}
+                            {% if field.name in 'dategamestart,dategameend' %}
+                            <div class="card-body">
+                                <h3 class="font-14">{{ field.label }}:</h3>
+                                <div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
+                                    {{ field }}
+                                    <div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                                <div class="card-body">
+                                    <h3 class="font-14">{{ field.label }}:</h3>
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="card-body border-top">
+                            <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock main %}
