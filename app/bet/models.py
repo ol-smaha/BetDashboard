@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db import models
 
 from bet.constants import (BetResultEnum, GameStatusEnum, BetTypeEnum,
-                           CompetitionFootballCategoryEnum, TeamCategoryEnum, BetVariant)
+                           CompetitionFootballCategoryEnum, TeamCategoryEnum, BetPredictionEnum)
 from users.models import CustomUser
 
 
@@ -72,11 +72,10 @@ class CompetitionFootball(CompetitionBase):
                                 default=CompetitionFootballCategoryEnum.UNKNOWN)
 
 
-
 class BetBase(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
                              related_name='bets')
-    bet = models.CharField(max_length=128, choices=BetVariant.choices())
+    prediction = models.CharField(max_length=128, choices=BetPredictionEnum.choices())
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     coefficient = models.DecimalField(max_digits=10, decimal_places=2)
     result = models.CharField(max_length=32, choices=BetResultEnum.choices())
@@ -117,3 +116,7 @@ class BetFootball(BetBase):
                                    default=GameStatusEnum.UNKNOWN)
     is_home_guest = models.BooleanField(default=True)
 
+    def save(self, *args, **kwargs):
+        if self.bet_type == BetTypeEnum.UNKNOWN or not self.bet_type and self.prediction:
+            self.bet_type = BetTypeEnum.get_value_by_bet(self.prediction)
+        super().save(*args, **kwargs)

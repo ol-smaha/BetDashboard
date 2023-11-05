@@ -25,9 +25,9 @@ class CompetitionFootballAdmin(admin.ModelAdmin):
 
 
 class BetBaseAdmin(admin.ModelAdmin):
-    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'profit', 'result', 'date_game', 'sport_kind',
+    list_display = ['get_user_username', 'prediction', 'amount', 'coefficient', 'profit', 'result', 'date_game', 'sport_kind',
                     'is_favourite']
-    actions = ["generate_bet_base"]
+    actions = ["generate_bet_base", "trigger_save"]
 
     @admin.display(ordering='user__username', description='User')
     def get_user_username(self, obj):
@@ -37,12 +37,17 @@ class BetBaseAdmin(admin.ModelAdmin):
     def generate_bet_base(self, request, queryset):
         generate_bets()
 
+    @admin.action(description="Trigger Save Method")
+    def trigger_save(self, request, queryset):
+        for obj in queryset:
+            obj.save()
+
 
 class BetFootballAdmin(admin.ModelAdmin):
-    list_display = ['get_user_username', 'bet', 'amount', 'coefficient', 'result',
+    list_display = ['get_user_username', 'prediction', 'amount', 'coefficient', 'result',
                     'team_home', 'team_guest', 'bet_type',
                     'competition', 'game_status', 'is_home_guest']
-    actions = ["generate_bet_football"]
+    actions = ["generate_bet_football", "trigger_save"]
 
     @admin.display(ordering='user__username', description='User')
     def get_user_username(self, obj):
@@ -51,6 +56,11 @@ class BetFootballAdmin(admin.ModelAdmin):
     @admin.action(description="Generate Football Bets")
     def generate_bet_football(self, request, queryset):
         generate_football_bets()
+
+    @admin.action(description="Trigger Save Method")
+    def trigger_save(self, request, queryset):
+        for obj in queryset:
+            obj.save()
 
 
 admin.site.register(Country, CountryAdmin)

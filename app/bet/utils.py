@@ -3,7 +3,7 @@ import random
 
 from django.contrib.auth import get_user_model
 
-from bet.constants import BetVariant, BetResultEnum, BetTypeEnum, GameStatusEnum, TeamCategoryEnum, \
+from bet.constants import BetPredictionEnum, BetResultEnum, BetTypeEnum, GameStatusEnum, TeamCategoryEnum, \
     CompetitionFootballCategoryEnum
 from bet.models import SportKind, BetBase, BetFootball, Team, CompetitionFootball, Country
 
@@ -20,7 +20,7 @@ def generate_bets():
                 bet_count = random.randrange(3, 6)
                 for i in range(bet_count):
                     user = UserModel.objects.get(username='admin')
-                    bet = random.choice(BetVariant.values())
+                    bet = random.choice(BetPredictionEnum.values())
                     amount = random.randrange(100, 500)
                     coefficient = round(random.uniform(1.5, 2.5), 2)
                     result = random.choice(BetResultEnum.values())
@@ -81,7 +81,7 @@ def generate_football_bets():
                 bet_count = random.randrange(2, 4)
                 for i in range(bet_count):
                     user = UserModel.objects.get(username='admin')
-                    bet = random.choice(BetVariant.values())
+                    bet = random.choice(BetPredictionEnum.values())
                     amount = random.randrange(100, 500)
                     coefficient = round(random.uniform(1.5, 2.5), 2)
                     result = random.choice(BetResultEnum.values())

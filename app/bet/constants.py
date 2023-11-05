@@ -18,7 +18,7 @@ class BetResultEnum(StrEnum):
         return res
 
 
-class BetVariant(StrEnum):
+class BetPredictionEnum(StrEnum):
     EXPRESS = 'Експрес'
     W1 = 'П1'
     X = 'Нічия'
@@ -28,53 +28,54 @@ class BetVariant(StrEnum):
     WX2 = '2-Х'
     O_Z = 'ОЗ'
     TO_0_5 = 'ТБ 0.5'
-    TU_0_5 = 'ТМ 0.5'
     TO_1_0 = 'ТБ 1.0'
-    TU_1_0 = 'ТМ 1.0'
     TO_1_5 = 'ТБ 1.5'
-    TU_1_5 = 'ТМ 1.5'
     TO_2_0 = 'ТБ 2.0'
-    TU_2_0 = 'ТМ 2.0'
     TO_2_5 = 'ТБ 2.5'
-    TU_2_5 = 'ТМ 2.5'
     TO_3_0 = 'ТБ 3.0'
-    TU_3_0 = 'ТМ 3.0'
     TO_3_5 = 'ТБ 3.5'
-    TU_3_5 = 'ТМ 3.5'
     TO_4_0 = 'ТБ 4.0'
-    TU_4_0 = 'ТМ 4.0'
     TO_4_5 = 'ТБ 4.5'
-    TU_4_5 = 'ТМ 4.5'
     TO_5_0 = 'ТБ 5.0'
-    TU_5_0 = 'ТМ 5.0'
     TO_5_5 = 'ТБ 5.5'
+    TU_0_5 = 'ТМ 0.5'
+    TU_1_0 = 'ТМ 1.0'
+    TU_1_5 = 'ТМ 1.5'
+    TU_2_0 = 'ТМ 2.0'
+    TU_2_5 = 'ТМ 2.5'
+    TU_3_0 = 'ТМ 3.0'
+    TU_3_5 = 'ТМ 3.5'
+    TU_4_0 = 'ТМ 4.0'
+    TU_4_5 = 'ТМ 4.5'
+    TU_5_0 = 'ТМ 5.0'
     TU_5_5 = 'ТМ 5.5'
     F1_0_0 = 'Ф1 (0)'
-    F2_0_0 = 'Ф1 (0)'
-    F1_PLUS_0_5 = 'Ф1 (+0.5)'
-    F2_PLUS_0_5 = 'Ф2 (+0.5)'
-    F1_PLUS_1_0 = 'Ф1 (+1.0)'
-    F2_PLUS_1_0 = 'Ф2 (+1.0)'
-    F1_PLUS_1_5 = 'Ф1 (+1.5)'
-    F2_PLUS_1_5 = 'Ф2 (+1.5)'
-    F1_PLUS_2_0 = 'Ф1 (+2.0)'
-    F2_PLUS_2_0 = 'Ф2 (+2.0)'
-    F1_PLUS_2_5 = 'Ф1 (+2.5)'
-    F2_PLUS_2_5 = 'Ф2 (+2.5)'
-    F1_PLUS_3_0 = 'Ф1 (+3.0)'
-    F2_PLUS_3_0 = 'Ф2 (+3.0)'
     F1_MINUS_0_5 = 'Ф1 (-0.5)'
-    F2_MINUS_0_5 = 'Ф2 (-0.5)'
     F1_MINUS_1_0 = 'Ф1 (-1.0)'
-    F2_MINUS_1_0 = 'Ф2 (-1.0)'
     F1_MINUS_1_5 = 'Ф1 (-1.5)'
-    F2_MINUS_1_5 = 'Ф2 (-1.5)'
     F1_MINUS_2_0 = 'Ф1 (-2.0)'
-    F2_MINUS_2_0 = 'Ф2 (-2.0)'
     F1_MINUS_2_5 = 'Ф1 (-2.5)'
-    F2_MINUS_2_5 = 'Ф2 (-2.5)'
     F1_MINUS_3_0 = 'Ф1 (-3.0)'
+    F2_0_0 = 'Ф2 (0)'
+    F2_MINUS_0_5 = 'Ф2 (-0.5)'
+    F2_MINUS_1_0 = 'Ф2 (-1.0)'
+    F2_MINUS_1_5 = 'Ф2 (-1.5)'
+    F2_MINUS_2_0 = 'Ф2 (-2.0)'
+    F2_MINUS_2_5 = 'Ф2 (-2.5)'
     F2_MINUS_3_0 = 'Ф2 (-3.0)'
+    F1_PLUS_0_5 = 'Ф1 (+0.5)'
+    F1_PLUS_1_0 = 'Ф1 (+1.0)'
+    F1_PLUS_1_5 = 'Ф1 (+1.5)'
+    F1_PLUS_2_0 = 'Ф1 (+2.0)'
+    F1_PLUS_2_5 = 'Ф1 (+2.5)'
+    F1_PLUS_3_0 = 'Ф1 (+3.0)'
+    F2_PLUS_0_5 = 'Ф2 (+0.5)'
+    F2_PLUS_1_0 = 'Ф2 (+1.0)'
+    F2_PLUS_1_5 = 'Ф2 (+1.5)'
+    F2_PLUS_2_0 = 'Ф2 (+2.0)'
+    F2_PLUS_2_5 = 'Ф2 (+2.5)'
+    F2_PLUS_3_0 = 'Ф2 (+3.0)'
+    OTHER = 'Інше'
 
     @classmethod
     def choices(cls):
@@ -93,11 +94,93 @@ class BetVariant(StrEnum):
 
 
 class BetTypeEnum(StrEnum):
-    WDL = '1-X-2'
-    WX = '1X-12-2X/'
-    FORA = 'Fora'
-    TOTAL = 'Total '
-    UNKNOWN = 'UNKNOWN'
+    WDL = 'П1-Х-П2'
+    WX = '1Х-12-Х2'
+    FORA = 'Фора'
+    TOTAL = 'Тотал'
+    EXPRESS = 'Експрес'
+    UNKNOWN = 'Інше'
+
+    @classmethod
+    def get_value_by_bet(cls, prediction):
+        print(prediction)
+        print(cls.prediction_type_dict().get(prediction, cls.UNKNOWN))
+        return cls.prediction_type_dict().get(prediction, cls.UNKNOWN)
+
+    @classmethod
+    def prediction_type_dict(cls):
+        mapper = {
+            cls.WDL: (
+                BetPredictionEnum.W1,
+                BetPredictionEnum.X,
+                BetPredictionEnum.W2,
+            ),
+            cls.WX: (
+                BetPredictionEnum.WX1,
+                BetPredictionEnum.NOT_X,
+                BetPredictionEnum.WX2,
+            ),
+            cls.FORA: (
+                BetPredictionEnum.F1_0_0,
+                BetPredictionEnum.F1_MINUS_0_5,
+                BetPredictionEnum.F1_MINUS_1_0,
+                BetPredictionEnum.F1_MINUS_1_5,
+                BetPredictionEnum.F1_MINUS_2_0,
+                BetPredictionEnum.F1_MINUS_2_5,
+                BetPredictionEnum.F1_MINUS_3_0,
+                BetPredictionEnum.F2_0_0,
+                BetPredictionEnum.F2_MINUS_0_5,
+                BetPredictionEnum.F2_MINUS_1_0,
+                BetPredictionEnum.F2_MINUS_1_5,
+                BetPredictionEnum.F2_MINUS_2_0,
+                BetPredictionEnum.F2_MINUS_2_5,
+                BetPredictionEnum.F2_MINUS_3_0,
+                BetPredictionEnum.F1_PLUS_0_5,
+                BetPredictionEnum.F1_PLUS_1_0,
+                BetPredictionEnum.F1_PLUS_1_5,
+                BetPredictionEnum.F1_PLUS_2_0,
+                BetPredictionEnum.F1_PLUS_2_5,
+                BetPredictionEnum.F1_PLUS_3_0,
+                BetPredictionEnum.F2_PLUS_0_5,
+                BetPredictionEnum.F2_PLUS_1_0,
+                BetPredictionEnum.F2_PLUS_1_5,
+                BetPredictionEnum.F2_PLUS_2_0,
+                BetPredictionEnum.F2_PLUS_2_5,
+                BetPredictionEnum.F2_PLUS_3_0,
+            ),
+            cls.TOTAL: (
+                BetPredictionEnum.TO_0_5,
+                BetPredictionEnum.TO_1_0,
+                BetPredictionEnum.TO_1_5,
+                BetPredictionEnum.TO_2_0,
+                BetPredictionEnum.TO_2_5,
+                BetPredictionEnum.TO_3_0,
+                BetPredictionEnum.TO_3_5,
+                BetPredictionEnum.TO_4_0,
+                BetPredictionEnum.TO_4_5,
+                BetPredictionEnum.TO_5_0,
+                BetPredictionEnum.TO_5_5,
+                BetPredictionEnum.TU_0_5,
+                BetPredictionEnum.TU_1_0,
+                BetPredictionEnum.TU_1_5,
+                BetPredictionEnum.TU_2_0,
+                BetPredictionEnum.TU_2_5,
+                BetPredictionEnum.TU_3_0,
+                BetPredictionEnum.TU_3_5,
+                BetPredictionEnum.TU_4_0,
+                BetPredictionEnum.TU_4_5,
+                BetPredictionEnum.TU_5_0,
+                BetPredictionEnum.TU_5_5,
+            ),
+            cls.EXPRESS: (
+                BetPredictionEnum.EXPRESS,
+            ),
+        }
+        reverse_dict = {}
+        for bet_type, bet_predictions in mapper.items():
+            for prediction in bet_predictions:
+                reverse_dict.update({prediction: bet_type})
+        return reverse_dict
 
     @classmethod
     def choices(cls):
@@ -150,7 +233,7 @@ class CompetitionFootballCategoryEnum(StrEnum):
 
 BET_BASE_TABLE_FIELD_NAMES = {
     'date_game': 'Date Of Game',
-    'bet': 'Bet',
+    'prediction': 'Bet',
     'amount': 'Amount',
     'coefficient': 'Coefficient',
     'result': 'Bet Result',
@@ -160,7 +243,7 @@ BET_BASE_TABLE_FIELD_NAMES = {
 
 BET_FOOTBALL_FIELDS_NAMES = {
     'date_game': 'Date Of Game',
-    'bet': 'Bet',
+    'prediction': 'Bet',
     'amount': 'Amount',
     'coefficient': 'Coefficient',
     'result': 'Bet Result',
@@ -193,7 +276,7 @@ DEFAULT_MORRIS_CHART_COLORS = [
 
 BET_BASE_ORDERING_FIELDS_CHOICES = (
     ('date_game', 'Дата події'),
-    ('bet', 'Прогноз'),
+    ('prediction', 'Прогноз'),
     ('amount', 'Сума ставки'),
     ('coefficient', 'Коефіцієнт'),
     ('result', 'Результат ставки'),

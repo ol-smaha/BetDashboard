@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
 from pprint import pprint
 
 from dateutil.relativedelta import relativedelta
@@ -21,9 +21,6 @@ class BetHistoryView(ListView):
     template_name = 'bet/bet_history.html'
 
     def filtered_queryset(self, qs):
-        print(" --- 111111 --- ")
-        print(self.request.GET)
-        
         sport_kind_values = self.request.GET.getlist('sport_kind')
         if sport_kind_values:
             qs = qs.filter(sport_kind__name__in=sport_kind_values)
@@ -64,7 +61,6 @@ class BetHistoryView(ListView):
         if coefficient_max:
             qs = qs.filter(coefficient__lte=coefficient_max)
 
-        print(" --- 222222 --- ")
         return qs
 
     def base_queryset(self):
@@ -99,7 +95,7 @@ class BetGraphsView(ListView):
                    .values('result')
                    .annotate(result_count=Count('result'))
                    .order_by())
-        for obj in objects:
+        for obj in objects[:50]:
             raw_data.update({obj.get('result'): obj.get('result_count')})
         for res in sorted_results:
             data.update({res: raw_data.get(res)})
@@ -111,7 +107,7 @@ class BetGraphsView(ListView):
                     .values('date_game')
                     .annotate(game_count=Count('date_game'))
                     .order_by('date_game'))
-        for dict_data in raw_data:
+        for dict_data in raw_data[:50]:
             date_game = datetime.strftime(dict_data.get('date_game'), '%Y-%m-%d')
             game_count = dict_data.get('game_count')
             data.update({date_game: {'BETS': game_count}})
@@ -123,7 +119,7 @@ class BetGraphsView(ListView):
                      .values('result', 'date_game')
                      .annotate(res_count=Count('result'), )
                      .order_by('date_game')))
-        for dict_data in raw_data:
+        for dict_data in raw_data[:50]:
             date_game = datetime.strftime(dict_data.get('date_game'), '%Y-%m-%d')
             if not data.get(date_game, {}):
                 data[date_game] = {}
@@ -334,7 +330,7 @@ class Statistic(ListView):
         total_bets_count = self.get_queryset().count()
         total_bets_profit = float(self.get_queryset().aggregate(Sum('profit')).get('profit__sum'))
         total_bets_amount = float(self.get_queryset().aggregate(Sum('amount')).get('amount__sum'))
-        total_bets_roi = total_bets_profit * 100 // total_bets_amount
+        total_bets_roi = round(total_bets_profit * 100 / total_bets_amount, 2)
 
         res_win = self.model.objects.filter(result=BetResultEnum.WIN).count()
         res_drawn = self.model.objects.filter(result=BetResultEnum.DRAWN).count()
@@ -380,6 +376,10 @@ class FootballBetHistoryView(ListView):
         result_value = self.request.GET.getlist('result')
         if result_value:
             qs = qs.filter(result__in=result_value)
+
+        bet_type = self.request.GET.getlist('bet_type')
+        if bet_type:
+            qs = qs.filter(bet_type__in=bet_type)
 
         is_favourite_value = self.request.GET.getlist('is_favourite')
         if is_favourite_value:
