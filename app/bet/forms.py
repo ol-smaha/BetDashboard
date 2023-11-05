@@ -104,4 +104,58 @@ class FootballBetHistoryFilterForm(BetHistoryFilterForm):
     )
 
 
+class BetProfitGraphFilterForm(forms.Form):
+    sport_kind = forms.MultipleChoiceField(
+        choices=SportKind.name_choices(),
+        required=False,
+        label='Вид спорту',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
+    dategamestart = forms.DateField(
+        required=False,
+        input_formats='%m/%d/%Y',
+        label='Дата з',
+        widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input'})
+    )
+    dategameend = forms.DateField(
+        required=False,
+        input_formats='%m/%d/%Y',
+        label='Дата по',
+        widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input'})
+    )
+    amount_min = forms.DecimalField(
+        required=False,
+        min_value='0.00',
+        decimal_places=2,
+        step_size='10.0',
+        label='Сума з',
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+    amount_max = forms.DecimalField(
+        required=False,
+        min_value='0.00',
+        step_size='10.0',
+        decimal_places=2,
+        label='Сума по',
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+    coefficient_min = forms.DecimalField(
+        required=False,
+        min_value='1.00',
+        decimal_places=2,
+        label='Коефіцієнт з',
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+
+    coefficient_max = forms.DecimalField(
+        required=False,
+        min_value='1.00',
+        decimal_places=2,
+        label='Коефіцієнт по',
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        fields = ('sport_kind', 'amount_min', 'amount_max', 'coefficient_min', 'coefficient_max',
+                  'dategamestart', 'dategameend',)
 
