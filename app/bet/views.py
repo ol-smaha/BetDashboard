@@ -93,10 +93,10 @@ class BetGraphsView(ListView):
                           BetResultEnum.LOSE, BetResultEnum.UNKNOWN]
         objects = (self.get_queryset()
                    .values('result')
-                   .annotate(result_count=Count('result'))
+                   .annotate(Count('result'))
                    .order_by())
         for obj in objects[:50]:
-            raw_data.update({obj.get('result'): obj.get('result_count')})
+            raw_data.update({obj.get('result'): obj.get('result__count')})
         for res in sorted_results:
             data.update({res: raw_data.get(res)})
         return data
@@ -156,6 +156,12 @@ class BetGraphsProfitView(ListView):
     model = BetBase
     template_name = 'bet/bet_graphs_profit.html'
 
+    @staticmethod
+    def _process_profit_sum(qs, check_date, data, date_format='%Y-%m-%d'):
+        date_str = check_date.strftime(date_format)
+        profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
+        data.update({date_str: {'Прибуток': float(profit), 'К-сть': qs.count()}})
+
     def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
 
@@ -163,19 +169,17 @@ class BetGraphsProfitView(ListView):
             # всі ставки від найпершої по кожен день поточного місяця
             now_date = now().date()
             for day in range(1, now_date.day+1):
-                day_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__lte=day_date)
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_profit_sum(qs, check_date, data)
 
         elif date_type == ChartDateType.LAST_30_DAYS:
             # всі ставки від найпершої по кожен день останніх 30 днів
             start_date = now() - relativedelta(days=30)
             for day in range(0, 31):
-                day_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__lte=day_date)
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = start_date + relativedelta(days=day)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_profit_sum(qs, check_date, data)
 
         elif date_type == ChartDateType.MONTHS:
             # всі ставки від найпершої по останній день місяця останніх 12 місяців
@@ -183,10 +187,9 @@ class BetGraphsProfitView(ListView):
             start_date = start_date.replace(day=1)
             for month in range(1, 13):
                 month_date_start = start_date + relativedelta(months=month)
-                month_date_end = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__lte=month_date_end)
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({month_date_end.strftime('%Y-%m'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_profit_sum(qs, check_date, data, date_format='%Y-%m')
 
         elif ChartDateType.YEARS:
             # всі ставки від найпершої по останній день року всіх років
@@ -195,10 +198,9 @@ class BetGraphsProfitView(ListView):
             end_year = now().year
 
             for year in range(start_year, end_year+1):
-                end_year_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__lte=end_year_date)
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({end_year_date.strftime('%Y-%m'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_profit_sum(qs, check_date, data, date_format='%Y-%m')
 
         return data
 
@@ -209,19 +211,17 @@ class BetGraphsProfitView(ListView):
             # ставки за кожен окремий день поточного місяця
             now_date = now().date()
             for day in range(1, now_date.day+1):
-                day_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__range=[day_date, day_date])
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
+                self._process_profit_sum(qs, check_date, data)
 
         elif date_type == ChartDateType.LAST_30_DAYS:
             # ставки за кожен окремий день останніх 30 днів
             start_date = now() - relativedelta(days=30)
             for day in range(0, 31):
-                day_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__range=[day_date, day_date])
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({day_date.strftime('%Y-%m-%d'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = start_date + relativedelta(days=day)
+                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
+                self._process_profit_sum(qs, check_date, data)
 
         elif date_type == ChartDateType.MONTHS:
             # ставки за кожен окремий місяць останніх 12 місяців
@@ -229,10 +229,9 @@ class BetGraphsProfitView(ListView):
             start_date = start_date.replace(day=1)
             for month in range(1, 13):
                 month_date_start = start_date + relativedelta(months=month)
-                month_date_end = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__range=[month_date_start, month_date_end])
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({month_date_end.strftime('%Y-%m'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__range=[month_date_start, check_date])
+                self._process_profit_sum(qs, check_date, data, date_format='%Y-%m')
 
         elif ChartDateType.YEARS:
             # ставки за кожен окремий рік
@@ -242,10 +241,9 @@ class BetGraphsProfitView(ListView):
 
             for year in range(start_year, end_year+1):
                 start_year_date = date(year=year, month=1, day=1)
-                end_year_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__range=[start_year_date, end_year_date])
-                profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-                data.update({end_year_date.strftime('%Y-%m'): {'Прибуток': float(profit), 'К-сть': qs.count()}})
+                check_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__range=[start_year_date, check_date])
+                self._process_profit_sum(qs, check_date, data, date_format='%Y-%m')
 
         return data
 
@@ -430,3 +428,171 @@ class FootballBetHistoryView(ListView):
         return context_data
 
 
+class BetGraphsResultView(ListView):
+    model = BetBase
+    template_name = 'bet/bet_graphs_result.html'
+
+    @staticmethod
+    def _process_result_count(qs, check_date, data, date_format='%Y-%m-%d'):
+        valid_values = [BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]
+        raw_data = qs.values('result').annotate(Count('result'))
+        date_str = check_date.strftime(date_format)
+        data.update({date_str: {BetResultEnum.WIN: 0, BetResultEnum.DRAWN: 0, BetResultEnum.LOSE: 0}})
+        for obj in raw_data:
+            if obj.get('result') in valid_values:
+                data.get(date_str).update({obj.get('result'): obj.get('result__count')})
+
+    def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
+        data = {}
+
+        if date_type == ChartDateType.NOW:
+            # всі ставки від найпершої по кожен день поточного місяця
+            now_date = now().date()
+            for day in range(1, now_date.day+1):
+                check_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_result_count(qs, check_date, data)
+
+        elif date_type == ChartDateType.LAST_30_DAYS:
+            # всі ставки від найпершої по кожен день останніх 30 днів
+            start_date = now() - relativedelta(days=30)
+            for day in range(0, 31):
+                check_date = start_date + relativedelta(days=day)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_result_count(qs, check_date, data)
+
+        elif date_type == ChartDateType.MONTHS:
+            # всі ставки від найпершої по останній день місяця останніх 12 місяців
+            start_date = now() - relativedelta(years=1)
+            start_date = start_date.replace(day=1)
+            for month in range(1, 13):
+                month_date_start = start_date + relativedelta(months=month)
+                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
+
+        elif ChartDateType.YEARS:
+            # всі ставки від найпершої по останній день року всіх років
+            earliest_bet = self.get_queryset().earliest('date_game')
+            start_year = earliest_bet.date_game.year
+            end_year = now().year
+
+            for year in range(start_year, end_year+1):
+                check_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
+
+        return data
+
+    def _get_profit_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
+        data = {}
+
+        if date_type == ChartDateType.NOW:
+            # ставки за кожен окремий день поточного місяця
+            now_date = now().date()
+            for day in range(1, now_date.day+1):
+                check_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
+                self._process_result_count(qs, check_date, data)
+
+        elif date_type == ChartDateType.LAST_30_DAYS:
+            # ставки за кожен окремий день останніх 30 днів
+            start_date = now() - relativedelta(days=30)
+            for day in range(0, 31):
+                check_date = start_date + relativedelta(days=day)
+                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
+                self._process_result_count(qs, check_date, data)
+
+        elif date_type == ChartDateType.MONTHS:
+            # ставки за кожен окремий місяць останніх 12 місяців
+            start_date = now() - relativedelta(years=1)
+            start_date = start_date.replace(day=1)
+            for month in range(1, 13):
+                month_date_start = start_date + relativedelta(months=month)
+                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__range=[month_date_start, check_date])
+                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
+
+        elif ChartDateType.YEARS:
+            # ставки за кожен окремий рік
+            earliest_bet = self.get_queryset().earliest('date_game')
+            start_year = earliest_bet.date_game.year
+            end_year = now().year
+
+            for year in range(start_year, end_year+1):
+                start_year_date = date(year=year, month=1, day=1)
+                check_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__range=[start_year_date, check_date])
+                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
+
+        return data
+
+    def filtered_queryset(self, qs):
+        sport_kind_values = self.request.GET.getlist('sport_kind')
+        if sport_kind_values:
+            qs = qs.filter(sport_kind__name__in=sport_kind_values)
+
+        date_game_start = self.request.GET.get('dategamestart')
+        if date_game_start:
+            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
+
+        date_game_end = self.request.GET.get('dategameend')
+        if date_game_end:
+            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
+
+        amount_min = self.request.GET.get('amount_min')
+        if amount_min:
+            qs = qs.filter(amount__gte=amount_min)
+
+        amount_max = self.request.GET.get('amount_max')
+        if amount_max:
+            qs = qs.filter(amount__lte=amount_max)
+
+        coefficient_min = self.request.GET.get('coefficient_min')
+        if coefficient_min:
+            qs = qs.filter(coefficient__gte=coefficient_min)
+
+        coefficient_max = self.request.GET.get('coefficient_max')
+        if coefficient_max:
+            qs = qs.filter(coefficient__lte=coefficient_max)
+
+        return qs
+
+    def base_queryset(self):
+        return self.model.objects.all()
+
+    def get_queryset(self):
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs
+
+    def get_context_data(self, **kwargs):
+        filter_form = BetProfitGraphFilterForm
+
+        context_data = {
+            'profit_now_line_data': MorrisChartLine.to_json_data(
+                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
+            'profit_last_line_data': MorrisChartLine.to_json_data(
+                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.LAST_30_DAYS)),
+            'profit_month_line_data': MorrisChartLine.to_json_data(
+                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
+            'profit_year_line_data': MorrisChartLine.to_json_data(
+                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
+            'profit_line_ykeys': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
+            'profit_line_labels': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
+
+            'profit_now_bar_data': MorrisChartBar.to_json_data(
+                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
+            'profit_last_bar_data': MorrisChartBar.to_json_data(
+                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.LAST_30_DAYS)),
+            'profit_month_bar_data': MorrisChartBar.to_json_data(
+                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
+            'profit_year_bar_data': MorrisChartBar.to_json_data(
+                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
+            'profit_bar_ykeys': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
+            'profit_bar_labels': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
+
+            'filter_form': filter_form,
+            'title': 'Profit Graphs',
+        }
+        print(context_data['profit_bar_ykeys'])
+        return context_data
