@@ -158,6 +158,22 @@ BET_BASE_TABLE_FIELD_NAMES = {
     'sport_kind': 'Kind Of Sport',
 }
 
+BET_FOOTBALL_FIELDS_NAMES = {
+    'date_game': 'Date Of Game',
+    'bet': 'Bet',
+    'amount': 'Amount',
+    'coefficient': 'Coefficient',
+    'result': 'Bet Result',
+    'profit': 'Profit',
+    'team_home': 'Team Home',
+    'team_guest': 'Team Guess',
+    'bet_type': 'Bet Type',
+    'competition': 'Competition',
+    'game_status': 'Game Status',
+    'is_home_guest': 'Is Home Guest',
+
+}
+
 
 DEFAULT_MORRIS_CHART_COLORS = [
     '#07F78A ', #файний салатовий

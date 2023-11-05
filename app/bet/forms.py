@@ -1,7 +1,8 @@
 from django import forms
 
-from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES
-from bet.models import BetBase, SportKind
+from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
+    GameStatusEnum
+from bet.models import BetBase, SportKind, CompetitionBase
 
 
 class BetHistoryFilterForm(forms.Form):
@@ -78,6 +79,31 @@ class BetHistoryFilterForm(forms.Form):
                   'amount_min', 'amount_max', 'coefficient_min', 'coefficient_max')
 
 
+class FootballBetHistoryFilterForm(BetHistoryFilterForm):
+    sport_kind = None
+
+    bet_type = forms.MultipleChoiceField(
+        choices=BetTypeEnum.choices(),
+        required=False,
+        label='Тип ставки',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
+
+    game_status = forms.MultipleChoiceField(
+        choices=GameStatusEnum.choices(),
+        required=False,
+        label='Статус Ігри',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
+
+    competition = forms.MultipleChoiceField(
+        choices=CompetitionBase.name_choices(),
+        required=False,
+        label='Змагання',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
+
+
 class BetProfitGraphFilterForm(forms.Form):
     sport_kind = forms.MultipleChoiceField(
         choices=SportKind.name_choices(),
@@ -132,3 +158,4 @@ class BetProfitGraphFilterForm(forms.Form):
     class Meta:
         fields = ('sport_kind', 'amount_min', 'amount_max', 'coefficient_min', 'coefficient_max',
                   'dategamestart', 'dategameend',)
+

@@ -57,6 +57,12 @@ class CompetitionBase(models.Model):
     country = models.ForeignKey(to=Country, on_delete=models.SET_NULL,
                                 related_name='competitions', null=True, blank=True)
 
+    @classmethod
+    def name_choices(cls):
+        qs = cls.objects.all().values_list('name', flat=True).distinct()
+        choices = tuple([(name, name) for name in qs])
+        return choices
+
     def __str__(self):
         return f"{self.name}"
 
@@ -64,6 +70,7 @@ class CompetitionBase(models.Model):
 class CompetitionFootball(CompetitionBase):
     category = models.CharField(max_length=32, choices=CompetitionFootballCategoryEnum.choices(),
                                 default=CompetitionFootballCategoryEnum.UNKNOWN)
+
 
 
 class BetBase(models.Model):
