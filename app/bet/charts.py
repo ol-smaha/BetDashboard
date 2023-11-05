@@ -135,3 +135,7 @@ class MorrisChartStacked:
         except Exception as e:
             print(e)
             return '[]'
+
+
+class MorrisChartBar(MorrisChartStacked):
+    """ For #morris_bar in 'static/vendor/charts/morris-bundle/Morrisjs.js' """
