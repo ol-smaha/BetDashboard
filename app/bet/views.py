@@ -361,6 +361,41 @@ class FootballBetHistoryView(ListView):
     template_name = 'bet/bet_football_history.html'
 
     def filtered_queryset(self, qs):
+        date_game_start = self.request.GET.get('dategamestart')
+        if date_game_start:
+            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
+
+        date_game_end = self.request.GET.get('dategameend')
+        if date_game_end:
+            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
+
+        amount_min = self.request.GET.get('amount_min')
+        if amount_min:
+            qs = qs.filter(amount__gte=amount_min)
+
+        amount_max = self.request.GET.get('amount_max')
+        if amount_max:
+            qs = qs.filter(amount__lte=amount_max)
+
+        result_value = self.request.GET.getlist('result')
+        if result_value:
+            qs = qs.filter(result__in=result_value)
+
+        is_favourite_value = self.request.GET.getlist('is_favourite')
+        if is_favourite_value:
+            qs = qs.filter(is_favourite__in=is_favourite_value)
+
+        ordering = self.request.GET.get('ordering')
+        if ordering:
+            qs = qs.order_by(ordering)
+
+        coefficient_min = self.request.GET.get('coefficient_min')
+        if coefficient_min:
+            qs = qs.filter(coefficient__gte=coefficient_min)
+
+        coefficient_max = self.request.GET.get('coefficient_max')
+        if coefficient_max:
+            qs = qs.filter(coefficient__lte=coefficient_max)
 
         bet_values = self.request.GET.getlist('bet_value')
         if bet_values:
@@ -373,8 +408,6 @@ class FootballBetHistoryView(ListView):
         competition_values = self.request.GET.getlist('competition')
         if competition_values:
             qs = qs.filter(competition__name__in=competition_values)
-
-
 
         return qs
 
