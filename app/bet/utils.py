@@ -29,7 +29,7 @@ def generate_bets():
 
                     bet = BetBase.objects.create(
                         user=user,
-                        bet=bet,
+                        prediction=bet,
                         amount=amount,
                         coefficient=coefficient,
                         result=result,
@@ -42,7 +42,7 @@ def generate_bets():
 
 
 def generate_football_bets():
-    # BetFootball.objects.all().delete()
+    BetFootball.objects.all().delete()
     sport_kind, _ = SportKind.objects.get_or_create(name="Футбол")
     country, _ = Country.objects.get_or_create(name='Іспанія')
     team_home, _ = Team.objects.get_or_create(
@@ -92,7 +92,7 @@ def generate_football_bets():
 
                     bet = BetFootball.objects.create(
                         user=user,
-                        bet=bet,
+                        prediction=bet,
                         amount=amount,
                         coefficient=coefficient,
                         result=result,

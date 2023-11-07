@@ -117,6 +117,6 @@ class BetFootball(BetBase):
     is_home_guest = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        if self.bet_type == BetTypeEnum.UNKNOWN or not self.bet_type and self.prediction:
+        if self.bet_type == BetTypeEnum.UNKNOWN or not self.bet_type or self.prediction:
             self.bet_type = BetTypeEnum.get_value_by_bet(self.prediction)
         super().save(*args, **kwargs)

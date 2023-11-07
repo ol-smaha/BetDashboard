@@ -2,7 +2,7 @@ from django.urls import path
 
 
 from bet.views import (BetHistoryView, BetGraphsView, Statistic, BetGraphsProfitView, BetGraphsResultView,
-                       FootballBetHistoryView)
+                       FootballBetHistoryView, BetGraphsRoiView)
 
 urlpatterns = [
     path('history/', BetHistoryView.as_view(), name='bet_history'),
@@ -11,5 +11,6 @@ urlpatterns = [
     path('graphs/result/', BetGraphsResultView.as_view(), name='bet_graphs_result'),
     path('statistic/', Statistic.as_view(), name='statistic'),
     path('football_history/', FootballBetHistoryView.as_view(), name='football_history'),
+    path('graphs/roi/', BetGraphsRoiView.as_view(), name='bet_graphs_roi'),
 
 ]
