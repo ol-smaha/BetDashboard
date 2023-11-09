@@ -36,15 +36,22 @@ jQuery(document).ready(function($) {
 
     }
 
-    if ($("#dategamestartdatepicker").length) {
-        $('#dategamestartdatepicker').datetimepicker({
+    if ($("#date_game_startdatepicker").length) {
+        $('#date_game_startdatepicker').datetimepicker({
             format: 'L'
         });
 
     }
 
-    if ($("#dategameenddatepicker").length) {
-        $('#dategameenddatepicker').datetimepicker({
+    if ($("#date_game_enddatepicker").length) {
+        $('#date_game_enddatepicker').datetimepicker({
+            format: 'L'
+        });
+
+    }
+
+    if ($("#date_gamedatepicker").length) {
+        $('#date_gamedatepicker').datetimepicker({
             format: 'L'
         });
 

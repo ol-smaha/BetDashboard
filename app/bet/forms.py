@@ -1,8 +1,9 @@
 from django import forms
+from django.forms import ModelForm
 
 from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
     GameStatusEnum, BetPredictionEnum
-from bet.models import SportKind, CompetitionBase
+from bet.models import SportKind, CompetitionBase, BetBase
 
 
 class OrderingBaseForm(forms.Form):
@@ -65,13 +66,13 @@ class BetBaseFilterForm(forms.Form):
         label='Результат події',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
-    dategamestart = forms.DateField(
+    date_game_start = forms.DateField(
         required=False,
         input_formats='%m/%d/%Y',
         label='Дата з',
         widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input'})
     )
-    dategameend = forms.DateField(
+    date_game_end = forms.DateField(
         required=False,
         input_formats='%m/%d/%Y',
         label='Дата по',
@@ -119,3 +120,25 @@ class BetProfitGraphFilterForm(BetBaseFilterForm):
     prediction = None
     result = None
     is_favourite = None
+
+
+class BetCreateForm(ModelForm):
+
+    class Meta:
+        model = BetBase
+        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'sport_kind',
+                  'date_game', 'is_favourite']
+        widgets = {
+            'prediction': forms.Select(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control',
+                                               'min': '0.00',
+                                               'step': '10.0'}),
+            'coefficient': forms.NumberInput(attrs={'class': 'form-control',
+                                                    'min': '1.00',
+                                                    'step': '0.01'}),
+            'result': forms.Select(attrs={'class': 'form-control'}),
+            'sport_kind': forms.Select(attrs={'class': 'form-control'}),
+            'date_game': forms.DateInput(attrs={'class': 'form-control datetimepicker-input'}),
+            'is_favourite': forms.Select(attrs={'class': 'form-control'}, choices=BOOL_FIELD_CHOICES),
+        }
+
