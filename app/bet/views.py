@@ -753,7 +753,7 @@ class BetGraphsRoiView(ListView):
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'roi_year_line_data': MorrisChartLine.to_json_data(
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'roi_line_ykeys': '["К-сть", "ROI"]',
+            'roi_line_ykeys': '["ROI"]',
             'roi_line_labels': '["К-сть", "ROI"]',
 
             'roi_now_bar_data': MorrisChartBar.to_json_data(
@@ -764,7 +764,7 @@ class BetGraphsRoiView(ListView):
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'roi_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'roi_bar_ykeys': '["К-сть", "ROI"]',
+            'roi_bar_ykeys': '["ROI"]',
             'roi_bar_labels': '["К-сть", "ROI"]',
 
             'filter_form': filter_form,

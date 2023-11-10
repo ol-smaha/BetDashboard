@@ -11,7 +11,7 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#5969ff', '#ff407b'],
+                lineColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -27,8 +27,8 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#69696b', '#5969ff'],
-                trendLineColors: ['#69696b', '#5969ff'],
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -44,8 +44,8 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#69696b', '#5969ff'],
-                trendLineColors: ['#69696b', '#5969ff'],
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -61,8 +61,8 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#69696b', '#5969ff'],
-                trendLineColors: ['#69696b', '#5969ff'],
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -78,8 +78,8 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                lineColors: ['#69696b', '#5969ff'],
-                trendLineColors: ['#69696b', '#5969ff'],
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -95,7 +95,7 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                   lineColors: ['#5969ff', '#FEE589'],
+                   lineColors: JSON.parse(element.dataset.colors),
                      resize: true,
                         gridTextSize: '14px'
             });
@@ -136,7 +136,7 @@
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
                 stacked: true,
-                   barColors: ['#5969ff', '#ff407b', '#25d5f2'],
+                   barColors: JSON.parse(element.dataset.colors),
                      resize: true,
                         gridTextSize: '14px'
             });
@@ -150,7 +150,7 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                barColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -164,7 +164,7 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                barColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -178,7 +178,7 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                barColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
@@ -192,7 +192,7 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                barColors: ['#69696b', '#5969ff', '#25d5f2'],
+                barColors: JSON.parse(element.dataset.colors),
                 resize: true,
                 gridTextSize: '14px'
             });
