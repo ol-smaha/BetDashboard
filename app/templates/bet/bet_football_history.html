@@ -80,7 +80,7 @@
 					<form>
 						<div class="card">
 							{% for field in filter_form.visible_fields %}
-								{% if field.name in 'dategamestart,dategameend' %}
+                            	{% if field.name in 'date_game_start,date_game_end' %}
 								<div class="card-body">
 									<h3 class="font-14">{{ field.label }}:</h3>
 									<div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">

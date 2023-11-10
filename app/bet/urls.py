@@ -2,10 +2,11 @@ from django.urls import path
 
 
 from bet.views import (BetHistoryView, BetGraphsView, Statistic, BetGraphsProfitView, BetGraphsResultView,
-                       FootballBetHistoryView, BetGraphsRoiView)
+                       FootballBetHistoryView, BetGraphsRoiView, BetCreate)
 
 urlpatterns = [
     path('history/', BetHistoryView.as_view(), name='bet_history'),
+    path('create/', BetCreate.as_view(), name='bet_create'),
     path('graphs/', BetGraphsView.as_view(), name='bet_graphs'),
     path('graphs/profit/', BetGraphsProfitView.as_view(), name='bet_graphs_profit'),
     path('graphs/result/', BetGraphsResultView.as_view(), name='bet_graphs_result'),

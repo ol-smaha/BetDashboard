@@ -29,6 +29,7 @@
                         <div id="morris_line"
                              data-data="{{ morris_line_data }}"
                              data-ykeys="{{ morris_line_ykeys }}"
+                             data-colors="{{ chart_one_line_colors }}"
                              data-labels="{{ morris_line_labels }}">
                         </div>
                     </div>
@@ -43,6 +44,7 @@
                         <div id="morris_stacked"
                              data-data="{{ morris_stacked_data }}"
                              data-ykeys="{{ morris_stacked_ykeys }}"
+                             data-colors="{{ result_colors }}"
                              data-labels="{{ morris_stacked_labels }}">
                         </div>
                     </div>
@@ -54,7 +56,10 @@
                 <div class="card">
                     <h5 class="card-header">Donut Chart </h5>
                     <div class="card-body">
-                        <div id="morris_donut" data-data="{{ morris_donut_data }}"></div>
+                        <div id="morris_donut"
+                             data-data="{{ morris_donut_data }}"
+                             data-colors="{{ result_colors }}">
+                        </div>
                     </div>
                 </div>
             </div>

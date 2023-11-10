@@ -274,6 +274,34 @@ DEFAULT_MORRIS_CHART_COLORS = [
     '#A96DFA', #фіолетовий
 ]
 
+CHART_ONE_LINE_COLORS = [
+    '#236995',
+]
+
+CHART_ONE_LINE_WITH_COUNT_COLORS = [
+    '#606060',  # count line - grey
+    '#236995',
+]
+
+OTHER_COLORS = [
+    '#606060',   # count line - grey
+    '#236995',
+    '#077373',
+    '#8b74ff',
+    '#ce4765',
+    '#356734',
+    '#66330c',
+    '#479a9a',
+]
+
+BET_RESULT_COLORS = [
+    '#6fce68',
+    '#ebbf3b',
+    '#ff6161',
+    '#828282',
+]
+
+
 BET_BASE_ORDERING_FIELDS_CHOICES = (
     ('date_game', 'Дата події'),
     ('prediction', 'Прогноз'),

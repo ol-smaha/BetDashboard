@@ -4,14 +4,16 @@ from pprint import pprint
 from dateutil.relativedelta import relativedelta
 
 from django.db.models import Count, Sum
+from django.forms import HiddenInput
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 from django.views.generic.list import ListView
 from django.utils.timezone import now
 
 from .models import BetBase, BetFootball
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartArea, MorrisChartBar
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
-from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm
-
+from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm
 
 from bet.constants import BetResultEnum
 
@@ -25,11 +27,11 @@ class BetHistoryView(ListView):
         if sport_kind_values:
             qs = qs.filter(sport_kind__name__in=sport_kind_values)
 
-        date_game_start = self.request.GET.get('dategamestart')
+        date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
 
-        date_game_end = self.request.GET.get('dategameend')
+        date_game_end = self.request.GET.get('date_game_end')
         if date_game_end:
             qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
 
@@ -252,11 +254,11 @@ class BetGraphsProfitView(ListView):
         if sport_kind_values:
             qs = qs.filter(sport_kind__name__in=sport_kind_values)
 
-        date_game_start = self.request.GET.get('dategamestart')
+        date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
 
-        date_game_end = self.request.GET.get('dategameend')
+        date_game_end = self.request.GET.get('date_game_end')
         if date_game_end:
             qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
 
@@ -355,11 +357,11 @@ class FootballBetHistoryView(ListView):
     template_name = 'bet/bet_football_history.html'
 
     def filtered_queryset(self, qs):
-        date_game_start = self.request.GET.get('dategamestart')
+        date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
 
-        date_game_end = self.request.GET.get('dategameend')
+        date_game_end = self.request.GET.get('date_game_end')
         if date_game_end:
             qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
 
@@ -532,11 +534,11 @@ class BetGraphsResultView(ListView):
         if sport_kind_values:
             qs = qs.filter(sport_kind__name__in=sport_kind_values)
 
-        date_game_start = self.request.GET.get('dategamestart')
+        date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
 
-        date_game_end = self.request.GET.get('dategameend')
+        date_game_end = self.request.GET.get('date_game_end')
         if date_game_end:
             qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
 
@@ -706,11 +708,11 @@ class BetGraphsRoiView(ListView):
         if sport_kind_values:
             qs = qs.filter(sport_kind__name__in=sport_kind_values)
 
-        date_game_start = self.request.GET.get('dategamestart')
+        date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
 
-        date_game_end = self.request.GET.get('dategameend')
+        date_game_end = self.request.GET.get('date_game_end')
         if date_game_end:
             qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
 
@@ -751,7 +753,7 @@ class BetGraphsRoiView(ListView):
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'roi_year_line_data': MorrisChartLine.to_json_data(
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'roi_line_ykeys': '["К-сть", "ROI"]',
+            'roi_line_ykeys': '["ROI"]',
             'roi_line_labels': '["К-сть", "ROI"]',
 
             'roi_now_bar_data': MorrisChartBar.to_json_data(
@@ -762,10 +764,27 @@ class BetGraphsRoiView(ListView):
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'roi_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'roi_bar_ykeys': '["К-сть", "ROI"]',
+            'roi_bar_ykeys': '["ROI"]',
             'roi_bar_labels': '["К-сть", "ROI"]',
 
             'filter_form': filter_form,
             'title': 'ROI Graphs',
         }
         return context_data
+
+
+class BetCreate(CreateView):
+    form_class = BetCreateForm
+    template_name = 'bet/bet_create.html'
+    success_url = reverse_lazy('bet_history')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['form'].fields['user'].initial = self.request.user.pk
+        context['form'].fields['user'].widget = HiddenInput()
+        return context
+
+
+
+
+
