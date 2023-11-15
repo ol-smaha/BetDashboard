@@ -6082,6 +6082,10 @@ Vertical Timeline - by CodyHouse.co
     color: #ffc600;
 }
 
+.favorite.active span {
+    color: #ffc600;
+}
+
 .email-list-item:hover {
     background-color: #fff;
 }

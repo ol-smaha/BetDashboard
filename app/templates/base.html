@@ -221,5 +221,10 @@
     <script src="{% static 'vendor/datepicker/moment.js' %}"></script>
     <script src="{% static 'vendor/datepicker/tempusdominus-bootstrap-4.js' %}"></script>
     <script src="{% static 'vendor/datepicker/datepicker.js' %}"></script>
+    <script>
+    $('#confirm-delete').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+    </script>
 
 </body>
