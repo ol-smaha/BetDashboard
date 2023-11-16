@@ -232,13 +232,15 @@ class CompetitionFootballCategoryEnum(StrEnum):
 
 
 BET_BASE_TABLE_FIELD_NAMES = {
-    'date_game': 'Date Of Game',
-    'prediction': 'Bet',
-    'amount': 'Amount',
-    'coefficient': 'Coefficient',
-    'result': 'Bet Result',
-    'profit': 'Profit',
-    'sport_kind': 'Kind Of Sport',
+    'date_game': 'Дата',
+    'prediction': 'Прогноз',
+    'amount': 'Сума',
+    'coefficient': 'Коефіцієнт',
+    'result': 'Результат ставки',
+    'profit': 'Прибуток',
+    'sport_kind': 'Спорт',
+    'is_favourite': '⭐',
+    'action_delete': '☒',
 }
 
 BET_FOOTBALL_FIELDS_NAMES = {

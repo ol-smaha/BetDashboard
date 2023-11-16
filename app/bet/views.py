@@ -3,23 +3,24 @@ from pprint import pprint
 
 from dateutil.relativedelta import relativedelta
 
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, F
 from django.forms import HiddenInput
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.shortcuts import redirect
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, DetailView, DeleteView
 from django.views.generic.list import ListView
 from django.utils.timezone import now
 
 from .models import BetBase, BetFootball
-from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartArea, MorrisChartBar
+from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm
-
 from bet.constants import BetResultEnum
 
 
 class BetHistoryView(ListView):
     model = BetBase
+    paginate_by = 50
     template_name = 'bet/bet_history.html'
 
     def filtered_queryset(self, qs):
@@ -53,7 +54,10 @@ class BetHistoryView(ListView):
             
         ordering = self.request.GET.get('ordering')
         if ordering:
-            qs = qs.order_by(ordering)
+            if ordering == 'is_favourite':
+                qs = qs.order_by('-is_favourite')
+            else:
+                qs = qs.order_by(ordering)
 
         coefficient_min = self.request.GET.get('coefficient_min')
         if coefficient_min:
@@ -73,15 +77,21 @@ class BetHistoryView(ListView):
         return filtered_qs
 
     def get_context_data(self, **kwargs):
-        filter_form = BetHistoryFilterForm
-        context_data = {
+        context = super().get_context_data()
+        filter_form = BetHistoryFilterForm(self.request.GET)
+        page_obj = context.get('page_obj')
+        page_obj_start = page_obj.number * self.paginate_by - self.paginate_by + 1
+        page_obj_end = page_obj.number * self.paginate_by
+        page_obj_end = page_obj_end if page_obj_end <= self.get_queryset().count() else self.get_queryset().count()
+        page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
+        context.update({
             'title': 'Bet History',
-            'total_bets_count': self.get_queryset().count(),
             'bet_fields': BET_BASE_TABLE_FIELD_NAMES.values(),
             'filter_form': filter_form,
-            'bets': self.get_queryset()[:50],
-        }
-        return context_data
+            'page_obj_count_string': page_obj_count_string,
+            'query_parametes': self.request.GET,
+        })
+        return context
 
 
 class BetGraphsView(ListView):
@@ -773,7 +783,7 @@ class BetGraphsRoiView(ListView):
         return context_data
 
 
-class BetCreate(CreateView):
+class BetCreateView(CreateView):
     form_class = BetCreateForm
     template_name = 'bet/bet_create.html'
     success_url = reverse_lazy('bet_history')
@@ -785,6 +795,19 @@ class BetCreate(CreateView):
         return context
 
 
+class BetBaseChangeFavouriteStatusView(DetailView):
+    model = BetBase
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().change_is_favourite()
+        return redirect(reverse_lazy('bet_history') + f'?{self.request.GET.urlencode()}')
 
 
+class BetBaseDeleteView(DetailView):
+    model = BetBase
+    pk_url_kwarg = 'id'
 
+    def get(self, request, *args, **kwargs):
+        self.get_object().delete()
+        return redirect(reverse_lazy('bet_history') + f'?{self.request.GET.urlencode()}')

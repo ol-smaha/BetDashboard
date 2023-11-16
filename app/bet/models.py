@@ -94,6 +94,11 @@ class BetBase(models.Model):
             profit = Decimal(f'-{self.amount}')
         return profit
 
+    def change_is_favourite(self, commit=True):
+        self.is_favourite = not self.is_favourite
+        if commit:
+            self.save()
+
     def save(self, *args, **kwargs):
         if self.profit is None:
             self.profit = self.calculate_profit()
