@@ -256,7 +256,8 @@ BET_FOOTBALL_FIELDS_NAMES = {
     'competition': 'Competition',
     'game_status': 'Game Status',
     'is_home_guest': 'Is Home Guest',
-
+    'is_favourite': '⭐',
+    'action_delete': '☒',
 }
 
 

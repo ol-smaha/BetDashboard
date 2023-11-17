@@ -3,7 +3,7 @@ from django.forms import ModelForm
 
 from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
     GameStatusEnum, BetPredictionEnum
-from bet.models import SportKind, CompetitionBase, BetBase
+from bet.models import SportKind, CompetitionBase, BetBase, BetFootball
 
 
 class OrderingBaseForm(forms.Form):
@@ -90,7 +90,15 @@ class BetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm):
     prediction = None
 
 
-class FootballBetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm):
+class FootballSearchForm(forms.Form):
+    value = forms.CharField(
+        label='Пошук',
+        max_length=128,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control-checkbox'}))
+
+
+class FootballBetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm, FootballSearchForm):
     sport_kind = None
     prediction = None
 
@@ -141,4 +149,28 @@ class BetCreateForm(ModelForm):
             'date_game': forms.DateInput(attrs={'class': 'form-control datetimepicker-input'}),
             'is_favourite': forms.Select(attrs={'class': 'form-control'}, choices=BOOL_FIELD_CHOICES),
         }
+
+
+class BetFootballCreateForm(ModelForm):
+    class Meta:
+        model = BetFootball
+        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'sport_kind',
+                  'date_game', 'is_favourite', 'bet_type', 'competition']
+        widgets = {
+            'prediction': forms.Select(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control',
+                                               'min': '0.00',
+                                               'step': '10.0'}),
+            'coefficient': forms.NumberInput(attrs={'class': 'form-control',
+                                                    'min': '1.00',
+                                                    'step': '0.01'}),
+            'result': forms.Select(attrs={'class': 'form-control'}),
+            'sport_kind': forms.Select(attrs={'class': 'form-control'}),
+            'date_game': forms.DateInput(attrs={'class': 'form-control datetimepicker-input'}),
+            'bet_type': forms.Select(attrs={'class': 'form-control'}),
+            'competition': forms.Select(attrs={'class': 'form-control'}),
+            'is_favourite': forms.Select(attrs={'class': 'form-control'}, choices=BOOL_FIELD_CHOICES),
+        }
+
+
 
