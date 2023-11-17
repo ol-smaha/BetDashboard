@@ -3,7 +3,7 @@ from pprint import pprint
 
 from dateutil.relativedelta import relativedelta
 
-from django.db.models import Count, Sum, F
+from django.db.models import Count, Sum, F, Q
 from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -14,7 +14,8 @@ from django.utils.timezone import now
 from .models import BetBase, BetFootball
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
-from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm
+from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
+    BetFootballCreateForm
 from bet.constants import BetResultEnum
 
 
@@ -364,9 +365,18 @@ class Statistic(ListView):
 
 class FootballBetHistoryView(ListView):
     model = BetFootball
+    paginate_by = 50
     template_name = 'bet/bet_football_history.html'
 
     def filtered_queryset(self, qs):
+        search_value = self.request.GET.get('value')
+        if search_value:
+            self.queryset = self.model.objects.filter(
+                Q(team_home__icontains=search_value) | Q(team_guest__icontains=search_value)
+            )
+        else:
+            self.queryset = self.model.objects.all()
+
         date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
@@ -397,7 +407,10 @@ class FootballBetHistoryView(ListView):
 
         ordering = self.request.GET.get('ordering')
         if ordering:
-            qs = qs.order_by(ordering)
+            if ordering == 'is_favourite':
+                qs = qs.order_by('-is_favourite')
+            else:
+                qs = qs.order_by(ordering)
 
         coefficient_min = self.request.GET.get('coefficient_min')
         if coefficient_min:
@@ -429,15 +442,23 @@ class FootballBetHistoryView(ListView):
         return filtered_qs
 
     def get_context_data(self, **kwargs):
-        filter_form = FootballBetHistoryFilterForm
-
-        context_data = {
+        context = super().get_context_data()
+        filter_form = FootballBetHistoryFilterForm(self.request.GET)
+        page_obj = context.get('page_obj')
+        page_obj_start = page_obj.number * self.paginate_by - self.paginate_by + 1
+        page_obj_end = page_obj.number * self.paginate_by
+        page_obj_end = page_obj_end if page_obj_end <= self.get_queryset().count() else self.get_queryset().count()
+        page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
+        context.update({
             'title': 'Football Bet History',
-            'bets': self.get_queryset()[:50],
+            'total_bets_count': self.get_queryset().count(),
             'football_bet_fields': BET_FOOTBALL_FIELDS_NAMES.values(),
-            'filter_form': filter_form
-        }
-        return context_data
+            'filter_form': filter_form,
+            'bets': self.get_queryset()[:50],
+            'page_obj_count_string': page_obj_count_string,
+            'query_parametes': self.request.GET,
+        })
+        return context
 
 
 class BetGraphsResultView(ListView):
@@ -811,3 +832,33 @@ class BetBaseDeleteView(DetailView):
     def get(self, request, *args, **kwargs):
         self.get_object().delete()
         return redirect(reverse_lazy('bet_history') + f'?{self.request.GET.urlencode()}')
+
+
+class BetFootballCreateView(CreateView):
+    form_class = BetFootballCreateForm
+    template_name = 'bet/bet_football_create.html'
+    success_url = reverse_lazy('football_history')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['form'].fields['user'].initial = self.request.user.pk
+        context['form'].fields['user'].widget = HiddenInput()
+        return context
+
+
+class BetFootballChangeFavouriteStatusView(DetailView):
+    model = BetFootball
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().change_is_favourite()
+        return redirect(reverse_lazy('football_history') + f'?{self.request.GET.urlencode()}')
+
+
+class BetFootballDeleteView(DetailView):
+    model = BetFootball
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().delete()
+        return redirect(reverse_lazy('football_history') + f'?{self.request.GET.urlencode()}')

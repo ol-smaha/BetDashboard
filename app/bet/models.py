@@ -121,6 +121,11 @@ class BetFootball(BetBase):
                                    default=GameStatusEnum.UNKNOWN)
     is_home_guest = models.BooleanField(default=True)
 
+    def change_is_favourite(self, commit=True):
+        self.is_favourite = not self.is_favourite
+        if commit:
+            self.save()
+
     def save(self, *args, **kwargs):
         if self.bet_type == BetTypeEnum.UNKNOWN or not self.bet_type or self.prediction:
             self.bet_type = BetTypeEnum.get_value_by_bet(self.prediction)
