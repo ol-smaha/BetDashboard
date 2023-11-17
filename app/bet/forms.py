@@ -91,11 +91,11 @@ class BetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm):
 
 
 class FootballSearchForm(forms.Form):
-    value = forms.CharField(
+    search = forms.CharField(
         label='Пошук',
         max_length=128,
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control-checkbox'}))
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
 class FootballBetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm, FootballSearchForm):

@@ -369,13 +369,11 @@ class FootballBetHistoryView(ListView):
     template_name = 'bet/bet_football_history.html'
 
     def filtered_queryset(self, qs):
-        search_value = self.request.GET.get('value')
+        search_value = self.request.GET.get('search')
         if search_value:
-            self.queryset = self.model.objects.filter(
-                Q(team_home__icontains=search_value) | Q(team_guest__icontains=search_value)
+            qs = qs.filter(
+                Q(team_home__name__icontains=search_value) | Q(team_guest__name__icontains=search_value)
             )
-        else:
-            self.queryset = self.model.objects.all()
 
         date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
