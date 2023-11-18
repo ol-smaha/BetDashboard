@@ -3,7 +3,7 @@ from pprint import pprint
 
 from dateutil.relativedelta import relativedelta
 
-from django.db.models import Count, Sum, F, Q
+from django.db.models import Count, Sum, F, Q, Avg
 from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -860,3 +860,168 @@ class BetFootballDeleteView(DetailView):
     def get(self, request, *args, **kwargs):
         self.get_object().delete()
         return redirect(reverse_lazy('football_history') + f'?{self.request.GET.urlencode()}')
+
+
+class BetGraphsAvgAmountView(ListView):
+    model = BetBase
+    template_name = 'bet/bet_graphs_amount.html'
+
+    @staticmethod
+    def _process_amount_avg(qs, check_date, data, date_format='%Y-%m-%d'):
+        date_str = check_date.strftime(date_format)
+        amount = round(qs.values('amount').aggregate(Avg('amount')).get('amount__avg') or 0.00, 2)
+        data.update({date_str: {'Середня ставка': float(amount), 'К-сть': qs.count()}})
+
+    def _get_amount_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
+        data = {}
+
+        if date_type == ChartDateType.NOW:
+            # всі ставки від найпершої по кожен день поточного місяця
+            now_date = now().date()
+            for day in range(1, now_date.day+1):
+                check_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_amount_avg(qs, check_date, data)
+
+        elif date_type == ChartDateType.LAST_30_DAYS:
+            # всі ставки від найпершої по кожен день останніх 30 днів
+            start_date = now() - relativedelta(days=30)
+            for day in range(0, 31):
+                check_date = start_date + relativedelta(days=day)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_amount_avg(qs, check_date, data)
+
+        elif date_type == ChartDateType.MONTHS:
+            # всі ставки від найпершої по останній день місяця останніх 12 місяців
+            start_date = now() - relativedelta(years=1)
+            start_date = start_date.replace(day=1)
+            for month in range(1, 13):
+                month_date_start = start_date + relativedelta(months=month)
+                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
+
+        elif ChartDateType.YEARS:
+            # всі ставки від найпершої по останній день року всіх років
+            earliest_bet = self.get_queryset().earliest('date_game')
+            start_year = earliest_bet.date_game.year
+            end_year = now().year
+
+            for year in range(start_year, end_year+1):
+                check_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__lte=check_date)
+                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
+
+        return data
+
+    def _get_amount_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
+        data = {}
+
+        if date_type == ChartDateType.NOW:
+            # ставки за кожен окремий день поточного місяця
+            now_date = now().date()
+            for day in range(1, now_date.day+1):
+                check_date = now_date.replace(day=day)
+                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
+                self._process_amount_avg(qs, check_date, data)
+
+        elif date_type == ChartDateType.LAST_30_DAYS:
+            # ставки за кожен окремий день останніх 30 днів
+            start_date = now() - relativedelta(days=30)
+            for day in range(0, 31):
+                check_date = start_date + relativedelta(days=day)
+                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
+                self._process_amount_avg(qs, check_date, data)
+
+        elif date_type == ChartDateType.MONTHS:
+            # ставки за кожен окремий місяць останніх 12 місяців
+            start_date = now() - relativedelta(years=1)
+            start_date = start_date.replace(day=1)
+            for month in range(1, 13):
+                month_date_start = start_date + relativedelta(months=month)
+                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
+                qs = self.get_queryset().filter(date_game__range=[month_date_start, check_date])
+                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
+
+        elif ChartDateType.YEARS:
+            # ставки за кожен окремий рік
+            earliest_bet = self.get_queryset().earliest('date_game')
+            start_year = earliest_bet.date_game.year
+            end_year = now().year
+
+            for year in range(start_year, end_year+1):
+                start_year_date = date(year=year, month=1, day=1)
+                check_date = date(year=year, month=12, day=31)
+                qs = self.get_queryset().filter(date_game__range=[start_year_date, check_date])
+                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
+
+        return data
+
+    def filtered_queryset(self, qs):
+        sport_kind_values = self.request.GET.getlist('sport_kind')
+        if sport_kind_values:
+            qs = qs.filter(sport_kind__name__in=sport_kind_values)
+
+        date_game_start = self.request.GET.get('date_game_start')
+        if date_game_start:
+            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
+
+        date_game_end = self.request.GET.get('date_game_end')
+        if date_game_end:
+            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
+
+        amount_min = self.request.GET.get('amount_min')
+        if amount_min:
+            qs = qs.filter(amount__gte=amount_min)
+
+        amount_max = self.request.GET.get('amount_max')
+        if amount_max:
+            qs = qs.filter(amount__lte=amount_max)
+
+        coefficient_min = self.request.GET.get('coefficient_min')
+        if coefficient_min:
+            qs = qs.filter(coefficient__gte=coefficient_min)
+
+        coefficient_max = self.request.GET.get('coefficient_max')
+        if coefficient_max:
+            qs = qs.filter(coefficient__lte=coefficient_max)
+
+        return qs
+
+    def base_queryset(self):
+        return self.model.objects.all()
+
+    def get_queryset(self):
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs
+
+    def get_context_data(self, **kwargs):
+        filter_form = BetProfitGraphFilterForm
+
+        context_data = {
+            'amount_now_line_data': MorrisChartLine.to_json_data(
+                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
+            'amount_last_line_data': MorrisChartLine.to_json_data(
+                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.LAST_30_DAYS)),
+            'amount_month_line_data': MorrisChartLine.to_json_data(
+                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
+            'amount_year_line_data': MorrisChartLine.to_json_data(
+                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
+            'amount_line_ykeys': '["К-сть", "Середня ставка"]',
+            'amount_line_labels': '["К-сть", "Середня ставка"]',
+
+            'amount_now_bar_data': MorrisChartBar.to_json_data(
+                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
+            'amount_last_bar_data': MorrisChartBar.to_json_data(
+                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.LAST_30_DAYS)),
+            'amount_month_bar_data': MorrisChartBar.to_json_data(
+                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
+            'amount_year_bar_data': MorrisChartBar.to_json_data(
+                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
+            'amount_bar_ykeys': '["К-сть", "Середня ставка"]',
+            'amount_bar_labels': '["К-сть", "Середня ставка"]',
+
+            'filter_form': filter_form,
+            'title': 'Amount Graphs',
+        }
+        return context_data
