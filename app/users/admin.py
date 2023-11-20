@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, TariffPlan
+from .models import CustomUser, TariffPlan, AboutUs, ContactUs
 
 
 class CustomUserAdmin(UserAdmin):
@@ -35,5 +35,16 @@ class TariffPlanAdmin(admin.ModelAdmin):
         queryset.update(is_active=False)
 
 
+class AboutUsAdmin(admin.ModelAdmin):
+    list_display = ['email', 'phone']
+
+
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ['user', 'message']
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(TariffPlan, TariffPlanAdmin)
+admin.site.register(AboutUs, AboutUsAdmin)
+admin.site.register(ContactUs, ContactUsAdmin)
+

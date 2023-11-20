@@ -1025,3 +1025,9 @@ class BetGraphsAvgAmountView(ListView):
             'title': 'Amount Graphs',
         }
         return context_data
+
+
+
+
+
+

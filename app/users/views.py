@@ -1,6 +1,10 @@
-from django.views.generic import TemplateView
+from django.forms import HiddenInput
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
 from django.views.generic.list import ListView
-from .models import TariffPlan
+
+from .forms import UserCreateMessageForm
+from .models import TariffPlan, AboutUs
 
 
 class HomePageView(TemplateView):
@@ -20,5 +24,27 @@ class Tariff(ListView):
             'title': 'Tariffs',
         }
         return context_data
+
+
+class AboutUsView(CreateView):
+    model = AboutUs
+    template_name = 'about_us/about_us.html'
+    form_class = UserCreateMessageForm
+    success_url = reverse_lazy('about-us')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context['form'].fields['user'].initial = self.request.user.pk
+        context['form'].fields['user'].widget = HiddenInput()
+        model_object = self.model.objects.all().first()
+        context.update({
+            'object': model_object,
+            'title': 'About Us'
+        })
+        return context
+
+
+
+
 
 

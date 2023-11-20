@@ -27,6 +27,8 @@ urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
     path('tariff/', Tariff.as_view(), name='tariff'),
     path('bet/', include('bet.urls')),
+    path('', include('users.urls')),
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -36,3 +36,18 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+
+class AboutUs(models.Model):
+    email = models.EmailField(max_length=128)
+    phone = models.CharField(max_length=32)
+    fb_link = models.URLField(verbose_name='facebook', blank=True, null=True)
+    inst_link = models.URLField(verbose_name='instagram', blank=True, null=True)
+    twit_link = models.URLField(verbose_name='twitter', blank=True, null=True)
+    img = models.ImageField(upload_to='media/images/', blank=True, null=True)
+
+
+class ContactUs(models.Model):
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
+                             related_name='contact_messages')
+    message = models.TextField(null=True, blank=True)
+
