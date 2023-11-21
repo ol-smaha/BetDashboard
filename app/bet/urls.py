@@ -4,7 +4,7 @@ from django.urls import path
 from bet.views import (BetHistoryView, BetGraphsView, Statistic, BetGraphsProfitView, BetGraphsResultView,
                        FootballBetHistoryView, BetGraphsRoiView, BetCreateView, BetBaseChangeFavouriteStatusView,
                        BetBaseDeleteView, BetFootballChangeFavouriteStatusView, BetFootballDeleteView,
-                       BetFootballCreateView, BetGraphsAvgAmountView)
+                       BetFootballCreateView, BetGraphsAvgAmountView, RatingGraphsView)
 
 urlpatterns = [
     path('history/', BetHistoryView.as_view(), name='bet_history'),
@@ -21,5 +21,6 @@ urlpatterns = [
     path('delete_football/<int:id>', BetFootballDeleteView.as_view(), name='football_bet_delete'),
     path('change_favourite_status_football/<int:id>', BetFootballChangeFavouriteStatusView.as_view(), name='football_bet_change_favourite_status'),
     path('graphs/amount/', BetGraphsAvgAmountView.as_view(), name='bet_graphs_amount'),
+    path('graphs/rating/',  RatingGraphsView.as_view(), name='rating_graphs'),
 
 ]
