@@ -1027,7 +1027,20 @@ class BetGraphsAvgAmountView(ListView):
         return context_data
 
 
+class RatingGraphsView(ListView):
+    model = BetFootball
+    template_name = 'bet/rating.html'
 
+    def _process_rating_profit_from_competition(self):
+       qs = self.model.objects.all() \
+            .values('competition__name') \
+            .annotate(profit=Sum('profit')) \
+            .order_by('-profit')
+       print(qs)
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update({
+            'profit_by_competition': self._process_rating_profit_from_competition(),
 
-
+        })
