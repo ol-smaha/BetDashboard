@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, date
 from pprint import pprint
 
@@ -1031,16 +1032,50 @@ class RatingGraphsView(ListView):
     model = BetFootball
     template_name = 'bet/rating.html'
 
+    def _get_competition_values(self):
+        values = []
+        for val in self.get_queryset().values_list('competition__name', flat=True).distinct():
+            val = val if val is not None else 'Інше'
+            values.append(val)
+        return values
+
     def _process_rating_profit_from_competition(self):
-       qs = self.model.objects.all() \
-            .values('competition__name') \
-            .annotate(profit=Sum('profit')) \
-            .order_by('-profit')
-       print(qs)
+        data = {}
+        qs = (self.get_queryset()
+              .values('competition__name')
+              .annotate(profit=Sum('profit'), count=Count('pk'))
+              .order_by('-profit'))
+
+        for element in qs:
+            competition = element.get('competition__name') or 'Інше'
+            profit = element.get('profit') or 0.00
+            data.update({
+                competition: {
+                    'Профіт': round(float(profit), 2),
+                    'К-сть': element.get('count') or 0
+                }
+            })
+        return data
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         context.update({
-            'profit_by_competition': self._process_rating_profit_from_competition(),
+            'profit_by_competition_labels': json.dumps(['Профіт', 'К-сть']),
+            'profit_by_competition_ykeys': json.dumps(['Профіт', 'К-сть']),
+            'profit_by_competition_data': MorrisChartBar.to_json_data(
+                self._process_rating_profit_from_competition()),
+            'roi_by_competition_labels': '',
+            'roi_by_competition_data': '',
 
+            'profit_by_bet_type_labels': '',
+            'profit_by_bet_type_data': '',
+            'roi_by_bet_type_labels': '',
+            'roi_by_bet_type_data': '',
+
+            'profit_by_sport_kind_labels': '',
+            'profit_by_sport_kind_data': '',
+            'roi_by_sport_kind_labels': '',
+            'roi_by_sport_kind_data': '',
         })
+
+        return context

@@ -198,6 +198,35 @@
             });
         }
 
+        if ($('#morris_bar_5').length) {
+            const element = document.getElementById("morris_bar_5")
+            Morris.Bar({
+                element: 'morris_bar_5',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                barColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                gridTextSize: '14px'
+            });
+        }
+
+        if ($('#morris_bar_6').length) {
+            const element = document.getElementById("morris_bar_6")
+            Morris.Bar({
+                element: 'morris_bar_6',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                barColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                gridTextSize: '14px'
+            });
+        }
+
+
         if ($('#morris_udateing').length) {
             var nReloads = 0;
 

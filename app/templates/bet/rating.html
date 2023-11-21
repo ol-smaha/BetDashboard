@@ -4,37 +4,167 @@
 
 {% block main %}
 
+<div class="container-fluid  dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">Rating Graphs </h2>
+                <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Bet Graphs</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-xl-10 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
+                <div class="section-block">
+                    <h4 class="section-title">Прибуток за весь час:</h4>
+                </div>
+                <div class="tab-regular">
+                    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link show active" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
+                                Ліги
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                                Вид Спорту
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="month-profit-line-tab" href="#month-profit-line" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
+                                Тип Ставки
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
+                            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <h5 class="card-header">Прибуток</h5>
+                                    <div class="card-body">
+                                        <div id="morris_bar_1"
+                                             data-colors="{{ chart_one_line_colors }}"
+                                             data-labels="{{ profit_by_competition_labels }}"
+                                             data-ykeys="{{ profit_by_competition_ykeys }}"
+                                             data-data="{{ profit_by_competition_data }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+							<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <h5 class="card-header">РОЙ</h5>
+                                    <div class="card-body">
+                                        <div id="morris_bar_2"
+                                             data-colors="{{ chart_one_line_colors }}"
+                                             data-labels="{{ profit_by_competition_labels }}"
+                                             data-ykeys="{{ profit_by_competition_ykeys }}"
+                                             data-data="{{ profit_by_competition_data }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
+                           	<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <h5 class="card-header">Прибуток</h5>
+                                    <div class="card-body">
+                                        <div id="morris_bar_3"
+                                             data-colors="{{ chart_one_line_colors }}"
+                                             data-labels="{{ profit_by_competition_labels }}"
+                                             data-ykeys="{{ profit_by_competition_ykeys }}"
+                                             data-data="{{ profit_by_competition_data }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+							<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <h5 class="card-header">РОЙ</h5>
+                                    <div class="card-body">
+                                        <div id="morris_bar_4"
+                                             data-colors="{{ chart_one_line_colors }}"
+                                             data-labels="{{ profit_by_competition_labels }}"
+                                             data-ykeys="{{ profit_by_competition_ykeys }}"
+                                             data-data="{{ profit_by_competition_data }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
+                           	<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <h5 class="card-header">Прибуток</h5>
+                                    <div class="card-body">
+                                        <div id="morris_bar_5"
+                                             data-colors="{{ chart_one_line_colors }}"
+                                             data-labels="{{ profit_by_competition_labels }}"
+                                             data-ykeys="{{ profit_by_competition_ykeys }}"
+                                             data-data="{{ profit_by_competition_data }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+							<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <h5 class="card-header">РОЙ</h5>
+                                        <div id="morris_bar_6"
+                                             data-colors="{{ chart_one_line_colors }}"
+                                             data-labels="{{ profit_by_competition_labels }}"
+                                             data-ykeys="{{ profit_by_competition_ykeys }}"
+                                             data-data="{{ profit_by_competition_data }}">
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
+                <form>
+                    <div class="card">
+                        {% for field in filter_form.visible_fields %}
+                            {% if field.name in 'date_game_start,date_game_end' %}
+                            <div class="card-body">
+                                <h3 class="font-14">{{ field.label }}:</h3>
+                                <div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
+                                    {{ field }}
+                                    <div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                                <div class="card-body">
+                                    <h3 class="font-14">{{ field.label }}:</h3>
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="card-body border-top">
+                            <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
-	<div class="col-xl-5 col-lg-12 col-md-6 col-sm-12 col-12">
-		<div class="card">
-			<h5 class="card-header">Top Folllowes by Locations </h5>
-			<div class="card-body">
-				<canvas id="chartjs_bar_horizontal"></canvas>
-			</div>
-		</div>
-	</div>
 
 
 {% endblock main %}
 
-
-
-<!--&lt;!&ndash; Optional JavaScript &ndash;&gt;-->
-<!--&lt;!&ndash; jquery 3.3.1 &ndash;&gt;-->
-<!--<script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>-->
-<!--&lt;!&ndash; bootstap bundle js &ndash;&gt;-->
-<!--<script src="assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>-->
-<!--&lt;!&ndash; slimscroll js &ndash;&gt;-->
-<!--<script src="assets/vendor/slimscroll/jquery.slimscroll.js"></script>-->
-<!--&lt;!&ndash; main js &ndash;&gt;-->
-<!--<script src="assets/libs/js/main-js.js"></script>-->
-<!--&lt;!&ndash; morris-chart js &ndash;&gt;-->
-<!--<script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>-->
-<!--<script src="assets/vendor/charts/morris-bundle/morris.js"></script>-->
-<!--<script src="assets/vendor/charts/morris-bundle/morrisjs.html"></script>-->
-<!--&lt;!&ndash; chart js &ndash;&gt;-->
-<!--<script src="assets/vendor/charts/charts-bundle/Chart.bundle.js"></script>-->
-<!--<script src="assets/vendor/charts/charts-bundle/chartjs.js"></script>-->
-<!--&lt;!&ndash; dashboard js &ndash;&gt;-->
-<!--<script src="assets/libs/js/dashboard-influencer.js"></script>-->

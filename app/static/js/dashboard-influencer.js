@@ -24,9 +24,9 @@ $(function() {
         formatter: function(x) { return x + "%" }
     });
 
-    // ============================================================== 
+    // ==============================================================
     //  chart bar horizontal
-    // ============================================================== 
+    // ==============================================================
     var ctx = document.getElementById("chartjs_bar_horizontal").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'horizontalBar',
