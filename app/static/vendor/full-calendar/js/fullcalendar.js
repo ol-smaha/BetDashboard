@@ -2709,18 +2709,18 @@ exports.globalDefaults = {
     locale: null,
     isRTL: false,
     buttonText: {
-        prev: 'prev',
-        next: 'next',
-        prevYear: 'prev year',
-        nextYear: 'next year',
-        year: 'year',
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day'
+        prev: 'попередній',
+        next: 'наступний',
+        prevYear: 'попередній рік',
+        nextYear: 'наступний рік',
+        year: 'рік',
+        today: 'сьогодні',
+        month: 'місяць',
+        week: 'тиждень',
+        day: 'день'
     },
     // buttonIcons: null,
-    allDayText: 'all-day',
+    allDayText: '',
     // allows setting a min-height to the event segment to prevent short events overlapping each other
     agendaEventMinHeight: 0,
     // jquery-ui theming
@@ -2737,7 +2737,7 @@ exports.globalDefaults = {
     eventOrder: 'title',
     // eventRenderWait: null,
     eventLimit: false,
-    eventLimitText: 'more',
+    eventLimitText: 'більше',
     eventLimitClick: 'popover',
     dayPopoverFormat: 'LL',
     handleWindowResize: true,
@@ -11319,7 +11319,7 @@ var Scroller_1 = __webpack_require__(39);
 var View_1 = __webpack_require__(41);
 var TimeGrid_1 = __webpack_require__(227);
 var DayGrid_1 = __webpack_require__(61);
-var AGENDA_ALL_DAY_EVENT_LIMIT = 5;
+var AGENDA_ALL_DAY_EVENT_LIMIT = 7;
 var agendaTimeGridMethods;
 var agendaDayGridMethods;
 /* An abstract class for all agenda-related views. Displays one more columns with time slots running vertically.

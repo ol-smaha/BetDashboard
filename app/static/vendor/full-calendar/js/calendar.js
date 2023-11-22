@@ -29,6 +29,7 @@ $(function() {
                     backgroundColor: '#ffc108',
                     borderColor: '#ffc108'
 
+
                 },
                 {
                     id: 999,
@@ -91,7 +92,24 @@ $(function() {
         });
 
     });
-  
+
+    $(document).ready(function() {
+        const element = document.getElementById("calendar_bet")
+        $('#calendar_bet').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month'
+            },
+            defaultDate: JSON.parse(element.dataset.now),
+            navLinks: true, // can click day/week names to navigate views
+            editable: false,
+            eventLimit: false, // allow "more" link when too many events
+            events: JSON.parse(element.dataset.data),
+        });
+
+    });
+
    
     $(document).ready(function() {
 

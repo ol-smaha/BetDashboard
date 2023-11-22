@@ -1,5 +1,7 @@
 import json
 
+from bet.constants import get_result_color
+
 
 class MorrisChartDonut:
     """ For #morris_donut in 'static/vendor/charts/morris-bundle/Morrisjs.js' """
@@ -139,3 +141,48 @@ class MorrisChartStacked:
 
 class MorrisChartBar(MorrisChartStacked):
     """ For #morris_bar in 'static/vendor/charts/morris-bundle/Morrisjs.js' """
+
+
+class CalendarDashboard:
+    """ For #calendar_bet in 'static/vendor/full-calendar/js/calendar.js' """
+
+    def __init__(self, input_data):
+        self.json_data = self.to_json_data(input_data)
+
+    @staticmethod
+    def to_json_data(input_data: dict):
+        """
+        Example input data:
+            {
+                2018-03-12: [{result: 'Виграш', amount: 100, coefficient: 1.5, profit: 50}],
+                2018-03-13: [{result: 'Програш', amount: 200, coefficient: 1.5, profit: -200}],
+                2018-03-14: [{result: 'Повернення', amount: 100, coefficient: 2, profit: 0}],
+            }
+        Example output data (json):
+            '[
+                {"title": "WIN 50 (100 * 1.5)", "start": "2018-03-12", "backgroundColor": '#ffc108'},
+                {"title": "LOSE -200 (200 * 1.5)", "start": "2018-03-13", "backgroundColor": '#25d5f2'},
+                {"title": "DRAWN 0 (100 * 2)", "start": "2018-03-14", "backgroundColor": '#ef172c'}
+            ]'
+        x: point on horizontal line 'x' in graphs
+        name1, name2, name3, (etc): point to generate graphs line
+        """
+
+        data = []
+        for date, objects in input_data.items():
+            for obj in objects:
+                pre_title = "+" if obj.get('profit') > 0 else ''
+                row_dict = {
+                    'start': date,
+                    'backgroundColor': get_result_color(obj.get('result')),
+                    'borderColor': get_result_color(obj.get('result')),
+                    'title': f"{pre_title}{obj.get('profit')} ({obj.get('amount')} * {obj.get('coefficient')})",
+                }
+                data.append(row_dict)
+
+        try:
+            json_data = json.dumps(data)
+            return json_data
+        except Exception as e:
+            print(e)
+            return '[]'
