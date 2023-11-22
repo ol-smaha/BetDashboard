@@ -173,5 +173,8 @@ class BetFootballCreateForm(ModelForm):
         }
 
 
-
-
+class RatingFilterForm(BetBaseFilterForm):
+    sport_kind = None
+    prediction = None
+    result = None
+    is_favourite = None
