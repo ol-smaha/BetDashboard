@@ -4,7 +4,7 @@ from pprint import pprint
 
 from dateutil.relativedelta import relativedelta
 
-from django.db.models import Count, Sum, F, Q, Avg
+from django.db.models import Count, Sum, F, Q, Avg, Min
 from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -13,7 +13,7 @@ from django.views.generic.list import ListView
 from django.utils.timezone import now
 
 from .models import BetBase, BetFootball
-from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar
+from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
     BetFootballCreateForm, RatingFilterForm
@@ -1194,4 +1194,41 @@ class RatingGraphsView(ListView):
                 self._process_rating_roi_from_sport_kind()),
         })
 
+        return context
+
+
+class CalendarView(ListView):
+    model = BetBase
+    template_name = 'bet/calendar.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+    def _prepare_calendar_data(self):
+        data = {}
+        start_date = self.get_queryset().values('date_game').aggregate(min_date=Min('date_game')).get('min_date')
+        end_date = now().date()
+        qs = self.get_queryset().filter(date_game__range=[start_date, end_date]).order_by('date_game', 'result')
+
+        for obj in qs:
+            date_str = datetime.strftime(obj.date_game, '%Y-%m-%d')
+            inner_dict = {
+                'result': obj.result,
+                'amount': obj.amount,
+                'coefficient': obj.coefficient,
+                'profit': obj.profit,
+            }
+            if data.get(date_str):
+                data[date_str].append(inner_dict)
+            else:
+                data[date_str] = [inner_dict]
+
+        return data
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update({
+            'calendar_data': CalendarDashboard.to_json_data(self._prepare_calendar_data()),
+            'date_now': json.dumps(datetime.strftime(now().date(), '%Y-%m-%d'))
+        })
         return context

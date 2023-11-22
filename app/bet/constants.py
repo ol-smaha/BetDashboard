@@ -282,12 +282,12 @@ CHART_ONE_LINE_COLORS = [
 ]
 
 CHART_ONE_LINE_WITH_COUNT_COLORS = [
-    '#606060',  # count line - grey
+    '#bfbfbd',  # count line - grey
     '#236995',
 ]
 
 OTHER_COLORS = [
-    '#606060',   # count line - grey
+    '#bfbfbd',   # count line - grey
     '#236995',
     '#077373',
     '#8b74ff',
@@ -301,8 +301,18 @@ BET_RESULT_COLORS = [
     '#6fce68',
     '#ebbf3b',
     '#ff6161',
-    '#828282',
+    '#bfbfbd',
 ]
+
+
+def get_result_color(result):
+    colors = {
+        BetResultEnum.WIN: '#6fce68',
+        BetResultEnum.DRAWN: '#ebbf3b',
+        BetResultEnum.LOSE: '#ff6161',
+        BetResultEnum.UNKNOWN: '#bfbfbd',
+    }
+    return colors.get(result, '#828282')
 
 
 BET_BASE_ORDERING_FIELDS_CHOICES = (

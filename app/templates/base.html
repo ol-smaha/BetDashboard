@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="{% static 'vendor/charts/morris-bundle/morris.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/datepicker/tempusdominus-bootstrap-4.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/full-calendar/css/fullcalendar.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/full-calendar/css/fullcalendar.print.css' %}" media='print'>
 
 </head>
 
@@ -137,6 +139,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" href="{% url 'bet_graphs_amount' %}">Amount Graphs</a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{% url 'calendar' %}">Calendar</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
@@ -226,6 +231,12 @@
     <script src="{% static 'vendor/datepicker/moment.js' %}"></script>
     <script src="{% static 'vendor/datepicker/tempusdominus-bootstrap-4.js' %}"></script>
     <script src="{% static 'vendor/datepicker/datepicker.js' %}"></script>
+    <script src="{% static 'vendor/full-calendar/js/moment.min.js' %}"></script>
+    <script src="{% static 'vendor/full-calendar/js/fullcalendar.js' %}"></script>
+    <script src="{% static 'vendor/full-calendar/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'vendor/full-calendar/js/calendar.js' %}"></script>
+
+
     <script>
     $('#confirm-delete').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
