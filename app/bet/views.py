@@ -72,7 +72,7 @@ class BetHistoryView(ListView):
         return qs
 
     def base_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.filter(user=self.request.user)
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -147,11 +147,12 @@ class BetGraphsView(ListView):
         return self.model.objects.all()
 
     def get_context_data(self, **kwargs):
+        context = super().get_context_data()
         morris_line_json = MorrisChartLine.to_json_data(self._get_morris_chart_line_data())
         morris_stacked_bar_json = MorrisChartStacked.to_json_data(self._get_morris_chart_stacked_data())
         morris_donut_json = MorrisChartDonut.to_json_data(self._get_morris_chart_donut_data())
 
-        context_data = {
+        context.update({
             'morris_line_data': morris_line_json,
             'morris_line_ykeys': json.dumps(["BETS"]),
             'morris_line_labels': json.dumps(["BETS"]),
@@ -162,8 +163,8 @@ class BetGraphsView(ListView):
                                                 BetResultEnum.LOSE, BetResultEnum.UNKNOWN]),
             'morris_donut_data': morris_donut_json,
             'title': 'Bets Graphs'
-        }
-        return context_data
+        })
+        return context
 
 
 class BetGraphsProfitView(ListView):
@@ -819,6 +820,9 @@ class BetBaseChangeFavouriteStatusView(DetailView):
     model = BetBase
     pk_url_kwarg = 'id'
 
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
     def get(self, request, *args, **kwargs):
         self.get_object().change_is_favourite()
         return redirect(reverse_lazy('bet_history') + f'?{self.request.GET.urlencode()}')
@@ -1058,24 +1062,17 @@ class RatingGraphsView(ListView):
 
     def _process_rating_roi_from_competition(self):
         data = {}
-
         qs = (self.get_queryset()
               .values('competition__name')
-              .annotate(profit=Sum('profit'), amount=Sum('amount'))
-              .order_by('-profit'))
+              .annotate(profit_sum=Sum('profit'), amount_sum=Sum('amount'))
+              .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+              .order_by('-roi'))
+
         for element in qs:
             competition = element.get('competition__name') or 'Інше'
-            profit_dec = element.get('profit') or 0.00
-            profit = float(profit_dec)
-            amount_dec = element.get('amount') or 0.00
-            amount = float(amount_dec)
-            if amount:
-                roi = round(profit * 100 / amount, 2)
-            else:
-                roi = 0.00
             data.update({
                 competition: {
-                    'ROI': round(float(roi), 2),
+                    'ROI': round(float(element.get('roi')), 2),
                 }
             })
         return data

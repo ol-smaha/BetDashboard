@@ -42,7 +42,7 @@ class BetBaseFilterForm(forms.Form):
         step_size='10.0',
         decimal_places=2,
         label='Сума по',
-        widget=forms.DateInput(attrs={'class': 'form-control'})
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
     coefficient_min = forms.DecimalField(
         required=False,
@@ -50,7 +50,7 @@ class BetBaseFilterForm(forms.Form):
         step_size='0.01',
         decimal_places=2,
         label='Коефіцієнт з',
-        widget=forms.DateInput(attrs={'class': 'form-control'})
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
     coefficient_max = forms.DecimalField(
         required=False,
@@ -58,7 +58,7 @@ class BetBaseFilterForm(forms.Form):
         step_size='0.01',
         decimal_places=2,
         label='Коефіцієнт по',
-        widget=forms.DateInput(attrs={'class': 'form-control'})
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
     result = forms.MultipleChoiceField(
         choices=BetResultEnum.choices(),
