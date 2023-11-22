@@ -16,7 +16,7 @@ from .models import BetBase, BetFootball
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
-    BetFootballCreateForm
+    BetFootballCreateForm, RatingFilterForm
 from bet.constants import BetResultEnum
 
 
@@ -153,13 +153,13 @@ class BetGraphsView(ListView):
 
         context_data = {
             'morris_line_data': morris_line_json,
-            'morris_line_ykeys': '["BETS"]',
-            'morris_line_labels': '["BETS"]',
+            'morris_line_ykeys': json.dumps(["BETS"]),
+            'morris_line_labels': json.dumps(["BETS"]),
             'morris_stacked_data': morris_stacked_bar_json,
-            'morris_stacked_ykeys': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", '
-                                    f'"{BetResultEnum.LOSE}", "{BetResultEnum.UNKNOWN}"]',
-            'morris_stacked_labels': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", '
-                                     f'"{BetResultEnum.LOSE}", "{BetResultEnum.UNKNOWN}"]',
+            'morris_stacked_ykeys': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN,
+                                                BetResultEnum.LOSE, BetResultEnum.UNKNOWN]),
+            'morris_stacked_labels': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN,
+                                                BetResultEnum.LOSE, BetResultEnum.UNKNOWN]),
             'morris_donut_data': morris_donut_json,
             'title': 'Bets Graphs'
         }
@@ -311,8 +311,8 @@ class BetGraphsProfitView(ListView):
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'profit_year_line_data': MorrisChartLine.to_json_data(
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'profit_line_ykeys': '["К-сть", "Прибуток"]',
-            'profit_line_labels': '["К-сть", "Прибуток"]',
+            'profit_line_ykeys': json.dumps(["К-сть", "Прибуток"]),
+            'profit_line_labels': json.dumps(["К-сть", "Прибуток"]),
 
             'profit_now_bar_data': MorrisChartBar.to_json_data(
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
@@ -322,8 +322,8 @@ class BetGraphsProfitView(ListView):
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'profit_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'profit_bar_ykeys': '["К-сть", "Прибуток"]',
-            'profit_bar_labels': '["К-сть", "Прибуток"]',
+            'profit_bar_ykeys': json.dumps(["К-сть", "Прибуток"]),
+            'profit_bar_labels': json.dumps(["К-сть", "Прибуток"]),
 
             'filter_form': filter_form,
             'title': 'Profit Graphs',
@@ -609,8 +609,8 @@ class BetGraphsResultView(ListView):
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'profit_year_line_data': MorrisChartLine.to_json_data(
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'profit_line_ykeys': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
-            'profit_line_labels': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
+            'profit_line_ykeys': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
+            'profit_line_labels': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
 
             'profit_now_bar_data': MorrisChartBar.to_json_data(
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
@@ -620,8 +620,8 @@ class BetGraphsResultView(ListView):
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'profit_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'profit_bar_ykeys': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
-            'profit_bar_labels': f'["{BetResultEnum.WIN}", "{BetResultEnum.DRAWN}", "{BetResultEnum.LOSE}"]',
+            'profit_bar_ykeys': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
+            'profit_bar_labels': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
 
             'filter_form': filter_form,
             'title': 'Profit Graphs',
@@ -783,8 +783,8 @@ class BetGraphsRoiView(ListView):
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'roi_year_line_data': MorrisChartLine.to_json_data(
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'roi_line_ykeys': '["ROI"]',
-            'roi_line_labels': '["К-сть", "ROI"]',
+            'roi_line_ykeys': json.dumps(["ROI"]),
+            'roi_line_labels': json.dumps(["К-сть", "ROI"]),
 
             'roi_now_bar_data': MorrisChartBar.to_json_data(
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
@@ -794,8 +794,8 @@ class BetGraphsRoiView(ListView):
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'roi_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'roi_bar_ykeys': '["ROI"]',
-            'roi_bar_labels': '["К-сть", "ROI"]',
+            'roi_bar_ykeys': json.dumps(["ROI"]),
+            'roi_bar_labels': json.dumps(["К-сть", "ROI"]),
 
             'filter_form': filter_form,
             'title': 'ROI Graphs',
@@ -1008,7 +1008,7 @@ class BetGraphsAvgAmountView(ListView):
                 self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'amount_year_line_data': MorrisChartLine.to_json_data(
                 self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'amount_line_ykeys': '["К-сть", "Середня ставка"]',
+            'amount_line_ykeys': json.dumps(["К-сть", "Середня ставка"]),
             'amount_line_labels': '["К-сть", "Середня ставка"]',
 
             'amount_now_bar_data': MorrisChartBar.to_json_data(
@@ -1019,8 +1019,8 @@ class BetGraphsAvgAmountView(ListView):
                 self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'amount_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'amount_bar_ykeys': '["К-сть", "Середня ставка"]',
-            'amount_bar_labels': '["К-сть", "Середня ставка"]',
+            'amount_bar_ykeys': json.dumps(["К-сть", "Середня ставка"]),
+            'amount_bar_labels': json.dumps(["К-сть", "Середня ставка"]),
 
             'filter_form': filter_form,
             'title': 'Amount Graphs',
@@ -1043,7 +1043,7 @@ class RatingGraphsView(ListView):
         data = {}
         qs = (self.get_queryset()
               .values('competition__name')
-              .annotate(profit=Sum('profit'), count=Count('pk'))
+              .annotate(profit=Sum('profit'))
               .order_by('-profit'))
 
         for element in qs:
@@ -1052,30 +1052,146 @@ class RatingGraphsView(ListView):
             data.update({
                 competition: {
                     'Профіт': round(float(profit), 2),
-                    'К-сть': element.get('count') or 0
+                }
+            })
+        return data
+
+    def _process_rating_roi_from_competition(self):
+        data = {}
+
+        qs = (self.get_queryset()
+              .values('competition__name')
+              .annotate(profit=Sum('profit'), amount=Sum('amount'))
+              .order_by('-profit'))
+        for element in qs:
+            competition = element.get('competition__name') or 'Інше'
+            profit_dec = element.get('profit') or 0.00
+            profit = float(profit_dec)
+            amount_dec = element.get('amount') or 0.00
+            amount = float(amount_dec)
+            if amount:
+                roi = round(profit * 100 / amount, 2)
+            else:
+                roi = 0.00
+            data.update({
+                competition: {
+                    'ROI': round(float(roi), 2),
+                }
+            })
+        return data
+
+    def _process_rating_profit_from_bet_type(self):
+        data = {}
+        qs = (self.get_queryset()
+              .values('bet_type')
+              .annotate(profit=Sum('profit'))
+              .order_by('-profit'))
+
+        for element in qs:
+            bet_type = element.get('bet_type')
+            profit = element.get('profit') or 0.00
+            data.update({
+                bet_type: {
+                    'Профіт': round(float(profit), 2),
+                }
+            })
+        return data
+
+    def _process_rating_roi_from_bet_type(self):
+        data = {}
+        qs = (self.get_queryset()
+              .values('bet_type')
+              .annotate(profit=Sum('profit'), amount=Sum('amount'))
+              .order_by('-profit'))
+        for element in qs:
+            bet_type = element.get('bet_type')
+            profit_dec = element.get('profit') or 0.00
+            profit = float(profit_dec)
+            amount_dec = element.get('amount') or 0.00
+            amount = float(amount_dec)
+            if amount:
+                roi = round(profit * 100 / amount, 2)
+            else:
+                roi = 0.00
+            data.update({
+                bet_type: {
+                    'ROI': round(float(roi), 2),
+                }
+            })
+        return data
+
+    def _process_rating_profit_from_sport_kind(self):
+        data = {}
+        qs = (self.get_queryset()
+              .values('sport_kind__name')
+              .annotate(profit=Sum('profit'))
+              .order_by('-profit'))
+        for element in qs:
+            sport_kind = element.get('sport_kind__name') or 'Інше'
+            profit = element.get('profit') or 0.00
+            data.update({
+                sport_kind: {
+                    'Профіт': round(float(profit), 2),
+                }
+            })
+        return data
+
+    def _process_rating_roi_from_sport_kind(self):
+        data = {}
+        qs = (self.get_queryset()
+              .values('sport_kind__name')
+              .annotate(profit=Sum('profit'), amount=Sum('amount'))
+              .order_by('-profit'))
+        for element in qs:
+            sport_kind = element.get('sport_kind__name') or 'Інше'
+            profit_dec = element.get('profit') or 0.00
+            profit = float(profit_dec)
+            amount_dec = element.get('amount') or 0.00
+            amount = float(amount_dec)
+            if amount:
+                roi = round(profit * 100 / amount, 2)
+            else:
+                roi = 0.00
+            data.update({
+                sport_kind: {
+                    'ROI': round(float(roi), 2),
                 }
             })
         return data
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
+        filter_form = RatingFilterForm
+
         context.update({
-            'profit_by_competition_labels': json.dumps(['Профіт', 'К-сть']),
-            'profit_by_competition_ykeys': json.dumps(['Профіт', 'К-сть']),
+            'title': 'Rating',
+            'filter_form': filter_form,
+            'profit_by_competition_labels': json.dumps(['Профіт']),
+            'profit_by_competition_ykeys': json.dumps(['Профіт']),
             'profit_by_competition_data': MorrisChartBar.to_json_data(
                 self._process_rating_profit_from_competition()),
-            'roi_by_competition_labels': '',
-            'roi_by_competition_data': '',
+            'roi_by_competition_labels': json.dumps(['ROI']),
+            'roi_by_competition_ykeys': json.dumps(['ROI']),
+            'roi_by_competition_data': MorrisChartBar.to_json_data(
+                self._process_rating_roi_from_competition()),
 
-            'profit_by_bet_type_labels': '',
-            'profit_by_bet_type_data': '',
-            'roi_by_bet_type_labels': '',
-            'roi_by_bet_type_data': '',
+            'profit_by_bet_type_labels': json.dumps(['Профіт']),
+            'profit_by_bet_type_ykeys': json.dumps(['Профіт']),
+            'profit_by_bet_type_data': MorrisChartBar.to_json_data(
+                self._process_rating_profit_from_bet_type()),
+            'roi_by_bet_type_labels': json.dumps(['ROI']),
+            'roi_by_bet_type_ykeys': json.dumps(['ROI']),
+            'roi_by_bet_type_data': MorrisChartBar.to_json_data(
+                self._process_rating_roi_from_bet_type()),
 
-            'profit_by_sport_kind_labels': '',
-            'profit_by_sport_kind_data': '',
-            'roi_by_sport_kind_labels': '',
-            'roi_by_sport_kind_data': '',
+            'profit_by_sport_kind_labels': json.dumps(['Профіт']),
+            'profit_by_sport_kind_ykeys': json.dumps(['Профіт']),
+            'profit_by_sport_kind_data': MorrisChartBar.to_json_data(
+                self._process_rating_profit_from_sport_kind()),
+            'roi_by_sport_kind_labels': json.dumps(['ROI']),
+            'roi_by_sport_kind_ykeys': json.dumps(['ROI']),
+            'roi_by_sport_kind_data': MorrisChartBar.to_json_data(
+                self._process_rating_roi_from_sport_kind()),
         })
 
         return context
