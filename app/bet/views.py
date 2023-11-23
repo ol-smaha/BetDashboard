@@ -1,17 +1,17 @@
 import json
 from datetime import datetime, date
-from pprint import pprint
 
 from dateutil.relativedelta import relativedelta
 
-from django.db.models import Count, Sum, F, Q, Avg, Min
+from django.db.models import Count, Sum, F, Avg, Min
 from django.forms import HiddenInput
 from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, DetailView, DeleteView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView
 from django.views.generic.list import ListView
 from django.utils.timezone import now
 
+from .mixins import BetFilterMixin
 from .models import BetBase, BetFootball
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
@@ -20,56 +20,10 @@ from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHi
 from bet.constants import BetResultEnum
 
 
-class BetHistoryView(ListView):
+class BetHistoryView(BetFilterMixin, ListView):
     model = BetBase
     paginate_by = 50
     template_name = 'bet/bet_history.html'
-
-    def filtered_queryset(self, qs):
-        sport_kind_values = self.request.GET.getlist('sport_kind')
-        if sport_kind_values:
-            qs = qs.filter(sport_kind__name__in=sport_kind_values)
-
-        date_game_start = self.request.GET.get('date_game_start')
-        if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
-
-        date_game_end = self.request.GET.get('date_game_end')
-        if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-
-        amount_min = self.request.GET.get('amount_min')
-        if amount_min:
-            qs = qs.filter(amount__gte=amount_min)
-
-        amount_max = self.request.GET.get('amount_max')
-        if amount_max:
-            qs = qs.filter(amount__lte=amount_max)
-
-        result_value = self.request.GET.getlist('result')
-        if result_value:
-            qs = qs.filter(result__in=result_value)
-
-        is_favourite_value = self.request.GET.getlist('is_favourite')
-        if is_favourite_value:
-            qs = qs.filter(is_favourite__in=is_favourite_value)
-            
-        ordering = self.request.GET.get('ordering')
-        if ordering:
-            if ordering == 'is_favourite':
-                qs = qs.order_by('-is_favourite')
-            else:
-                qs = qs.order_by(ordering)
-
-        coefficient_min = self.request.GET.get('coefficient_min')
-        if coefficient_min:
-            qs = qs.filter(coefficient__gte=coefficient_min)
-
-        coefficient_max = self.request.GET.get('coefficient_max')
-        if coefficient_max:
-            qs = qs.filter(coefficient__lte=coefficient_max)
-
-        return qs
 
     def base_queryset(self):
         return self.model.objects.filter(user=self.request.user)
@@ -167,7 +121,7 @@ class BetGraphsView(ListView):
         return context
 
 
-class BetGraphsProfitView(ListView):
+class BetGraphsProfitView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/bet_graphs_profit.html'
 
@@ -262,37 +216,6 @@ class BetGraphsProfitView(ListView):
 
         return data
 
-    def filtered_queryset(self, qs):
-        sport_kind_values = self.request.GET.getlist('sport_kind')
-        if sport_kind_values:
-            qs = qs.filter(sport_kind__name__in=sport_kind_values)
-
-        date_game_start = self.request.GET.get('date_game_start')
-        if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
-
-        date_game_end = self.request.GET.get('date_game_end')
-        if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-
-        amount_min = self.request.GET.get('amount_min')
-        if amount_min:
-            qs = qs.filter(amount__gte=amount_min)
-
-        amount_max = self.request.GET.get('amount_max')
-        if amount_max:
-            qs = qs.filter(amount__lte=amount_max)
-
-        coefficient_min = self.request.GET.get('coefficient_min')
-        if coefficient_min:
-            qs = qs.filter(coefficient__gte=coefficient_min)
-
-        coefficient_max = self.request.GET.get('coefficient_max')
-        if coefficient_max:
-            qs = qs.filter(coefficient__lte=coefficient_max)
-
-        return qs
-
     def base_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
@@ -333,12 +256,16 @@ class BetGraphsProfitView(ListView):
         return context
 
 
-class Statistic(ListView):
+class Statistic(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/statistic.html'
 
+    def base_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
     def get_queryset(self):
-        return self.model.objects.all()
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -367,74 +294,10 @@ class Statistic(ListView):
         return context
 
 
-class FootballBetHistoryView(ListView):
+class FootballBetHistoryView(BetFilterMixin, ListView):
     model = BetFootball
     paginate_by = 50
     template_name = 'bet/bet_football_history.html'
-
-    def filtered_queryset(self, qs):
-        search_value = self.request.GET.get('search')
-        if search_value:
-            qs = qs.filter(
-                Q(team_home__name__icontains=search_value) | Q(team_guest__name__icontains=search_value)
-            )
-
-        date_game_start = self.request.GET.get('date_game_start')
-        if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
-
-        date_game_end = self.request.GET.get('date_game_end')
-        if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-
-        amount_min = self.request.GET.get('amount_min')
-        if amount_min:
-            qs = qs.filter(amount__gte=amount_min)
-
-        amount_max = self.request.GET.get('amount_max')
-        if amount_max:
-            qs = qs.filter(amount__lte=amount_max)
-
-        result_value = self.request.GET.getlist('result')
-        if result_value:
-            qs = qs.filter(result__in=result_value)
-
-        bet_type = self.request.GET.getlist('bet_type')
-        if bet_type:
-            qs = qs.filter(bet_type__in=bet_type)
-
-        is_favourite_value = self.request.GET.getlist('is_favourite')
-        if is_favourite_value:
-            qs = qs.filter(is_favourite__in=is_favourite_value)
-
-        ordering = self.request.GET.get('ordering')
-        if ordering:
-            if ordering == 'is_favourite':
-                qs = qs.order_by('-is_favourite')
-            else:
-                qs = qs.order_by(ordering)
-
-        coefficient_min = self.request.GET.get('coefficient_min')
-        if coefficient_min:
-            qs = qs.filter(coefficient__gte=coefficient_min)
-
-        coefficient_max = self.request.GET.get('coefficient_max')
-        if coefficient_max:
-            qs = qs.filter(coefficient__lte=coefficient_max)
-
-        bet_values = self.request.GET.getlist('bet_value')
-        if bet_values:
-            qs = qs.filter(bet_value__in=bet_values)
-
-        game_status = self.request.GET.getlist('game_status')
-        if game_status:
-            qs = qs.filter(game_status__in=game_status)
-
-        competition_values = self.request.GET.getlist('competition')
-        if competition_values:
-            qs = qs.filter(competition__name__in=competition_values)
-
-        return qs
 
     def base_queryset(self):
         return self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
@@ -463,7 +326,7 @@ class FootballBetHistoryView(ListView):
         return context
 
 
-class BetGraphsResultView(ListView):
+class BetGraphsResultView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/bet_graphs_result.html'
 
@@ -562,37 +425,6 @@ class BetGraphsResultView(ListView):
 
         return data
 
-    def filtered_queryset(self, qs):
-        sport_kind_values = self.request.GET.getlist('sport_kind')
-        if sport_kind_values:
-            qs = qs.filter(sport_kind__name__in=sport_kind_values)
-
-        date_game_start = self.request.GET.get('date_game_start')
-        if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
-
-        date_game_end = self.request.GET.get('date_game_end')
-        if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-
-        amount_min = self.request.GET.get('amount_min')
-        if amount_min:
-            qs = qs.filter(amount__gte=amount_min)
-
-        amount_max = self.request.GET.get('amount_max')
-        if amount_max:
-            qs = qs.filter(amount__lte=amount_max)
-
-        coefficient_min = self.request.GET.get('coefficient_min')
-        if coefficient_min:
-            qs = qs.filter(coefficient__gte=coefficient_min)
-
-        coefficient_max = self.request.GET.get('coefficient_max')
-        if coefficient_max:
-            qs = qs.filter(coefficient__lte=coefficient_max)
-
-        return qs
-
     def base_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
@@ -633,7 +465,7 @@ class BetGraphsResultView(ListView):
         return context
 
 
-class BetGraphsRoiView(ListView):
+class BetGraphsRoiView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/bet_graphs_roi.html'
 
@@ -736,37 +568,6 @@ class BetGraphsRoiView(ListView):
 
         return data
 
-    def filtered_queryset(self, qs):
-        sport_kind_values = self.request.GET.getlist('sport_kind')
-        if sport_kind_values:
-            qs = qs.filter(sport_kind__name__in=sport_kind_values)
-
-        date_game_start = self.request.GET.get('date_game_start')
-        if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
-
-        date_game_end = self.request.GET.get('date_game_end')
-        if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-
-        amount_min = self.request.GET.get('amount_min')
-        if amount_min:
-            qs = qs.filter(amount__gte=amount_min)
-
-        amount_max = self.request.GET.get('amount_max')
-        if amount_max:
-            qs = qs.filter(amount__lte=amount_max)
-
-        coefficient_min = self.request.GET.get('coefficient_min')
-        if coefficient_min:
-            qs = qs.filter(coefficient__gte=coefficient_min)
-
-        coefficient_max = self.request.GET.get('coefficient_max')
-        if coefficient_max:
-            qs = qs.filter(coefficient__lte=coefficient_max)
-
-        return qs
-
     def base_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
@@ -788,7 +589,7 @@ class BetGraphsRoiView(ListView):
             'roi_year_line_data': MorrisChartLine.to_json_data(
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
             'roi_line_ykeys': json.dumps(["ROI"]),
-            'roi_line_labels': json.dumps(["К-сть", "ROI"]),
+            'roi_line_labels': json.dumps(["ROI"]),
 
             'roi_now_bar_data': MorrisChartBar.to_json_data(
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
@@ -799,7 +600,7 @@ class BetGraphsRoiView(ListView):
             'roi_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
             'roi_bar_ykeys': json.dumps(["ROI"]),
-            'roi_bar_labels': json.dumps(["К-сть", "ROI"]),
+            'roi_bar_labels': json.dumps(["ROI"]),
 
             'filter_form': filter_form,
             'title': 'ROI Graphs',
@@ -870,7 +671,7 @@ class BetFootballDeleteView(DetailView):
         return redirect(reverse_lazy('football_history') + f'?{self.request.GET.urlencode()}')
 
 
-class BetGraphsAvgAmountView(ListView):
+class BetGraphsAvgAmountView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/bet_graphs_amount.html'
 
@@ -965,37 +766,6 @@ class BetGraphsAvgAmountView(ListView):
 
         return data
 
-    def filtered_queryset(self, qs):
-        sport_kind_values = self.request.GET.getlist('sport_kind')
-        if sport_kind_values:
-            qs = qs.filter(sport_kind__name__in=sport_kind_values)
-
-        date_game_start = self.request.GET.get('date_game_start')
-        if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
-
-        date_game_end = self.request.GET.get('date_game_end')
-        if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-
-        amount_min = self.request.GET.get('amount_min')
-        if amount_min:
-            qs = qs.filter(amount__gte=amount_min)
-
-        amount_max = self.request.GET.get('amount_max')
-        if amount_max:
-            qs = qs.filter(amount__lte=amount_max)
-
-        coefficient_min = self.request.GET.get('coefficient_min')
-        if coefficient_min:
-            qs = qs.filter(coefficient__gte=coefficient_min)
-
-        coefficient_max = self.request.GET.get('coefficient_max')
-        if coefficient_max:
-            qs = qs.filter(coefficient__lte=coefficient_max)
-
-        return qs
-
     def base_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
@@ -1036,7 +806,7 @@ class BetGraphsAvgAmountView(ListView):
         return context
 
 
-class RatingGraphsView(ListView):
+class RatingGraphsView(BetFilterMixin, ListView):
     model = BetFootball
     template_name = 'bet/rating.html'
 
@@ -1145,33 +915,6 @@ class RatingGraphsView(ListView):
                 }
             })
         return data
-
-    def filtered_queryset(self, qs):
-        date_game_start = self.request.GET.get('date_game_start')
-        if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
-
-        date_game_end = self.request.GET.get('date_game_end')
-        if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
-
-        amount_min = self.request.GET.get('amount_min')
-        if amount_min:
-            qs = qs.filter(amount__gte=amount_min)
-
-        amount_max = self.request.GET.get('amount_max')
-        if amount_max:
-            qs = qs.filter(amount__lte=amount_max)
-
-        coefficient_min = self.request.GET.get('coefficient_min')
-        if coefficient_min:
-            qs = qs.filter(coefficient__gte=coefficient_min)
-
-        coefficient_max = self.request.GET.get('coefficient_max')
-        if coefficient_max:
-            qs = qs.filter(coefficient__lte=coefficient_max)
-
-        return qs
 
     def base_queryset(self):
         return self.model.objects.filter(user=self.request.user)
