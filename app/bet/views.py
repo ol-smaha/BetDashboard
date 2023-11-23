@@ -144,7 +144,7 @@ class BetGraphsView(ListView):
         return data
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -294,16 +294,17 @@ class BetGraphsProfitView(ListView):
         return qs
 
     def base_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.filter(user=self.request.user)
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
         return filtered_qs
 
     def get_context_data(self, **kwargs):
-        filter_form = BetProfitGraphFilterForm
+        context = super().get_context_data()
+        filter_form = BetProfitGraphFilterForm(self.request.GET)
 
-        context_data = {
+        context.update({
             'profit_now_line_data': MorrisChartLine.to_json_data(
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
             'profit_last_line_data': MorrisChartLine.to_json_data(
@@ -328,8 +329,8 @@ class BetGraphsProfitView(ListView):
 
             'filter_form': filter_form,
             'title': 'Profit Graphs',
-        }
-        return context_data
+        })
+        return context
 
 
 class Statistic(ListView):
@@ -340,6 +341,7 @@ class Statistic(ListView):
         return self.model.objects.all()
 
     def get_context_data(self, **kwargs):
+        context = super().get_context_data()
         total_bets_count = self.get_queryset().count()
         total_bets_profit = float(self.get_queryset().aggregate(Sum('profit')).get('profit__sum'))
         total_bets_amount = float(self.get_queryset().aggregate(Sum('amount')).get('amount__sum'))
@@ -350,7 +352,7 @@ class Statistic(ListView):
         res_lose = self.model.objects.filter(result=BetResultEnum.LOSE).count()
         res_unknown = self.model.objects.filter(result=BetResultEnum.UNKNOWN).count()
 
-        context_data = {
+        context.update({
             'title': 'Bet Statistic',
             'total_bets_count': total_bets_count,
             'total_bets_profit': total_bets_profit,
@@ -361,8 +363,8 @@ class Statistic(ListView):
             'res_lose': res_lose,
             'res_unknown': res_unknown,
 
-        }
-        return context_data
+        })
+        return context
 
 
 class FootballBetHistoryView(ListView):
@@ -435,7 +437,7 @@ class FootballBetHistoryView(ListView):
         return qs
 
     def base_queryset(self):
-        return self.model.objects.filter(sport_kind__name='Футбол')
+        return self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -592,16 +594,17 @@ class BetGraphsResultView(ListView):
         return qs
 
     def base_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.filter(user=self.request.user)
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
         return filtered_qs
 
     def get_context_data(self, **kwargs):
-        filter_form = BetProfitGraphFilterForm
+        context = super().get_context_data()
+        filter_form = BetProfitGraphFilterForm(self.request.GET)
 
-        context_data = {
+        context.update({
             'profit_now_line_data': MorrisChartLine.to_json_data(
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
             'profit_last_line_data': MorrisChartLine.to_json_data(
@@ -626,9 +629,8 @@ class BetGraphsResultView(ListView):
 
             'filter_form': filter_form,
             'title': 'Profit Graphs',
-        }
-        print(context_data['profit_bar_ykeys'])
-        return context_data
+        })
+        return context
 
 
 class BetGraphsRoiView(ListView):
@@ -766,16 +768,17 @@ class BetGraphsRoiView(ListView):
         return qs
 
     def base_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.filter(user=self.request.user)
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
         return filtered_qs
 
     def get_context_data(self, **kwargs):
-        filter_form = BetProfitGraphFilterForm
+        context = super().get_context_data()
+        filter_form = BetProfitGraphFilterForm(self.request.GET)
 
-        context_data = {
+        context.update({
             'roi_now_line_data': MorrisChartLine.to_json_data(
                 self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
             'roi_last_line_data': MorrisChartLine.to_json_data(
@@ -800,8 +803,8 @@ class BetGraphsRoiView(ListView):
 
             'filter_form': filter_form,
             'title': 'ROI Graphs',
-        }
-        return context_data
+        })
+        return context
 
 
 class BetCreateView(CreateView):
@@ -994,16 +997,17 @@ class BetGraphsAvgAmountView(ListView):
         return qs
 
     def base_queryset(self):
-        return self.model.objects.all()
+        return self.model.objects.filter(user=self.request.user)
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
         return filtered_qs
 
     def get_context_data(self, **kwargs):
-        filter_form = BetProfitGraphFilterForm
+        context = super().get_context_data()
+        filter_form = BetProfitGraphFilterForm(self.request.GET)
 
-        context_data = {
+        context.update({
             'amount_now_line_data': MorrisChartLine.to_json_data(
                 self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
             'amount_last_line_data': MorrisChartLine.to_json_data(
@@ -1028,8 +1032,8 @@ class BetGraphsAvgAmountView(ListView):
 
             'filter_form': filter_form,
             'title': 'Amount Graphs',
-        }
-        return context_data
+        })
+        return context
 
 
 class RatingGraphsView(ListView):
@@ -1098,21 +1102,14 @@ class RatingGraphsView(ListView):
         data = {}
         qs = (self.get_queryset()
               .values('bet_type')
-              .annotate(profit=Sum('profit'), amount=Sum('amount'))
-              .order_by('-profit'))
+              .annotate(profit_sum=Sum('profit'), amount_sum=Sum('amount'))
+              .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+              .order_by('-roi'))
         for element in qs:
             bet_type = element.get('bet_type')
-            profit_dec = element.get('profit') or 0.00
-            profit = float(profit_dec)
-            amount_dec = element.get('amount') or 0.00
-            amount = float(amount_dec)
-            if amount:
-                roi = round(profit * 100 / amount, 2)
-            else:
-                roi = 0.00
             data.update({
                 bet_type: {
-                    'ROI': round(float(roi), 2),
+                    'ROI': round(float(element.get('roi')), 2),
                 }
             })
         return data
@@ -1137,28 +1134,55 @@ class RatingGraphsView(ListView):
         data = {}
         qs = (self.get_queryset()
               .values('sport_kind__name')
-              .annotate(profit=Sum('profit'), amount=Sum('amount'))
-              .order_by('-profit'))
+              .annotate(profit_sum=Sum('profit'), amount_sum=Sum('amount'))
+              .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+              .order_by('-roi'))
         for element in qs:
             sport_kind = element.get('sport_kind__name') or 'Інше'
-            profit_dec = element.get('profit') or 0.00
-            profit = float(profit_dec)
-            amount_dec = element.get('amount') or 0.00
-            amount = float(amount_dec)
-            if amount:
-                roi = round(profit * 100 / amount, 2)
-            else:
-                roi = 0.00
             data.update({
                 sport_kind: {
-                    'ROI': round(float(roi), 2),
+                    'ROI': round(float(element.get('roi')), 2),
                 }
             })
         return data
 
+    def filtered_queryset(self, qs):
+        date_game_start = self.request.GET.get('date_game_start')
+        if date_game_start:
+            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
+
+        date_game_end = self.request.GET.get('date_game_end')
+        if date_game_end:
+            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
+
+        amount_min = self.request.GET.get('amount_min')
+        if amount_min:
+            qs = qs.filter(amount__gte=amount_min)
+
+        amount_max = self.request.GET.get('amount_max')
+        if amount_max:
+            qs = qs.filter(amount__lte=amount_max)
+
+        coefficient_min = self.request.GET.get('coefficient_min')
+        if coefficient_min:
+            qs = qs.filter(coefficient__gte=coefficient_min)
+
+        coefficient_max = self.request.GET.get('coefficient_max')
+        if coefficient_max:
+            qs = qs.filter(coefficient__lte=coefficient_max)
+
+        return qs
+
+    def base_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+    def get_queryset(self):
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        filter_form = RatingFilterForm
+        filter_form = RatingFilterForm(self.request.GET)
 
         context.update({
             'title': 'Rating',
