@@ -11,6 +11,10 @@ class BetFilterMixin:
                 Q(team_home__name__icontains=search_value) | Q(team_guest__name__icontains=search_value)
             )
 
+        sport_kind_values = self.request.GET.getlist('sport_kind')
+        if sport_kind_values:
+            qs = qs.filter(sport_kind__name__in=sport_kind_values)
+
         date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
@@ -30,6 +34,10 @@ class BetFilterMixin:
         result_value = self.request.GET.getlist('result')
         if result_value:
             qs = qs.filter(result__in=result_value)
+
+        live_types = self.request.GET.getlist('live_type')
+        if live_types:
+            qs = qs.filter(live_type__in=live_types)
 
         bet_type = self.request.GET.getlist('bet_type')
         if bet_type:
