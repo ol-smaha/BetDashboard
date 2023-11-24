@@ -156,10 +156,10 @@
    ========================================================================== */
 
 body {
-    font-family: 'Circular Std Book';
+    font-family: 'Jura SemiBold';
     font-style: normal;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 16px;
     color: #71748d;
     background-color: #efeff6;
     -webkit-font-smoothing: antialiased;
@@ -173,7 +173,7 @@ h5,
 h6 {
     color: #3d405c;
     margin: 0px 0px 15px 0px;
-    font-family: 'Circular Std Medium';
+    font-family: 'Jura SemiBold';
 }
 
 h1 {
@@ -818,12 +818,12 @@ html body .display-7 {
 }
 
 .arrow li:before {
-    font-family: 'Font Awesome\ 5 Free';
+    font-family: 'Jura SemiBold';
     font-weight: 900;
     display: inline-block;
     position: absolute;
     left: 0;
-    font-size: 14px;
+    font-size: 16px;
     color: #ff407b;
     content: '\f058';
     font-style: initial;
@@ -839,12 +839,12 @@ html body .display-7 {
 }
 
 .bullet-check li:before {
-    font-family: 'Font Awesome\ 5 Free';
+    font-family: 'Jura SemiBold';
     font-weight: 900;
     display: inline-block;
     position: absolute;
     left: 0;
-    font-size: 14px;
+    font-size: 16px;
     color: #22ce77;
     content: '\f00c';
     font-style: initial;
@@ -2032,7 +2032,7 @@ Pageheader
     padding-right: .5rem;
     color: #b1b1c0;
     content: "\f105";
-    font-family: 'Font Awesome\ 5 Free';
+    font-family: 'Jura SemiBold';
     font-weight: 600;
 }
 
@@ -2333,7 +2333,7 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
     background-color: #59b3ff;
     padding: 31px 15px;
     text-align: center;
-    left: 10px;  font-family: 'Circular Std Medium'; color: #fff;}
+    left: 10px;  font-family: 'Jura SemiBold'; color: #fff;}
 
    .ribbons-text{transform: rotate(90deg);
     position: absolute;
@@ -2360,7 +2360,7 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 .product-rating{font-size: 12px;
 
     color: #ffa811;}
-.product-price{ position: absolute; top: 0; right: 0; font-size: 16px; color: #3d405c;font-family: 'Circular Std Medium'; line-height: 1;}
+.product-price{ position: absolute; top: 0; right: 0; font-size: 16px; color: #3d405c;font-family: 'Jura SemiBold'; line-height: 1;}
 .product-btn{}
 .product-del{font-size: 14px; color: #71748d;}
 .product-sidebar{ background-color: #fff; border:1px solid #e6e6f2;  }
@@ -2443,12 +2443,12 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 .product-colors label:before {
      content: "\f00c";
     position: absolute;
-    font-family: 'Font Awesome\ 5 Free';
+    font-family: 'Jura SemiBold';
     font-weight: 900;
     padding: 0px;
     margin: 4px 8px;
     color: #fff;
-    font-size:  14px;
+    font-size:  16px;
 }
 
 
@@ -2551,8 +2551,8 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
   width: 20px;
   text-align: center;
   color: #333;
-  font-size: 13px;
-  font-family: 'Circular Std Medium';
+  font-size: 14px;
+  font-family: 'Jura SemiBold';
 
   line-height: 1.6;
   -webkit-transform: translateX(-100%);
@@ -4513,7 +4513,7 @@ Pills vertical
 .table thead th,
 .table th {
     color: #3d405c;
-    font-family: 'Circular Std Medium';
+    font-family: 'Jura SemiBold';
 }
 
 .table-bordered {
@@ -4545,7 +4545,7 @@ tr.group,
 tr.group:hover {
     background-color: #5969ff !important;
     color: #fff;
-    font-family: 'Circular Std Medium';
+    font-family: 'Jura SemiBold';
     font-size: 18px;
 }
 
