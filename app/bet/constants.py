@@ -249,7 +249,7 @@ BET_BASE_TABLE_FIELD_NAMES = {
     'result': 'Результат ставки',
     'profit': 'Прибуток',
     'sport_kind': 'Спорт',
-    'live type': 'Активність матчу',
+    'live_type': 'Момент ставки',
     'is_favourite': '⭐',
     'action_delete': '☒',
 }
@@ -260,7 +260,7 @@ BET_FOOTBALL_FIELDS_NAMES = {
     'amount': 'Amount',
     'coefficient': 'Coefficient',
     'result': 'Bet Result',
-    'live type': 'Live Type',
+    'live_type': 'Live Type',
     'profit': 'Profit',
     'team_home': 'Team Home',
     'team_guest': 'Team Guess',

@@ -69,7 +69,7 @@ class BetBaseFilterForm(forms.Form):
     live_type = forms.MultipleChoiceField(
         choices=LiveTypeEnum.choices(),
         required=False,
-        label='Активність матчу',
+        label='Момент ставки',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
     date_game_start = forms.DateField(

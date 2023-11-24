@@ -271,9 +271,12 @@ class Statistic(BetFilterMixin, ListView):
         context = super().get_context_data()
         filter_form = StatisticFilterForm(self.request.GET)
         total_bets_count = self.get_queryset().count()
-        total_bets_profit = float(self.get_queryset().aggregate(Sum('profit')).get('profit__sum'))
-        total_bets_amount = float(self.get_queryset().aggregate(Sum('amount')).get('amount__sum'))
-        total_bets_roi = round(total_bets_profit * 100 / total_bets_amount, 2)
+        total_bets_profit = self.get_queryset().aggregate(Sum('profit')).get('profit__sum') or 0.00
+        total_bets_amount = self.get_queryset().aggregate(Sum('amount')).get('amount__sum') or 0.00
+        if total_bets_amount > 0:
+            total_bets_roi = round(float(total_bets_profit) * 100 / float(total_bets_amount), 2)
+        else:
+            total_bets_roi = 0.00
         res_win = self.get_queryset().filter(result=BetResultEnum.WIN).count()
         res_drawn = self.get_queryset().filter(result=BetResultEnum.DRAWN).count()
         res_lose = self.get_queryset().filter(result=BetResultEnum.LOSE).count()
@@ -283,8 +286,8 @@ class Statistic(BetFilterMixin, ListView):
             'title': 'Bet Statistic',
             'filter_form': filter_form,
             'total_bets_count': total_bets_count,
-            'total_bets_profit': total_bets_profit,
-            'total_bets_amount': total_bets_amount,
+            'total_bets_profit': float(total_bets_profit),
+            'total_bets_amount': float(total_bets_amount),
             'total_bets_roi': total_bets_roi,
             'res_win': res_win,
             'res_drawn': res_drawn,
