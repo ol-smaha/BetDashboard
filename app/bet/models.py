@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db import models
 
 from bet.constants import (BetResultEnum, GameStatusEnum, BetTypeEnum,
-                           CompetitionFootballCategoryEnum, TeamCategoryEnum, BetPredictionEnum)
+                           CompetitionFootballCategoryEnum, TeamCategoryEnum, BetPredictionEnum, LiveTypeEnum)
 from users.models import CustomUser
 
 
@@ -85,6 +85,7 @@ class BetBase(models.Model):
     date_game = models.DateField(null=True, blank=True)
     date_betting = models.DateField(null=True, blank=True)
     is_favourite = models.BooleanField(default=False)
+    live_type = models.CharField(max_length=32, blank=True, null=True, choices=LiveTypeEnum.choices())
 
     def calculate_profit(self):
         profit = Decimal('0.00')

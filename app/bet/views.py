@@ -16,7 +16,7 @@ from .models import BetBase, BetFootball
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
-    BetFootballCreateForm, RatingFilterForm
+    BetFootballCreateForm, RatingFilterForm, StatisticFilterForm
 from bet.constants import BetResultEnum
 
 
@@ -269,18 +269,19 @@ class Statistic(BetFilterMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        filter_form = StatisticFilterForm(self.request.GET)
         total_bets_count = self.get_queryset().count()
         total_bets_profit = float(self.get_queryset().aggregate(Sum('profit')).get('profit__sum'))
         total_bets_amount = float(self.get_queryset().aggregate(Sum('amount')).get('amount__sum'))
         total_bets_roi = round(total_bets_profit * 100 / total_bets_amount, 2)
-
-        res_win = self.model.objects.filter(result=BetResultEnum.WIN).count()
-        res_drawn = self.model.objects.filter(result=BetResultEnum.DRAWN).count()
-        res_lose = self.model.objects.filter(result=BetResultEnum.LOSE).count()
-        res_unknown = self.model.objects.filter(result=BetResultEnum.UNKNOWN).count()
+        res_win = self.get_queryset().filter(result=BetResultEnum.WIN).count()
+        res_drawn = self.get_queryset().filter(result=BetResultEnum.DRAWN).count()
+        res_lose = self.get_queryset().filter(result=BetResultEnum.LOSE).count()
+        res_unknown = self.get_queryset().filter(result=BetResultEnum.UNKNOWN).count()
 
         context.update({
             'title': 'Bet Statistic',
+            'filter_form': filter_form,
             'total_bets_count': total_bets_count,
             'total_bets_profit': total_bets_profit,
             'total_bets_amount': total_bets_amount,

@@ -209,6 +209,16 @@ class GameStatusEnum(StrEnum):
         return res
 
 
+class LiveTypeEnum(StrEnum):
+    LIVE = 'Лайв'
+    PREMATCH = 'Прематч'
+
+    @classmethod
+    def choices(cls):
+        res = tuple([(e.value, e.value) for e in cls])
+        return res
+
+
 class TeamCategoryEnum(StrEnum):
     CLUB = 'CLUB'
     NATIONAL = 'NATIONAL'
@@ -239,6 +249,7 @@ BET_BASE_TABLE_FIELD_NAMES = {
     'result': 'Результат ставки',
     'profit': 'Прибуток',
     'sport_kind': 'Спорт',
+    'live type': 'Активність матчу',
     'is_favourite': '⭐',
     'action_delete': '☒',
 }
@@ -249,6 +260,7 @@ BET_FOOTBALL_FIELDS_NAMES = {
     'amount': 'Amount',
     'coefficient': 'Coefficient',
     'result': 'Bet Result',
+    'live type': 'Live Type',
     'profit': 'Profit',
     'team_home': 'Team Home',
     'team_guest': 'Team Guess',

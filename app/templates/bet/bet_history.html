@@ -73,6 +73,8 @@
 											<td>{{ bet.result }}</td>
 											<td>{{ bet.profit }}</td>
 											<td>{{ bet.sport_kind }}</td>
+											<td>{{ bet.live_type }}</td>
+
 											{% if bet.is_favourite %}
 												<td>
 													<a class="favorite active" href="{% url 'bet_change_favourite_status' bet.id %}?{{ request.GET.urlencode }}">
