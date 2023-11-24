@@ -1233,6 +1233,7 @@ Top Header
 
 
 .navbar-brand {
+    font-family: "Font Awesome 5 Free";
     display: inline-block;
     margin-right: 1rem;
     line-height: inherit;
@@ -1241,10 +1242,10 @@ Top Header
     font-size: 30px;
     text-transform: uppercase;
     font-weight: 700;
-    color: #007bff;
+    color: #236995;
 }
 .navbar-brand:hover{
-    color: #007bff;
+    color: #0e0c28;
 }
 .navbar-right-top {}
 
@@ -1690,10 +1691,10 @@ Left Navigation Sidebar
 .nav-left-sidebar .navbar-nav .nav-item {}
 
 .nav-left-sidebar .navbar-nav .nav-link {
-    font-size: 14px;
+    font-size: 18px;
     padding: 12px;
     /* margin-bottom: 2px; */
-    color: #71789e;
+    color: #8fadb3;
     transition: 0.3s;
 }
 
@@ -1714,14 +1715,14 @@ Left Navigation Sidebar
 }
 
 .nav-left-sidebar .submenu {
-    padding-left: 12px;
+    padding-left: 14px;
     padding-right: 12px;
     /* margin-top: 5px; */
     background: #24274a;
 }
 
 .nav-left-sidebar .submenu .nav .nav-item .nav-link {
-    font-size: 14px;
+    font-size: 16px;
     padding: 6px 12px;
     transition: 0.3s;
 }
@@ -1818,13 +1819,13 @@ Leftsidebar - dark
 }
 
 .sidebar-dark.nav-left-sidebar .nav-link i {
-    color: #7a80b4;
+    color: #a0a6db;
 }
 
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-item {}
 
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-link {
-    color: #7a80b4;
+    color: #a0a6db;
 }
 
 .sidebar-dark.nav-left-sidebar .navbar-nav .nav-link:focus,
@@ -3567,13 +3568,15 @@ btn-link
     border-color: #dddde8;
 }
 
-.tab-regular .nav-tabs .nav-link:focus,
-.nav-tabs .nav-link:hover {}
+.tab-regular .nav.nav-tabs .nav-link:focus,
+.tab-regular .nav.nav-tabs .nav-link:hover {
+    color: #236995;
+}
 
 .tab-regular .nav-tabs .nav-link.active {
     background-color: #fff;
     border-color: #e6e6f2 #e6e6f2 #fff;
-    color: #5969ff;
+    color: #236995;
 }
 
 .tab-regular .tab-content {
@@ -3655,7 +3658,7 @@ btn-link
 .tab-outline .nav.nav-tabs .nav-item {}
 
 .tab-outline .nav-tabs .nav-link.active {
-    color: #5969ff !important;
+    color: #236995 !important;
     background-color: transparent !important;
     border-color: #c4c4cf #c4c4cf #efeff6 !important;
 }
@@ -3663,7 +3666,7 @@ btn-link
 .tab-outline .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover {
     border-color: transparent;
-    color: #5969ff !important;
+    color: #236995 !important;
 }
 
 .tab-outline .tab-content {
