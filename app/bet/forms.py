@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 
 from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
-    GameStatusEnum, BetPredictionEnum
+    GameStatusEnum, BetPredictionEnum, LiveTypeEnum
 from bet.models import SportKind, CompetitionBase, BetBase, BetFootball
 
 
@@ -64,6 +64,12 @@ class BetBaseFilterForm(forms.Form):
         choices=BetResultEnum.choices(),
         required=False,
         label='Результат події',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
+    live_type = forms.MultipleChoiceField(
+        choices=LiveTypeEnum.choices(),
+        required=False,
+        label='Активність матчу',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
     date_game_start = forms.DateField(
@@ -134,7 +140,7 @@ class BetCreateForm(ModelForm):
 
     class Meta:
         model = BetBase
-        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'sport_kind',
+        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'live_type', 'sport_kind',
                   'date_game', 'is_favourite']
         widgets = {
             'prediction': forms.Select(attrs={'class': 'form-control'}),
@@ -145,6 +151,7 @@ class BetCreateForm(ModelForm):
                                                     'min': '1.00',
                                                     'step': '0.01'}),
             'result': forms.Select(attrs={'class': 'form-control'}),
+            'live_type': forms.Select(attrs={'class': 'form-control'}),
             'sport_kind': forms.Select(attrs={'class': 'form-control'}),
             'date_game': forms.DateInput(attrs={'class': 'form-control datetimepicker-input'}),
             'is_favourite': forms.Select(attrs={'class': 'form-control'}, choices=BOOL_FIELD_CHOICES),
@@ -154,7 +161,7 @@ class BetCreateForm(ModelForm):
 class BetFootballCreateForm(ModelForm):
     class Meta:
         model = BetFootball
-        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'sport_kind',
+        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'live_type', 'sport_kind',
                   'date_game', 'is_favourite', 'bet_type', 'competition']
         widgets = {
             'prediction': forms.Select(attrs={'class': 'form-control'}),
@@ -165,6 +172,7 @@ class BetFootballCreateForm(ModelForm):
                                                     'min': '1.00',
                                                     'step': '0.01'}),
             'result': forms.Select(attrs={'class': 'form-control'}),
+            'live_type': forms.Select(attrs={'class': 'form-control'}),
             'sport_kind': forms.Select(attrs={'class': 'form-control'}),
             'date_game': forms.DateInput(attrs={'class': 'form-control datetimepicker-input'}),
             'bet_type': forms.Select(attrs={'class': 'form-control'}),
@@ -178,3 +186,16 @@ class RatingFilterForm(BetBaseFilterForm):
     prediction = None
     result = None
     is_favourite = None
+
+
+class StatisticFilterForm(BetBaseFilterForm):
+    prediction = None
+    amount_min = None
+    amount_max = None
+    coefficient_min = None
+    coefficient_max = None
+    result = None
+    date_game_start = None
+    date_game_end = None
+    is_favourite = None
+
