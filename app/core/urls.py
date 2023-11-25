@@ -15,19 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 from users.views import HomePageView, Tariff
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', HomePageView.as_view(), name='home'),
-    path('tariff/', Tariff.as_view(), name='tariff'),
-    path('bet/', include('bet.urls')),
+    path('', RedirectView.as_view(url=reverse_lazy('calendar'), permanent=False), name='index'),
     path('', include('users.urls')),
+    path('bet/', include('bet.urls')),
 
 ]
 

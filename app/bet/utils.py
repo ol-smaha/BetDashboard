@@ -10,6 +10,16 @@ from bet.models import SportKind, BetBase, BetFootball, Team, CompetitionFootbal
 UserModel = get_user_model()
 
 
+def reverse_dict(dct):
+    try:
+        reverse = {}
+        for key, val in dct.items():
+            reverse.update({val: key})
+        return reverse
+    except:
+        return dct
+
+
 def generate_bets():
     # BetBase.objects.all().delete()
     sport_kind = SportKind.objects.get(name="Футбол")

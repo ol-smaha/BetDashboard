@@ -12,12 +12,15 @@ from django.views.generic.list import ListView
 from django.utils.timezone import now
 
 from .mixins import BetFilterMixin
-from .models import BetBase, BetFootball
+from .models import BetBase, BetFootball, CompetitionFootball, CompetitionBase
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
-from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES
+from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES, \
+    COMPETITION_RATING_TABLE_FIELD_NAMES, BetTypeEnum, SPORT_KIND_RATING_TABLE_FIELD_NAMES, \
+    BET_TYPE_RATING_TABLE_FIELD_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
     BetFootballCreateForm, RatingFilterForm, StatisticFilterForm
 from bet.constants import BetResultEnum
+from .utils import reverse_dict
 
 
 class BetHistoryView(BetFilterMixin, ListView):
@@ -307,6 +310,7 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
         return self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
 
     def get_queryset(self):
+        print(self.base_queryset().count())
         filtered_qs = self.filtered_queryset(self.base_queryset())
         return filtered_qs
 
@@ -323,7 +327,6 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
             'total_bets_count': self.get_queryset().count(),
             'football_bet_fields': BET_FOOTBALL_FIELDS_NAMES.values(),
             'filter_form': filter_form,
-            'bets': self.get_queryset()[:50],
             'page_obj_count_string': page_obj_count_string,
             'query_parametes': self.request.GET,
         })
@@ -814,109 +817,62 @@ class RatingGraphsView(BetFilterMixin, ListView):
     model = BetFootball
     template_name = 'bet/rating.html'
 
-    def _get_competition_values(self):
-        values = []
-        for val in self.get_queryset().values_list('competition__name', flat=True).distinct():
-            val = val if val is not None else 'Інше'
-            values.append(val)
-        return values
+    def get_active_tab(self):
+        return int(self.request.GET.get('active_tab', 1))
 
-    def _process_rating_profit_from_competition(self):
-        data = {}
+    def annotate_qs(self, field_name, fields_dict):
+        ordering_tab = '-profit_sum'
+        ordering_tab_raw_value = self.request.GET.get('ordering_tab')
+        if ordering_tab_raw_value:
+            ordering_tab_value = reverse_dict(fields_dict).get(ordering_tab_raw_value)
+            if ordering_tab_value:
+                ordering_tab = f"-{ordering_tab_value}"
+
         qs = (self.get_queryset()
-              .values('competition__name')
-              .annotate(profit=Sum('profit'))
-              .order_by('-profit'))
-
-        for element in qs:
-            competition = element.get('competition__name') or 'Інше'
-            profit = element.get('profit') or 0.00
-            data.update({
-                competition: {
-                    'Профіт': round(float(profit), 2),
-                }
-            })
-        return data
-
-    def _process_rating_roi_from_competition(self):
-        data = {}
-        qs = (self.get_queryset()
-              .values('competition__name')
-              .annotate(profit_sum=Sum('profit'), amount_sum=Sum('amount'))
+              .values(field_name)
+              .annotate(profit_avg=Avg('profit'), profit_sum=Sum('profit'), amount_sum=Sum('amount'), count=Count('pk'))
               .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
-              .order_by('-roi'))
+              .order_by(ordering_tab))
+        return qs
 
-        for element in qs:
-            competition = element.get('competition__name') or 'Інше'
-            data.update({
-                competition: {
-                    'ROI': round(float(element.get('roi')), 2),
-                }
+    def get_competitions_data(self):
+        data = []
+        for obj in self.annotate_qs('competition__name', COMPETITION_RATING_TABLE_FIELD_NAMES):
+            try:
+                flag = CompetitionFootball.objects.get(name=obj.get('competition__name')).country.flag_code
+            except:
+                flag = ''
+            data.append({
+                'flag': flag,
+                'name': obj.get('competition__name') or 'Iнше',
+                'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
+                'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
+                'total_roi': round(float(obj.get('roi', 0.00)), 2),
+                'count': obj.get('count', 0),
             })
         return data
 
-    def _process_rating_profit_from_bet_type(self):
-        data = {}
-        qs = (self.get_queryset()
-              .values('bet_type')
-              .annotate(profit=Sum('profit'))
-              .order_by('-profit'))
-
-        for element in qs:
-            bet_type = element.get('bet_type')
-            profit = element.get('profit') or 0.00
-            data.update({
-                bet_type: {
-                    'Профіт': round(float(profit), 2),
-                }
+    def get_sport_kind_data(self):
+        data = []
+        for obj in self.annotate_qs('sport_kind__name', SPORT_KIND_RATING_TABLE_FIELD_NAMES):
+            data.append({
+                'name': obj.get('sport_kind__name') or 'Iнше',
+                'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
+                'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
+                'total_roi': round(float(obj.get('roi', 0.00)), 2),
+                'count': obj.get('count', 0),
             })
         return data
 
-    def _process_rating_roi_from_bet_type(self):
-        data = {}
-        qs = (self.get_queryset()
-              .values('bet_type')
-              .annotate(profit_sum=Sum('profit'), amount_sum=Sum('amount'))
-              .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
-              .order_by('-roi'))
-        for element in qs:
-            bet_type = element.get('bet_type')
-            data.update({
-                bet_type: {
-                    'ROI': round(float(element.get('roi')), 2),
-                }
-            })
-        return data
-
-    def _process_rating_profit_from_sport_kind(self):
-        data = {}
-        qs = (self.get_queryset()
-              .values('sport_kind__name')
-              .annotate(profit=Sum('profit'))
-              .order_by('-profit'))
-        for element in qs:
-            sport_kind = element.get('sport_kind__name') or 'Інше'
-            profit = element.get('profit') or 0.00
-            data.update({
-                sport_kind: {
-                    'Профіт': round(float(profit), 2),
-                }
-            })
-        return data
-
-    def _process_rating_roi_from_sport_kind(self):
-        data = {}
-        qs = (self.get_queryset()
-              .values('sport_kind__name')
-              .annotate(profit_sum=Sum('profit'), amount_sum=Sum('amount'))
-              .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
-              .order_by('-roi'))
-        for element in qs:
-            sport_kind = element.get('sport_kind__name') or 'Інше'
-            data.update({
-                sport_kind: {
-                    'ROI': round(float(element.get('roi')), 2),
-                }
+    def get_bet_type_data(self):
+        data = []
+        for obj in self.annotate_qs('bet_type', BET_TYPE_RATING_TABLE_FIELD_NAMES):
+            data.append({
+                'name': obj.get('bet_type') or BetTypeEnum.UNKNOWN,
+                'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
+                'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
+                'total_roi': round(float(obj.get('roi', 0.00)), 2),
+                'count': obj.get('count', 0),
             })
         return data
 
@@ -934,33 +890,16 @@ class RatingGraphsView(BetFilterMixin, ListView):
         context.update({
             'title': 'Rating',
             'filter_form': filter_form,
-            'profit_by_competition_labels': json.dumps(['Профіт']),
-            'profit_by_competition_ykeys': json.dumps(['Профіт']),
-            'profit_by_competition_data': MorrisChartBar.to_json_data(
-                self._process_rating_profit_from_competition()),
-            'roi_by_competition_labels': json.dumps(['ROI']),
-            'roi_by_competition_ykeys': json.dumps(['ROI']),
-            'roi_by_competition_data': MorrisChartBar.to_json_data(
-                self._process_rating_roi_from_competition()),
-
-            'profit_by_bet_type_labels': json.dumps(['Профіт']),
-            'profit_by_bet_type_ykeys': json.dumps(['Профіт']),
-            'profit_by_bet_type_data': MorrisChartBar.to_json_data(
-                self._process_rating_profit_from_bet_type()),
-            'roi_by_bet_type_labels': json.dumps(['ROI']),
-            'roi_by_bet_type_ykeys': json.dumps(['ROI']),
-            'roi_by_bet_type_data': MorrisChartBar.to_json_data(
-                self._process_rating_roi_from_bet_type()),
-
-            'profit_by_sport_kind_labels': json.dumps(['Профіт']),
-            'profit_by_sport_kind_ykeys': json.dumps(['Профіт']),
-            'profit_by_sport_kind_data': MorrisChartBar.to_json_data(
-                self._process_rating_profit_from_sport_kind()),
-            'roi_by_sport_kind_labels': json.dumps(['ROI']),
-            'roi_by_sport_kind_ykeys': json.dumps(['ROI']),
-            'roi_by_sport_kind_data': MorrisChartBar.to_json_data(
-                self._process_rating_roi_from_sport_kind()),
+            'active_tab': self.get_active_tab(),
+            'competition_objects': self.get_competitions_data(),
+            'competition_fields': COMPETITION_RATING_TABLE_FIELD_NAMES.values(),
+            'sport_kind_objects': self.get_sport_kind_data(),
+            'sport_kind_fields': SPORT_KIND_RATING_TABLE_FIELD_NAMES.values(),
+            'bet_type_objects': self.get_bet_type_data(),
+            'bet_type_fields': BET_TYPE_RATING_TABLE_FIELD_NAMES.values(),
         })
+        print(context.get('active_tab'))
+        print(type(context.get('active_tab')))
 
         return context
 

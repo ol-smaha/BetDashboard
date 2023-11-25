@@ -92,7 +92,7 @@ class BetBaseFilterForm(forms.Form):
     )
 
 
-class BetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm):
+class BetHistoryFilterForm(BetBaseFilterForm):
     prediction = None
 
 

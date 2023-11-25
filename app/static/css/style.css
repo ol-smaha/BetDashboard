@@ -1640,7 +1640,7 @@ Left Navigation Sidebar
 
 .nav-left-sidebar {
     position: fixed;
-    width: 200px;
+    width: 215px;
     height: 100%;
     top: 60px;
     overflow: auto;
@@ -1691,7 +1691,7 @@ Left Navigation Sidebar
 .nav-left-sidebar .navbar-nav .nav-item {}
 
 .nav-left-sidebar .navbar-nav .nav-link {
-    font-size: 18px;
+    font-size: 17px;
     padding: 12px;
     /* margin-bottom: 2px; */
     color: #8fadb3;
@@ -1699,7 +1699,7 @@ Left Navigation Sidebar
 }
 
 .nav-left-sidebar .nav-link i {
-    font-size: 14px;
+    font-size: 16px;
     margin-right: 9px;
     text-align: center;
     vertical-align: middle;
@@ -1722,7 +1722,7 @@ Left Navigation Sidebar
 }
 
 .nav-left-sidebar .submenu .nav .nav-item .nav-link {
-    font-size: 16px;
+    font-size: 15px;
     padding: 6px 12px;
     transition: 0.3s;
 }
@@ -1944,7 +1944,7 @@ Container / Wrapper
 .dashboard-wrapper {
     position: relative;
     left: 0;
-    margin-left: 200px;
+    margin-left: 215px;
     min-height: 870px !important;
 }
 

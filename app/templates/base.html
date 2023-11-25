@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{% static 'vendor/datepicker/tempusdominus-bootstrap-4.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/full-calendar/css/fullcalendar.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/full-calendar/css/fullcalendar.print.css' %}" media='print'>
+    <link rel="stylesheet" href="{% static 'vendor/fonts/flag-icon-css/flag-icon.min.css' %}">
 
 </head>
 
@@ -97,6 +98,19 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" href="{% url 'football_history' %}">Футбол</a>
                                             </li>
+                                            <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-11" aria-controls="submenu-11">Додати ставку</a>
+                                            <div id="submenu-11" class="collapse submenu" style="">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="{% url 'bet_create' %}">Загальна</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="{% url 'bet_football_create' %}">Футбол</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
                                         </ul>
                                     </div>
                                 </li>

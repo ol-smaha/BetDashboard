@@ -3,13 +3,12 @@
 {% load bet_tags %}
 
 {% block main %}
-    <div class="influence-finder">
+<div class="influence-finder" xmlns="http://www.w3.org/1999/html">
 		<div class="container-fluid dashboard-content">
 			<div class="row">
 				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 					<div class="page-header">
 						<h3 class="mb-2">Infulencer Dashboard Template </h3>
-						<p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
 						<div class="page-breadcrumb">
 							<nav aria-label="breadcrumb">
 								<ol class="breadcrumb">
@@ -50,22 +49,18 @@
 									<thead>
 										<tr>
 											{% for field in bet_fields %}
-											<th>{{ field }}</th>
+											<th>
+												{{ field }}
+												{% if field not in '☒,bar'%}
+													<a href="?{% query_transform ordering=field|bet_base_ordering_value %}"><i class="fas fa-sort" style="float: right;"></i></a>
+												{% endif %}
+											</th>
 											{% endfor %}
-<!--											<th>Actions</th>-->
 										</tr>
 									</thead>
 									<tbody>
 										{% for bet in page_obj %}
 										<tr>
-											{% if field.name == 'objects_ids' %}
-											<td>
-												<label class="custom-control custom-checkbox">
-													<input class="custom-control-input checkboxes" type="checkbox" value="{{bet.id}}" name="{{ field.name }}" id="{{ field.auto_id }}">
-													<span class="custom-control-label"></span>
-                                				</label>
-											</td>
-											{% endif %}
 											<td>{{ bet.date_game }}</td>
 											<td>{{ bet.prediction }}</td>
 											<td>{{ bet.amount }} $</td>
@@ -149,6 +144,11 @@
 				<div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
 					<form>
 						<div class="card">
+							<div class="card-body">
+								<a href="?" class="text-danger">
+									<i class="float-right far fa-window-close fa-fw fa-sm text-secondary"></i>
+								</a>
+							</div>
 							{% for field in filter_form.visible_fields %}
                             	{% if field.name in 'date_game_start,date_game_end' %}
 								<div class="card-body">
@@ -168,7 +168,7 @@
 								{% endif %}
 							{% endfor %}
 							<div class="card-body border-top">
-								<button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
+                            	<button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
 							</div>
 						</div>
 					</form>

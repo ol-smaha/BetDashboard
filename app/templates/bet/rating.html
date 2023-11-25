@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load bet_tags %}
 
 
 {% block main %}
@@ -23,110 +24,223 @@
     </div>
         <div class="row">
             <div class="col-xl-10 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
-                <div class="section-block">
-                    <h4 class="section-title">Рейтинг за весь час:</h4>
-                </div>
                 <div class="tab-regular">
                     <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link show active" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
+                            <a class="nav-link {% if active_tab == 1 %}show active{% endif %}" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
                                 Ліги
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                            <a class="nav-link {% if active_tab == 2 %}show active{% endif %}" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
                                 Вид Спорту
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="month-profit-line-tab" href="#month-profit-line" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
+                            <a class="nav-link {% if active_tab == 3 %}show active{% endif %}" id="month-profit-line-tab" href="#month-profit-line" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
                                 Тип Ставки
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
+                        <div class="tab-pane fade {% if active_tab == 1 %}show active{% endif %}" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
                             <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="card">
-                                    <h5 class="card-header">Прибуток</h5>
-                                    <div class="card-body">
-                                        <div id="morris_bar_1"
-                                             data-colors="{{ chart_one_line_colors }}"
-                                             data-labels="{{ profit_by_competition_labels }}"
-                                             data-ykeys="{{ profit_by_competition_ykeys }}"
-                                             data-data="{{ profit_by_competition_data }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-							<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <h5 class="card-header">РОЙ</h5>
-                                    <div class="card-body">
-                                        <div id="morris_bar_2"
-                                             data-colors="{{ chart_one_line_colors }}"
-                                             data-labels="{{ roi_by_competition_labels }}"
-                                             data-ykeys="{{ roi_by_competition_ykeys }}"
-                                             data-data="{{ roi_by_competition_data }}">
-                                        </div>
-                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered first">
+                                            <thead>
+                                                <tr>
+                                                    {% for field in competition_fields %}
+                                                    <th>
+                                                        {{ field }}
+                                                        <a href="?{% query_transform ordering_tab=field active_tab=1 %}"><i class="fas fa-sort" style="float: right;"></i></a>
+                                                    </th>
+                                                    {% endfor %}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for obj in competition_objects %}
+                                                <tr>
+                                                    <td>
+                                                        <span class="mr-2"><i class="flag-icon flag-icon-{{obj.flag}}" title="{{obj.flag}}" id="{{obj.flag}}"></i></span>
+                                                        <span class="traffic-sales-name">{{obj.name}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="traffic-sales-name" style="float: right;">{{obj.count}}</span>
+                                                    </td>
+                                                    <td>
+                                                        {% if obj.avg_profit > 0 %}
+                                                            <span class="ml-1 text-success" style="float: right;">${{obj.avg_profit}}</span>
+                                                        {% elif obj.avg_profit == 0 %}
+                                                            <span class="ml-1 text-warning" style="float: right;">${{obj.avg_profit}}</span>
+                                                        {% else %}
+                                                            <span class="ml-1 text-danger" style="float: right;">${{obj.avg_profit}}</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if obj.total_profit > 0 %}
+                                                            <span class="ml-1 text-success" style="float: right;">${{obj.total_profit}}</span>
+                                                        {% elif obj.total_profit == 0 %}
+                                                            <span class="ml-1 text-warning" style="float: right;">${{obj.total_profit}}</span>
+                                                        {% else %}
+                                                            <span class="ml-1 text-danger" style="float: right;">${{obj.total_profit}}</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if obj.total_roi > 0 %}
+                                                            <span class="icon-circle-small icon-box-xs text-success ml-4 bg-success-light" style="float: right;">
+                                                                <i class="fa fa-fw fa-arrow-up"></i>
+                                                            </span>
+                                                            <span class="ml-1 text-success" style="float: right;">{{obj.total_roi}}%</span>
+                                                        {% elif obj.total_roi == 0 %}
+                                                            <span class="icon-circle-small icon-box-xs text-brand ml-4 bg-brand-light" style="float: right;">
+                                                                <i class="fa fa-fw fa-arrow-right"></i>
+                                                            </span>
+                                                            <span class="ml-1 text-warning" style="float: right;">{{obj.total_roi}}%</span>
+                                                        {% else %}
+                                                            <span class="icon-circle-small icon-box-xs text-danger ml-4 bg-danger-light" style="float: right;">
+                                                                <i class="fa fa-fw fa-arrow-down"></i>
+                                                            </span>
+                                                            <span class="ml-1 text-danger" style="float: right;">{{obj.total_roi}}%</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+							        </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
+                        <div class="tab-pane fade {% if active_tab == 2 %}show active{% endif %}" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
                            	<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <h5 class="card-header">Прибуток</h5>
-                                    <div class="card-body">
-                                        <div id="morris_bar_3"
-                                             data-colors="{{ chart_one_line_colors }}"
-                                             data-labels="{{ profit_by_sport_kind_labels }}"
-                                             data-ykeys="{{ profit_by_sport_kind_ykeys }}"
-                                             data-data="{{ profit_by_sport_kind_data }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-							<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <h5 class="card-header">РОЙ</h5>
-                                    <div class="card-body">
-                                        <div id="morris_bar_4"
-                                             data-colors="{{ chart_one_line_colors }}"
-                                             data-labels="{{ roi_by_sport_kind_labels }}"
-                                             data-ykeys="{{roi_by_sport_kind_ykeys }}"
-                                             data-data="{{ roi_by_sport_kind_data }}">
-                                        </div>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered first">
+                                        <thead>
+                                            <tr>
+                                                {% for field in sport_kind_fields %}
+                                                <th>
+                                                    {{ field }}
+                                                    <a href="?{% query_transform ordering_tab=field active_tab=2 %}"><i class="fas fa-sort" style="float: right;"></i></a>
+                                                </th>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for obj in sport_kind_objects %}
+                                            <tr>
+                                                <td>
+                                                    <span class="traffic-sales-name">{{obj.name}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="traffic-sales-name" style="float: right;">{{obj.count}}</span>
+                                                </td>
+                                                <td>
+                                                    {% if obj.avg_profit > 0 %}
+                                                        <span class="ml-1 text-success" style="float: right;">${{obj.avg_profit}}</span>
+                                                    {% elif obj.avg_profit == 0 %}
+                                                        <span class="ml-1 text-warning" style="float: right;">${{obj.avg_profit}}</span>
+                                                    {% else %}
+                                                        <span class="ml-1 text-danger" style="float: right;">${{obj.avg_profit}}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if obj.total_profit > 0 %}
+                                                        <span class="ml-1 text-success" style="float: right;">${{obj.total_profit}}</span>
+                                                    {% elif obj.total_profit == 0 %}
+                                                        <span class="ml-1 text-warning" style="float: right;">${{obj.total_profit}}</span>
+                                                    {% else %}
+                                                        <span class="ml-1 text-danger" style="float: right;">${{obj.total_profit}}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if obj.total_roi > 0 %}
+                                                        <span class="icon-circle-small icon-box-xs text-success ml-4 bg-success-light" style="float: right;">
+                                                            <i class="fa fa-fw fa-arrow-up"></i>
+                                                        </span>
+                                                        <span class="ml-1 text-success" style="float: right;">{{obj.total_roi}}%</span>
+                                                    {% elif obj.total_roi == 0 %}
+                                                        <span class="icon-circle-small icon-box-xs text-brand ml-4 bg-brand-light" style="float: right;">
+                                                            <i class="fa fa-fw fa-arrow-right"></i>
+                                                        </span>
+                                                        <span class="ml-1 text-warning" style="float: right;">{{obj.total_roi}}%</span>
+                                                    {% else %}
+                                                        <span class="icon-circle-small icon-box-xs text-danger ml-4 bg-danger-light" style="float: right;">
+                                                            <i class="fa fa-fw fa-arrow-down"></i>
+                                                        </span>
+                                                        <span class="ml-1 text-danger" style="float: right;">{{obj.total_roi}}%</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
+                        <div class="tab-pane fade {% if active_tab == 3 %}show active{% endif %}" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
                            	<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <h5 class="card-header">Прибуток</h5>
-                                    <div class="card-body">
-                                        <div id="morris_bar_5"
-                                             data-colors="{{ chart_one_line_colors }}"
-                                             data-labels="{{ profit_by_bet_type_labels }}"
-                                             data-ykeys="{{ profit_by_bet_type_ykeys }}"
-                                             data-data="{{ profit_by_bet_type_data }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-							<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <h5 class="card-header">РОЙ</h5>
-                                        <div id="morris_bar_6"
-                                             data-colors="{{ chart_one_line_colors }}"
-                                             data-labels="{{ roi_by_bet_type_labels }}"
-                                             data-ykeys="{{roi_by_bet_type_ykeys }}"
-                                             data-data="{{ roi_by_bet_type_data }}">
-                                        </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered first">
+                                        <thead>
+                                            <tr>
+                                                {% for field in bet_type_fields %}
+                                                <th>
+                                                    {{ field }}
+                                                    <a href="?{% query_transform ordering_tab=field active_tab=3 %}"><i class="fas fa-sort" style="float: right;"></i></a>
+                                                </th>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for obj in bet_type_objects %}
+                                            <tr>
+                                                <td>
+                                                    <span class="traffic-sales-name">{{obj.name}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="traffic-sales-name" style="float: right;">{{obj.count}}</span>
+                                                </td>
+                                                <td>
+                                                    {% if obj.avg_profit > 0 %}
+                                                        <span class="ml-1 text-success" style="float: right;">${{obj.avg_profit}}</span>
+                                                    {% elif obj.avg_profit == 0 %}
+                                                        <span class="ml-1 text-warning" style="float: right;">${{obj.avg_profit}}</span>
+                                                    {% else %}
+                                                        <span class="ml-1 text-danger" style="float: right;">${{obj.avg_profit}}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if obj.total_profit > 0 %}
+                                                        <span class="ml-1 text-success" style="float: right;">${{obj.total_profit}}</span>
+                                                    {% elif obj.total_profit == 0 %}
+                                                        <span class="ml-1 text-warning" style="float: right;">${{obj.total_profit}}</span>
+                                                    {% else %}
+                                                        <span class="ml-1 text-danger" style="float: right;">${{obj.total_profit}}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if obj.total_roi > 0 %}
+                                                        <span class="icon-circle-small icon-box-xs text-success ml-4 bg-success-light" style="float: right;">
+                                                            <i class="fa fa-fw fa-arrow-up"></i>
+                                                        </span>
+                                                        <span class="ml-1 text-success" style="float: right;">{{obj.total_roi}}%</span>
+                                                    {% elif obj.total_roi == 0 %}
+                                                        <span class="icon-circle-small icon-box-xs text-brand ml-4 bg-brand-light" style="float: right;">
+                                                            <i class="fa fa-fw fa-arrow-right"></i>
+                                                        </span>
+                                                        <span class="ml-1 text-warning" style="float: right;">{{obj.total_roi}}%</span>
+                                                    {% else %}
+                                                        <span class="icon-circle-small icon-box-xs text-danger ml-4 bg-danger-light" style="float: right;">
+                                                            <i class="fa fa-fw fa-arrow-down"></i>
+                                                        </span>
+                                                        <span class="ml-1 text-danger" style="float: right;">{{obj.total_roi}}%</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

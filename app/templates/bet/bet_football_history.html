@@ -45,29 +45,24 @@
 									</div>
                         		</div>
 							</div>
-						<h5 class="card-header">Football Bet History</h5>
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table table-striped table-bordered first">
 									<thead>
 										<tr>
 											{% for field in football_bet_fields %}
-											<th>{{ field }}</th>
+											<th>
+												{{ field }}
+												{% if field not in '☒,bar'%}
+													<a href="?{% query_transform ordering=field|bet_football_ordering_value %}"><i class="fas fa-sort" style="float: right;"></i></a>
+												{% endif %}
+											</th>
 											{% endfor %}
-<!--											<th>Actions</th>-->
 										</tr>
 									</thead>
 									<tbody>
 										{% for bet in page_obj %}
 										<tr>
-											{% if field.name == 'objects_ids' %}
-											<td>
-												<label class="custom-control custom-checkbox">
-													<input class="custom-control-input checkboxes" type="checkbox" value="{{bet.id}}" name="{{ field.name }}" id="{{ field.auto_id }}">
-													<span class="custom-control-label"></span>
-                                				</label>
-											</td>
-											{% endif %}
 											<td>{{ bet.date_game }}</td>
 											<td>{{ bet.prediction }}</td>
 											<td>{{ bet.amount }} $</td>
@@ -77,10 +72,8 @@
 											<td>{{ bet.profit }}</td>
 											<td>{{ bet.team_home }}</td>
 											<td>{{ bet.team_guest }}</td>
-											<td>{{ bet.bet_type }}</td>
 											<td>{{ bet.competition }}</td>
 											<td>{{ bet.game_status }}</td>
-											<td>{{ bet.is_home_guest }}</td>
 											{% if bet.is_favourite %}
 												<td>
 													<a class="favorite active" href="{% url 'football_bet_change_favourite_status' bet.id %}?{{ request.GET.urlencode }}">

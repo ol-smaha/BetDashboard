@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'bet.context_processors.graph_colors',
+                'bet.context_processors.urls',
             ],
         },
     },

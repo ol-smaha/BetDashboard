@@ -248,7 +248,7 @@ BET_BASE_TABLE_FIELD_NAMES = {
     'coefficient': 'Коефіцієнт',
     'result': 'Результат ставки',
     'profit': 'Прибуток',
-    'sport_kind': 'Спорт',
+    'sport_kind__name': 'Спорт',
     'live_type': 'Момент ставки',
     'is_favourite': '⭐',
     'action_delete': '☒',
@@ -264,10 +264,8 @@ BET_FOOTBALL_FIELDS_NAMES = {
     'profit': 'Profit',
     'team_home': 'Team Home',
     'team_guest': 'Team Guess',
-    'bet_type': 'Bet Type',
     'competition': 'Competition',
     'game_status': 'Game Status',
-    'is_home_guest': 'Is Home Guest',
     'is_favourite': '⭐',
     'action_delete': '☒',
 }
@@ -334,10 +332,11 @@ BET_BASE_ORDERING_FIELDS_CHOICES = (
     ('coefficient', 'Коефіцієнт'),
     ('result', 'Результат ставки'),
     ('profit', 'Профіт'),
-    ('sport_kind', 'Вид спорту'),
+    ('sport_kind__name', 'Вид спорту'),
     ('is_favourite', 'Улюблене'),
 
 )
+
 
 BOOL_FIELD_CHOICES = (
     (True, 'Так'),
@@ -365,3 +364,30 @@ class ChartDateType(StrEnum):
     def items(cls):
         res = [e.value for e in cls]
         return res
+
+
+COMPETITION_RATING_TABLE_FIELD_NAMES = {
+    'competition__name': 'Ліга',
+    'count': 'К-сть',
+    'profit_avg': 'Прибуток за ставку',
+    'profit_sum': 'Загальний Прибуток',
+    'roi': 'Рентабельність',
+}
+
+
+SPORT_KIND_RATING_TABLE_FIELD_NAMES = {
+    'sport_kind__name': 'Спорт',
+    'count': 'К-сть',
+    'profit_avg': 'Прибуток за ставку',
+    'profit_sum': 'Загальний Прибуток',
+    'roi': 'Рентабельність',
+}
+
+
+BET_TYPE_RATING_TABLE_FIELD_NAMES = {
+    'bet_type': 'Прогноз',
+    'count': 'К-сть',
+    'profit_avg': 'Прибуток за ставку',
+    'profit_sum': 'Загальний Прибуток',
+    'roi': 'Рентабельність',
+}

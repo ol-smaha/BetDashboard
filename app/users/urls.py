@@ -1,9 +1,9 @@
 from django.urls import path
 
-from users.views import AboutUsView
+from users.views import AboutUsView, Tariff
 
 urlpatterns = [
-    path('about-us/', AboutUsView.as_view(), name='about-us'),
-
+    path('about/', AboutUsView.as_view(), name='about'),
+    path('tariff/', Tariff.as_view(), name='tariff'),
 ]
 

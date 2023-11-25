@@ -96,8 +96,16 @@ $(function() {
     $(document).ready(function() {
         const element = document.getElementById("calendar_bet")
         $('#calendar_bet').fullCalendar({
+            customButtons: {
+              createNewBetButton: {
+                text: 'Додати ставку',
+                click: function() {
+                    window.location.href = JSON.parse(element.dataset.betcreateurl);
+                }
+              }
+            },
             header: {
-                left: 'prev,next today',
+                left: 'prev,next today createNewBetButton',
                 center: 'title',
                 right: 'month'
             },

@@ -11,6 +11,7 @@ class Country(models.Model):
     name = models.CharField(max_length=64, unique=True)
     code2 = models.CharField(max_length=2, null=True, blank=True)
     code3 = models.CharField(max_length=4, null=True, blank=True)
+    flag_code = models.CharField(max_length=4, null=True, blank=True)
 
     @classmethod
     def name_choices(cls):
