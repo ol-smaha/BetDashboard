@@ -45,6 +45,7 @@ class BetHistoryView(BetFilterMixin, ListView):
         page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
         context.update({
             'title': 'Bet History',
+            'menu_key': 'bet_list',
             'bet_fields': BET_BASE_TABLE_FIELD_NAMES.values(),
             'filter_form': filter_form,
             'page_obj_count_string': page_obj_count_string,
@@ -255,6 +256,7 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
 
             'filter_form': filter_form,
             'title': 'Profit Graphs',
+            'menu_key': 'bet_graphs_profit',
         })
         return context
 
@@ -287,6 +289,7 @@ class Statistic(BetFilterMixin, ListView):
 
         context.update({
             'title': 'Bet Statistic',
+            'menu_key': 'bet_statistic',
             'filter_form': filter_form,
             'total_bets_count': total_bets_count,
             'total_bets_profit': float(total_bets_profit),
@@ -324,6 +327,7 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
         page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
         context.update({
             'title': 'Football Bet History',
+            'menu_key': 'bet_football_list',
             'total_bets_count': self.get_queryset().count(),
             'football_bet_fields': BET_FOOTBALL_FIELDS_NAMES.values(),
             'filter_form': filter_form,
@@ -468,6 +472,7 @@ class BetGraphsResultView(BetFilterMixin, ListView):
 
             'filter_form': filter_form,
             'title': 'Profit Graphs',
+            'menu_key': 'bet_graphs_result',
         })
         return context
 
@@ -611,6 +616,7 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
 
             'filter_form': filter_form,
             'title': 'ROI Graphs',
+            'menu_key': 'bet_graphs_roi',
         })
         return context
 
@@ -624,6 +630,9 @@ class BetCreateView(CreateView):
         context = super().get_context_data()
         context['form'].fields['user'].initial = self.request.user.pk
         context['form'].fields['user'].widget = HiddenInput()
+        context.update({
+            'menu_key': 'bet_create',
+        })
         return context
 
 
@@ -657,6 +666,9 @@ class BetFootballCreateView(CreateView):
         context = super().get_context_data()
         context['form'].fields['user'].initial = self.request.user.pk
         context['form'].fields['user'].widget = HiddenInput()
+        context.update({
+            'menu_key': 'bet_football_create',
+        })
         return context
 
 
@@ -809,6 +821,7 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
 
             'filter_form': filter_form,
             'title': 'Amount Graphs',
+            'menu_key': 'bet_graphs_amount',
         })
         return context
 
@@ -889,6 +902,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
 
         context.update({
             'title': 'Rating',
+            'menu_key': 'bet_ratings',
             'filter_form': filter_form,
             'active_tab': self.get_active_tab(),
             'competition_objects': self.get_competitions_data(),
@@ -898,8 +912,6 @@ class RatingGraphsView(BetFilterMixin, ListView):
             'bet_type_objects': self.get_bet_type_data(),
             'bet_type_fields': BET_TYPE_RATING_TABLE_FIELD_NAMES.values(),
         })
-        print(context.get('active_tab'))
-        print(type(context.get('active_tab')))
 
         return context
 
@@ -935,6 +947,7 @@ class CalendarView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         context.update({
+            'menu_key': 'bet_calendar',
             'calendar_data': CalendarDashboard.to_json_data(self._prepare_calendar_data()),
             'date_now': json.dumps(datetime.strftime(now().date(), '%Y-%m-%d'))
         })

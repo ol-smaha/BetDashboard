@@ -7,23 +7,8 @@
     <div class="influence-finder">
 		<div class="container-fluid dashboard-content">
 			<div class="row">
-				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					<div class="page-header">
-						<h3 class="mb-2">Infulencer Dashboard Template </h3>
-						<p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
-						<div class="page-breadcrumb">
-							<nav aria-label="breadcrumb">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Bet Football History</li>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
 				<div class="col-xl-10 col-lg-6 col-md-6 col-sm-12 col-12">
+					<div class="alert alert-light text-dark" role="alert">Список ставок на Футбол:</div>
 					<div class="card">
 						<div class="email-filters">
 								<div class="email-filters-left">
@@ -76,19 +61,19 @@
 											<td>{{ bet.game_status }}</td>
 											{% if bet.is_favourite %}
 												<td>
-													<a class="favorite active" href="{% url 'football_bet_change_favourite_status' bet.id %}?{{ request.GET.urlencode }}">
+													<a class="favorite active" href="{% url 'bet_football_change_is_favourite' bet.id %}?{{ request.GET.urlencode }}">
 														<span><i class="fas fa-star"></i></span>
 													</a>
 												</td>
 											{% else %}
 												<td>
-													<a class="favorite" href="{% url 'football_bet_change_favourite_status' bet.id %}?{{ request.GET.urlencode }}">
+													<a class="favorite" href="{% url 'bet_football_change_is_favourite' bet.id %}?{{ request.GET.urlencode }}">
 														<span><i class="far fa-star"></i></span>
 													</a>
 												</td>
 											{% endif %}
 											<td>
-												<a class="favorite" href="#" data-href="{% url 'football_bet_delete' bet.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete">
+												<a class="favorite" href="#" data-href="{% url 'bet_football_delete' bet.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete">
 													<span><i class="mdi mdi-close-box-outline"></i></span>
 												</a>
                                                 <!-- Modal -->
@@ -146,6 +131,8 @@
 					</nav>
 				</div>
 				<div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
+					<div class="alert alert-light text-dark" role="alert">Фільтрація:</div>
+
 					<form>
 						<div class="card">
 							{% for field in filter_form.visible_fields %}

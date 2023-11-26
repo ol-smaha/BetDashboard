@@ -1,6 +1,6 @@
 from django import template
 
-from bet.constants import BET_FOOTBALL_FIELDS_NAMES, BET_BASE_TABLE_FIELD_NAMES
+from bet.constants import BET_FOOTBALL_FIELDS_NAMES, BET_BASE_TABLE_FIELD_NAMES, MENU_TREE
 from bet.utils import reverse_dict
 
 register = template.Library()
@@ -33,7 +33,7 @@ def bet_base_ordering_value(value):
 
 
 @register.filter
-def bet_football_ordering_value(value, **kwargs):
+def bet_football_ordering_value(value):
     default = 'pk'
     desc_fields = ['is_favourite']
     exclude_fields = ['action_delete']
@@ -48,3 +48,12 @@ def bet_football_ordering_value(value, **kwargs):
             return default
     except:
         return default
+
+
+@register.filter
+def is_parent_menu_active(parent, child):
+    try:
+        parents = MENU_TREE.get(child)
+        return parent in parents
+    except:
+        return False

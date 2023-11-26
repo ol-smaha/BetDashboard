@@ -1,31 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
+{% load bet_tags %}
 
 {% block main %}
     <div class="influence-finder">
 		<div class="container-fluid dashboard-content">
 			<div class="row">
-				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					<div class="page-header">
-						<h3 class="mb-2">Infulencer Dashboard Template </h3>
-						<p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
-						<div class="page-breadcrumb">
-							<nav aria-label="breadcrumb">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Influencer Dashboard Template</li>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
 				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+					<div class="alert alert-light text-dark" role="alert">Додати загальну ставку:</div>
 					<div class="card">
-						<div class="card-header d-flex">
-							<h4 class="card-header-title">Add New Bet</h4>
-						</div>
 						<div class="card-body">
 							<form method="POST">
 								<div class="form-group">

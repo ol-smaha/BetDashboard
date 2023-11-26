@@ -391,3 +391,20 @@ BET_TYPE_RATING_TABLE_FIELD_NAMES = {
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
 }
+
+
+MENU_TREE = {
+    'bet_calendar': ['dashboard'],
+    'bet_statistic': ['dashboard'],
+    'bet_ratings': ['dashboard'],
+
+    'bet_list': ['list'],
+    'bet_football_list': ['list'],
+    'bet_create': ['list', 'add_bet'],
+    'bet_football_create': ['list', 'add_bet'],
+
+    'bet_graphs_profit': ['graphs'],
+    'bet_graphs_roi': ['graphs'],
+    'bet_graphs_result': ['graphs'],
+    'bet_graphs_amount': ['graphs'],
+}
