@@ -4,7 +4,7 @@ from django.forms.utils import ErrorDict
 
 from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
     GameStatusEnum, BetPredictionEnum, LiveTypeEnum
-from bet.models import SportKind, CompetitionBase, BetBase, BetFootball
+from bet.models import SportKind, CompetitionBase, BetBase, BetFootball, BettingService
 
 
 class OrderingBaseForm(forms.Form):
@@ -65,6 +65,12 @@ class BetBaseFilterForm(forms.Form):
         choices=BetResultEnum.choices(),
         required=False,
         label='Результат події',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
+    betting_service = forms.MultipleChoiceField(
+        choices=BettingService.name_choices(),
+        required=False,
+        label='Сервіс',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
     live_type = forms.MultipleChoiceField(
