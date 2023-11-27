@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm
+from django.forms.utils import ErrorDict
 
 from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
     GameStatusEnum, BetPredictionEnum, LiveTypeEnum
@@ -146,14 +147,14 @@ class BetCreateForm(ModelForm):
             'prediction': forms.Select(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control',
                                                'min': '0.00',
-                                               'step': '10.0'}),
+                                               'step': '1.0'}),
             'coefficient': forms.NumberInput(attrs={'class': 'form-control',
                                                     'min': '1.00',
                                                     'step': '0.01'}),
             'result': forms.Select(attrs={'class': 'form-control'}),
             'live_type': forms.Select(attrs={'class': 'form-control'}),
             'sport_kind': forms.Select(attrs={'class': 'form-control'}),
-            'date_game': forms.DateInput(attrs={'class': 'form-control datetimepicker-input'}),
+            'date_game': forms.DateInput(attrs={'class': 'form-control'}),
             'is_favourite': forms.Select(attrs={'class': 'form-control'}, choices=BOOL_FIELD_CHOICES),
         }
 

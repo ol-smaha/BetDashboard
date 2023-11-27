@@ -10,6 +10,7 @@
 					<div class="alert alert-light text-dark" role="alert">Додати ставку на Футбол:</div>
 					<div class="card">
 						<div class="card-body">
+							<h4>Заповніть форму</h4>
 							<form method="POST">
 								<div class="form-group">
 									{% csrf_token %}
@@ -26,6 +27,16 @@
 													<div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
 														<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
 													</div>
+													</div>
+												</div>
+											</div>
+										{% elif field.name == 'is_favourite' %}
+											<div class="form-group row">
+												<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+												<div class="col-9 col-sm-8 col-lg-6 pt-1">
+													<div class="switch-button switch-button-warning">
+														<input type="checkbox" checked="" name="switch17" id="switch17">
+														<span><label for="switch17"></label></span>
 													</div>
 												</div>
 											</div>

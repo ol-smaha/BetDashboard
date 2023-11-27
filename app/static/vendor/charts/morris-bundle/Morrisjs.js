@@ -13,7 +13,13 @@
                 labels: JSON.parse(element.dataset.labels),
                 lineColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
             });
 
         }
@@ -30,7 +36,8 @@
                 lineColors: JSON.parse(element.dataset.colors),
                 trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
 
         }
@@ -47,7 +54,8 @@
                 lineColors: JSON.parse(element.dataset.colors),
                 trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
 
         }
@@ -64,7 +72,8 @@
                 lineColors: JSON.parse(element.dataset.colors),
                 trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
 
         }
@@ -81,10 +90,104 @@
                 lineColors: JSON.parse(element.dataset.colors),
                 trendLineColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
 
         }
+
+        if ($('#morris_line_with_count_1').length) {
+            const element = document.getElementById("morris_line_with_count_1")
+            Morris.Line({
+                element: 'morris_line_with_count_1',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
+            });
+
+        }
+
+        if ($('#morris_line_with_count_2').length) {
+            const element = document.getElementById("morris_line_with_count_2")
+            Morris.Line({
+                element: 'morris_line_with_count_2',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
+            });
+
+        }
+
+        if ($('#morris_line_with_count_3').length) {
+            const element = document.getElementById("morris_line_with_count_3")
+            Morris.Line({
+                element: 'morris_line_with_count_3',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
+            });
+
+        }
+
+        if ($('#morris_line_with_count_4').length) {
+            const element = document.getElementById("morris_line_with_count_4")
+            Morris.Line({
+                element: 'morris_line_with_count_4',
+                behaveLikeLine: true,
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                lineColors: JSON.parse(element.dataset.colors),
+                trendLineColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
+            });
+
+        }
+
 
         if ($('#morris_line').length) {
             const element = document.getElementById("morris_line")
@@ -95,9 +198,15 @@
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
-                   lineColors: JSON.parse(element.dataset.colors),
-                     resize: true,
-                        gridTextSize: '14px'
+                lineColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
             });
 
         }
@@ -119,9 +228,10 @@
                 xkey: 'x',
                 ykeys: ['y'],
                 labels: ['Y'],
-                   barColors: ['#5969ff'],
-                     resize: true,
-                        gridTextSize: '14px'
+                barColors: ['#5969ff'],
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px'
 
             });
         }
@@ -136,9 +246,15 @@
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
                 stacked: true,
-                   barColors: JSON.parse(element.dataset.colors),
-                     resize: true,
-                        gridTextSize: '14px'
+                barColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
             });
         }
 
@@ -152,7 +268,8 @@
                 labels: JSON.parse(element.dataset.labels),
                 barColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
         }
 
@@ -166,7 +283,8 @@
                 labels: JSON.parse(element.dataset.labels),
                 barColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
         }
 
@@ -180,7 +298,8 @@
                 labels: JSON.parse(element.dataset.labels),
                 barColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
         }
 
@@ -194,38 +313,90 @@
                 labels: JSON.parse(element.dataset.labels),
                 barColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
             });
         }
 
-        if ($('#morris_bar_5').length) {
-            const element = document.getElementById("morris_bar_5")
+        if ($('#morris_bar_with_count_1').length) {
+            const element = document.getElementById("morris_bar_with_count_1")
             Morris.Bar({
-                element: 'morris_bar_5',
+                element: 'morris_bar_with_count_1',
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
                 barColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
             });
         }
 
-        if ($('#morris_bar_6').length) {
-            const element = document.getElementById("morris_bar_6")
+        if ($('#morris_bar_with_count_2').length) {
+            const element = document.getElementById("morris_bar_with_count_2")
             Morris.Bar({
-                element: 'morris_bar_6',
+                element: 'morris_bar_with_count_2',
                 data: JSON.parse(element.dataset.data),
                 xkey: 'x',
                 ykeys: JSON.parse(element.dataset.ykeys),
                 labels: JSON.parse(element.dataset.labels),
                 barColors: JSON.parse(element.dataset.colors),
                 resize: true,
-                gridTextSize: '14px'
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
             });
         }
 
+        if ($('#morris_bar_with_count_3').length) {
+            const element = document.getElementById("morris_bar_with_count_3")
+            Morris.Bar({
+                element: 'morris_bar_with_count_3',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                barColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
+            });
+        }
+
+        if ($('#morris_bar_with_count_4').length) {
+            const element = document.getElementById("morris_bar_with_count_4")
+            Morris.Bar({
+                element: 'morris_bar_with_count_4',
+                data: JSON.parse(element.dataset.data),
+                xkey: 'x',
+                ykeys: JSON.parse(element.dataset.ykeys),
+                labels: JSON.parse(element.dataset.labels),
+                barColors: JSON.parse(element.dataset.colors),
+                resize: true,
+                hideHover: 'auto',
+                gridTextSize: '14px',
+                hoverCallback: function(index, options, content) {
+                    var data = options.data[index];
+                    content += "<div class='morris-hover-point' style='color: #5c5c5c'>"+"К-сть: "+data.count;+"</div>";
+                    return content;
+                }
+            });
+        }
 
         if ($('#morris_udateing').length) {
             var nReloads = 0;
@@ -279,7 +450,8 @@
                      "#25d5f2",
                      "#ffc750",
                 ],
-                resize: true
+                resize: true,
+                hideHover: 'auto'
             });
         }
     });

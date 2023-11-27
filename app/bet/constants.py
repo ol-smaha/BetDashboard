@@ -292,12 +292,12 @@ CHART_ONE_LINE_COLORS = [
 ]
 
 CHART_ONE_LINE_WITH_COUNT_COLORS = [
-    '#bfbfbd',  # count line - grey
+    '#5c5c5c',  # count line - grey
     '#236995',
 ]
 
 OTHER_COLORS = [
-    '#bfbfbd',   # count line - grey
+    '#5c5c5c',   # count line - grey
     '#236995',
     '#077373',
     '#8b74ff',

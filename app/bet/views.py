@@ -133,7 +133,7 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
     def _process_profit_sum(qs, check_date, data, date_format='%Y-%m-%d'):
         date_str = check_date.strftime(date_format)
         profit = qs.values('profit').aggregate(Sum('profit')).get('profit__sum') or 0.00
-        data.update({date_str: {'Прибуток': float(profit), 'К-сть': qs.count()}})
+        data.update({date_str: {'Прибуток': float(profit), 'count': qs.count()}})
 
     def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
@@ -240,8 +240,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'profit_year_line_data': MorrisChartLine.to_json_data(
                 self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'profit_line_ykeys': json.dumps(["К-сть", "Прибуток"]),
-            'profit_line_labels': json.dumps(["К-сть", "Прибуток"]),
+            'profit_line_ykeys': json.dumps(["Прибуток"]),
+            'profit_line_labels': json.dumps(["Прибуток"]),
 
             'profit_now_bar_data': MorrisChartBar.to_json_data(
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
@@ -251,8 +251,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'profit_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'profit_bar_ykeys': json.dumps(["К-сть", "Прибуток"]),
-            'profit_bar_labels': json.dumps(["К-сть", "Прибуток"]),
+            'profit_bar_ykeys': json.dumps(["Прибуток"]),
+            'profit_bar_labels': json.dumps(["Прибуток"]),
 
             'filter_form': filter_form,
             'title': 'Profit Graphs',
@@ -493,7 +493,7 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
             roi = round(profit * 100 / amount, 2)
         else:
             roi = 0.00
-        data.update({date_str: {'ROI': float(roi), 'К-сть': qs.count()}})
+        data.update({date_str: {'ROI': float(roi), 'count': qs.count()}})
 
     def _get_roi_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
@@ -624,7 +624,7 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
 class BetCreateView(CreateView):
     form_class = BetCreateForm
     template_name = 'bet/bet_create.html'
-    success_url = reverse_lazy('bet_history')
+    success_url = reverse_lazy('bet_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -645,7 +645,7 @@ class BetBaseChangeFavouriteStatusView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.get_object().change_is_favourite()
-        return redirect(reverse_lazy('bet_history') + f'?{self.request.GET.urlencode()}')
+        return redirect(reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}')
 
 
 class BetBaseDeleteView(DetailView):
@@ -654,13 +654,13 @@ class BetBaseDeleteView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.get_object().delete()
-        return redirect(reverse_lazy('bet_history') + f'?{self.request.GET.urlencode()}')
+        return redirect(reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}')
 
 
 class BetFootballCreateView(CreateView):
     form_class = BetFootballCreateForm
     template_name = 'bet/bet_football_create.html'
-    success_url = reverse_lazy('football_history')
+    success_url = reverse_lazy('bet_football_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -678,7 +678,7 @@ class BetFootballChangeFavouriteStatusView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.get_object().change_is_favourite()
-        return redirect(reverse_lazy('football_history') + f'?{self.request.GET.urlencode()}')
+        return redirect(reverse_lazy('bet_football_list') + f'?{self.request.GET.urlencode()}')
 
 
 class BetFootballDeleteView(DetailView):
@@ -687,7 +687,7 @@ class BetFootballDeleteView(DetailView):
 
     def get(self, request, *args, **kwargs):
         self.get_object().delete()
-        return redirect(reverse_lazy('football_history') + f'?{self.request.GET.urlencode()}')
+        return redirect(reverse_lazy('bet_football_list') + f'?{self.request.GET.urlencode()}')
 
 
 class BetGraphsAvgAmountView(BetFilterMixin, ListView):
@@ -698,7 +698,7 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
     def _process_amount_avg(qs, check_date, data, date_format='%Y-%m-%d'):
         date_str = check_date.strftime(date_format)
         amount = round(qs.values('amount').aggregate(Avg('amount')).get('amount__avg') or 0.00, 2)
-        data.update({date_str: {'Середня ставка': float(amount), 'К-сть': qs.count()}})
+        data.update({date_str: {'Середня ставка': float(amount), 'count': qs.count()}})
 
     def _get_amount_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
@@ -805,8 +805,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
                 self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
             'amount_year_line_data': MorrisChartLine.to_json_data(
                 self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'amount_line_ykeys': json.dumps(["К-сть", "Середня ставка"]),
-            'amount_line_labels': '["К-сть", "Середня ставка"]',
+            'amount_line_ykeys': json.dumps(["Середня ставка"]),
+            'amount_line_labels': json.dumps(["Середня ставка"]),
 
             'amount_now_bar_data': MorrisChartBar.to_json_data(
                 self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
@@ -816,8 +816,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
                 self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
             'amount_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'amount_bar_ykeys': json.dumps(["К-сть", "Середня ставка"]),
-            'amount_bar_labels': json.dumps(["К-сть", "Середня ставка"]),
+            'amount_bar_ykeys': json.dumps(["Середня ставка"]),
+            'amount_bar_labels': json.dumps(["Середня ставка"]),
 
             'filter_form': filter_form,
             'title': 'Amount Graphs',
