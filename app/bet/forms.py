@@ -195,7 +195,11 @@ class StatisticFilterForm(BetBaseFilterForm):
     coefficient_min = None
     coefficient_max = None
     result = None
-    date_game_start = None
-    date_game_end = None
     is_favourite = None
 
+    bet_type = forms.MultipleChoiceField(
+        choices=BetTypeEnum.choices(),
+        required=False,
+        label='Тип ставки',
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
+    )
