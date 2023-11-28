@@ -12,7 +12,7 @@
 					<div class="card">
 						<div class="email-filters">
 								<div class="email-filters-left">
-									<a href="{% url 'bet_football_create' %}" class="btn btn-outline-success">Create New</a>
+									<a href="{% url 'bet_football_create' %}" class="btn btn-outline-success">Додати ставку</a>
 								</div>
 								<div class="email-filters-right">
 									<span class="email-pagination-indicator">{{ page_obj_count_string }}</span>
@@ -58,6 +58,7 @@
 											<td>{{ bet.team_home }}</td>
 											<td>{{ bet.team_guest }}</td>
 											<td>{{ bet.competition }}</td>
+											<td>{{ bet.betting_service }}</td>
 											<td>{{ bet.game_status }}</td>
 											{% if bet.is_favourite %}
 												<td>

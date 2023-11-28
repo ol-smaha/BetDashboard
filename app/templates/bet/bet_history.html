@@ -11,7 +11,7 @@
 				<div class="card">
 						<div class="email-filters">
 							<div class="email-filters-left">
-								<a href="{% url 'bet_create' %}" class="btn btn-outline-success">Create New</a>
+								<a href="{% url 'bet_create' %}" class="btn btn-outline-success">Додати ставку</a>
 							</div>
 							<div class="email-filters-right">
 								<span class="email-pagination-indicator">{{ page_obj_count_string }}</span>
@@ -54,6 +54,7 @@
 										<td>{{ bet.result }}</td>
 										<td>{{ bet.profit }}</td>
 										<td>{{ bet.sport_kind }}</td>
+										<td>{{ bet.betting_service }}</td>
 										<td>{{ bet.live_type }}</td>
 
 										{% if bet.is_favourite %}
