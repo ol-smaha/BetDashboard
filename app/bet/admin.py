@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from bet.models import Country, SportKind, Team, CompetitionBase, CompetitionFootball, BetBase, BetFootball
+from bet.models import Country, SportKind, Team, CompetitionBase, CompetitionFootball, BetBase, BetFootball, \
+    BettingService
 from bet.utils import generate_bets, generate_football_bets
 
 
@@ -63,6 +64,10 @@ class BetFootballAdmin(admin.ModelAdmin):
             obj.save()
 
 
+class BettingServiceAdmin(admin.ModelAdmin):
+    list_display = ['user', 'name', 'is_active']
+
+
 admin.site.register(Country, CountryAdmin)
 admin.site.register(SportKind, SportKindAdmin)
 admin.site.register(Team, TeamAdmin)
@@ -70,3 +75,5 @@ admin.site.register(CompetitionBase, CompetitionBaseAdmin)
 admin.site.register(CompetitionFootball, CompetitionFootballAdmin)
 admin.site.register(BetBase, BetBaseAdmin)
 admin.site.register(BetFootball, BetFootballAdmin)
+admin.site.register(BettingService, BettingServiceAdmin)
+

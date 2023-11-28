@@ -1,7 +1,6 @@
 from decimal import Decimal
 
 from django.db import models
-
 from bet.constants import (BetResultEnum, GameStatusEnum, BetTypeEnum,
                            CompetitionFootballCategoryEnum, TeamCategoryEnum, BetPredictionEnum, LiveTypeEnum)
 from users.models import CustomUser
@@ -73,6 +72,27 @@ class CompetitionFootball(CompetitionBase):
                                 default=CompetitionFootballCategoryEnum.UNKNOWN)
 
 
+class BettingService(models.Model):
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
+                             related_name='service')
+    name = models.CharField(max_length=64)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'name'], name='name and user unique'),
+        ]
+
+    @classmethod
+    def name_choices(cls):
+        qs = cls.objects.all().values_list('name', flat=True).distinct()
+        choices = tuple([(name, name) for name in qs])
+        return choices
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 class BetBase(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
                              related_name='bets')
@@ -86,6 +106,8 @@ class BetBase(models.Model):
     date_game = models.DateField(null=True, blank=True)
     is_favourite = models.BooleanField(default=False)
     live_type = models.CharField(max_length=32, blank=True, null=True, choices=LiveTypeEnum.choices())
+    betting_service = models.ForeignKey(to=BettingService, on_delete=models.SET_NULL,
+                                        related_name='bets', null=True, blank=True)
 
     def calculate_profit(self):
         profit = Decimal('0.00')
@@ -128,3 +150,7 @@ class BetFootball(BetBase):
             if self.prediction:
                 self.bet_type = BetTypeEnum.get_value_by_bet(self.prediction)
         super().save(*args, **kwargs)
+
+
+
+

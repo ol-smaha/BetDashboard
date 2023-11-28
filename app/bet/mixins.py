@@ -15,6 +15,10 @@ class BetFilterMixin:
         if sport_kind_values:
             qs = qs.filter(sport_kind__name__in=sport_kind_values)
 
+        betting_service_values = self.request.GET.getlist('betting_service')
+        if betting_service_values:
+            qs = qs.filter(betting_service__name__in=betting_service_values)
+
         date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
             qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
