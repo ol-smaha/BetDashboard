@@ -11,25 +11,25 @@
 					<div class="alert alert-light text-dark" role="alert">Список ставок на Футбол:</div>
 					<div class="card">
 						<div class="email-filters">
-								<div class="email-filters-left">
-									<a href="{% url 'bet_football_create' %}" class="btn btn-outline-success">Create New</a>
-								</div>
-								<div class="email-filters-right">
-									<span class="email-pagination-indicator">{{ page_obj_count_string }}</span>
-									<div class="btn-group email-pagination-nav">
-										{% if page_obj.has_previous %}
-											<a href="?{% query_transform page=page_obj.previous_page_number %}">
-												<button class="btn btn-light" type="button"><i class="fas fa-angle-left"></i></button>
-											</a>
-										{% endif %}
-										{% if page_obj.has_next %}
-											<a href="?{% query_transform page=page_obj.next_page_number %}">
-												<button class="btn btn-light" type="button"><i class="fas fa-angle-right"></i></button>
-											</a>
-										{% endif %}
-									</div>
-                        		</div>
+							<div class="email-filters-left">
+								{% include 'addition/create_form_modal.html' with create_form_action='bet_football_create' %}
 							</div>
+							<div class="email-filters-right">
+								<span class="email-pagination-indicator">{{ page_obj_count_string }}</span>
+								<div class="btn-group email-pagination-nav">
+									{% if page_obj.has_previous %}
+										<a href="?{% query_transform page=page_obj.previous_page_number %}">
+											<button class="btn btn-light" type="button"><i class="fas fa-angle-left"></i></button>
+										</a>
+									{% endif %}
+									{% if page_obj.has_next %}
+										<a href="?{% query_transform page=page_obj.next_page_number %}">
+											<button class="btn btn-light" type="button"><i class="fas fa-angle-right"></i></button>
+										</a>
+									{% endif %}
+								</div>
+							</div>
+						</div>
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table table-striped table-bordered first">
@@ -131,33 +131,7 @@
 					</nav>
 				</div>
 				<div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
-					<div class="alert alert-light text-dark" role="alert">Фільтрація:</div>
-
-					<form>
-						<div class="card">
-							{% for field in filter_form.visible_fields %}
-                            	{% if field.name in 'date_game_start,date_game_end' %}
-								<div class="card-body">
-									<h3 class="font-14">{{ field.label }}:</h3>
-									<div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
-										{{ field }}
-										<div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
-											<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
-										</div>
-									</div>
-								</div>
-								{% else %}
-									<div class="card-body">
-										<h3 class="font-14">{{ field.label }}:</h3>
-										{{ field }}
-									</div>
-								{% endif %}
-							{% endfor %}
-							<div class="card-body border-top">
-								<button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
-							</div>
-						</div>
-					</form>
+					{% include 'addition/filter_form.html' %}
 				</div>
 			</div>
 		</div>

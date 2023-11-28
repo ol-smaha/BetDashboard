@@ -4,74 +4,65 @@
 
 {% block main %}
     <div class="influence-finder">
-		<div class="container-fluid dashboard-content">
+		<div class="container-fluid  dashboard-content">
 			<div class="row">
-				<div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-12">
-					{% if form.errors %}
-						 <div class="alert alert-danger">
-							{{ form.errors }}
-						</div>
-					{% endif %}
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 
-					<div class="alert alert-light text-dark" role="alert">Додати загальну ставку:</div>
-					<div class="card">
-						<div class="card-body">
-							<h4>Заповніть форму</h4>
-							<form method="POST">
-								<div class="form-group">
-									{% csrf_token %}
-									{% for field in form.hidden_fields %}
-										{{ field }}
-									{% endfor %}
-									{% for field in form.visible_fields %}
-										{% if field.name in 'date_game' %}
-											<div class="form-group row">
-                                            	<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
-												<div class="col-9 col-lg-10">
-													<div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
-													{{ field }}
-													<div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
-														<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+						{% if form.errors %}
+							 <div class="alert alert-danger">
+								{{ form.errors }}
+							</div>
+						{% endif %}
+
+						<div class="alert alert-light text-dark" role="alert">Додати загальну ставку:</div>
+						<div class="card">
+							<div class="card-body">
+								<form method="POST">
+									<div class="form-group">
+										{% csrf_token %}
+										{% for field in form.hidden_fields %}
+											{{ field }}
+										{% endfor %}
+										{% for field in form.visible_fields %}
+											{% if field.name in 'date_game' %}
+												<div class="form-group row">
+													<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+													<div class="col-9 col-lg-10">
+														<div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
+														{{ field }}
+														<div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
+															<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+														</div>
+														</div>
 													</div>
+												</div>
+											{% elif field.name in 'is_favourite' %}
+												<div class="form-group row">
+													<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+													<div class="col-9 col-lg-2">
+														{{ field }}
 													</div>
 												</div>
-											</div>
-										{% elif field.name in 'is_favourite' %}
-											<div class="form-group row">
-                                            	<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
-												<div class="col-9 col-lg-2">
-													{{ field }}
+											{% else %}
+												<div class="form-group row">
+													<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+													<div class="col-9 col-lg-10">
+														{{ field }}
+													</div>
 												</div>
-											</div>
-										{% else %}
-											<div class="form-group row">
-                                            	<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
-												<div class="col-9 col-lg-10">
-													{{ field }}
-												</div>
-											</div>
-										{% endif %}
-									{% endfor %}
-									<div class="col-sm-12">
-										<p class="text-right">
-											<button type="submit" class="btn btn-success">Додати</button>
-										</p>
+											{% endif %}
+										{% endfor %}
+										<div class="col-sm-12">
+											<p class="text-right">
+												<button type="submit" class="btn btn-success">Додати</button>
+											</p>
+										</div>
 									</div>
-								</div>
-							</form>
+								</form>
+							</div>
 						</div>
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 {% endblock main %}
-
-
-
-
-<!--<form method="POST" enctype="multipart/form-data">-->
-<!--    {% csrf_token %}-->
-<!--    {{ form.as_p }}-->
-<!--    <input type="submit" value="Submit">-->
-<!--</form>-->

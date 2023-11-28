@@ -1,0 +1,56 @@
+
+
+<a href="#" class="btn btn-outline-success" data-toggle="modal" data-target="#create-form">Додати</a>
+<div id="create-form" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Login</h1>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url create_form_action %}">
+                    <div class="form-group">
+                        {% csrf_token %}
+                        {% for field in create_form.hidden_fields %}
+                            {{ field }}
+                        {% endfor %}
+                        {% for field in create_form.visible_fields %}
+                            {% if field.name in 'date_game' %}
+                                <div class="form-group row">
+                                    <label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+                                    <div class="col-9 col-lg-10">
+                                        <div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
+                                        {{ field }}
+                                        <div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif field.name in 'is_favourite' %}
+                                <div class="form-group row">
+                                    <label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+                                    <div class="col-9 col-lg-3">
+                                        {{ field }}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="form-group row">
+                                    <label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+                                    <div class="col-9 col-lg-10">
+                                        {{ field }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="col-sm-12">
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-success">Додати</button>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

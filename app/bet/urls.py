@@ -8,13 +8,13 @@ from bet.views import (BetHistoryView, BetGraphsView, Statistic, BetGraphsProfit
 
 urlpatterns = [
     path('list/', BetHistoryView.as_view(), name='bet_list'),
-    path('create/', BetCreateView.as_view(), name='bet_create'),
+    path('create/', BetCreateView.as_view(), name='bet_create'),   # use modal form on bet_list
     path('delete/<int:id>', BetBaseDeleteView.as_view(), name='bet_delete'),
     path('change-is-favourite/<int:id>', BetBaseChangeFavouriteStatusView.as_view(),
          name='bet_change_is_favourite'),
 
     path('list/football/', FootballBetHistoryView.as_view(), name='bet_football_list'),
-    path('create/football/', BetFootballCreateView.as_view(), name='bet_football_create'),
+    path('create/football/', BetFootballCreateView.as_view(), name='bet_football_create'),   # use modal form on bet_football_list
     path('delete/football/<int:id>', BetFootballDeleteView.as_view(), name='bet_football_delete'),
     path('change-is-favourite/football/<int:id>', BetFootballChangeFavouriteStatusView.as_view(),
          name='bet_football_change_is_favourite'),

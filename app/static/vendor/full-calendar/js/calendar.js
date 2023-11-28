@@ -98,7 +98,7 @@ $(function() {
         $('#calendar_bet').fullCalendar({
             customButtons: {
               createNewBetButton: {
-                text: 'Додати ставку',
+                text: 'додати ставку',
                 click: function() {
                     window.location.href = JSON.parse(element.dataset.betcreateurl);
                 }

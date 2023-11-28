@@ -1,0 +1,35 @@
+{% load static %}
+
+<div class="alert alert-light text-dark" role="alert">
+    Фільтрація:
+</div>
+<form>
+    <div class="card">
+        <div class="card-body">
+            <a href="?" class="text-danger">
+                <i class="float-right far fa-window-close fa-fw fa-sm text-secondary"></i>
+            </a>
+        </div>
+        {% for field in filter_form.visible_fields %}
+            {% if field.name in 'date_game_start,date_game_end' %}
+            <div class="card-body">
+                <h3 class="font-14">{{ field.label }}:</h3>
+                <div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
+                    {{ field }}
+                    <div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+                <div class="card-body">
+                    <h3 class="font-14">{{ field.label }}:</h3>
+                    {{ field }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="card-body border-top">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+        </div>
+    </div>
+</form>

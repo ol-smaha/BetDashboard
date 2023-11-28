@@ -50,9 +50,9 @@ class BetFilterMixin:
         ordering = self.request.GET.get('ordering')
         if ordering:
             if ordering == 'is_favourite':
-                qs = qs.order_by('-is_favourite')
+                qs = qs.order_by('-is_favourite', '-id')
             else:
-                qs = qs.order_by(ordering)
+                qs = qs.order_by(ordering, '-id')
 
         coefficient_min = self.request.GET.get('coefficient_min')
         if coefficient_min:

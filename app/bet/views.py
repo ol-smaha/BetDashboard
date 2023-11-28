@@ -8,6 +8,7 @@ from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
+from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.utils.timezone import now
 
@@ -29,7 +30,7 @@ class BetHistoryView(BetFilterMixin, ListView):
     template_name = 'bet/bet_history.html'
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user).order_by('-date_game', '-id')
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -38,6 +39,7 @@ class BetHistoryView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetHistoryFilterForm(self.request.GET)
+        create_form = BetCreateForm()
         page_obj = context.get('page_obj')
         page_obj_start = page_obj.number * self.paginate_by - self.paginate_by + 1
         page_obj_end = page_obj.number * self.paginate_by
@@ -48,9 +50,12 @@ class BetHistoryView(BetFilterMixin, ListView):
             'menu_key': 'bet_list',
             'bet_fields': BET_BASE_TABLE_FIELD_NAMES.values(),
             'filter_form': filter_form,
+            'create_form': create_form,
             'page_obj_count_string': page_obj_count_string,
             'query_parametes': self.request.GET,
         })
+        context['create_form'].fields['user'].initial = self.request.user.pk
+        context['create_form'].fields['user'].widget = HiddenInput()
         return context
 
 
@@ -310,16 +315,17 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
     template_name = 'bet/bet_football_history.html'
 
     def base_queryset(self):
-        return self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
+        return (self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
+                .order_by('-date_game', '-id'))
 
     def get_queryset(self):
-        print(self.base_queryset().count())
         filtered_qs = self.filtered_queryset(self.base_queryset())
         return filtered_qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = FootballBetHistoryFilterForm(self.request.GET)
+        create_form = BetFootballCreateForm()
         page_obj = context.get('page_obj')
         page_obj_start = page_obj.number * self.paginate_by - self.paginate_by + 1
         page_obj_end = page_obj.number * self.paginate_by
@@ -331,9 +337,12 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
             'total_bets_count': self.get_queryset().count(),
             'football_bet_fields': BET_FOOTBALL_FIELDS_NAMES.values(),
             'filter_form': filter_form,
+            'create_form': create_form,
             'page_obj_count_string': page_obj_count_string,
             'query_parametes': self.request.GET,
         })
+        context['create_form'].fields['user'].initial = self.request.user.pk
+        context['create_form'].fields['user'].widget = HiddenInput()
         return context
 
 

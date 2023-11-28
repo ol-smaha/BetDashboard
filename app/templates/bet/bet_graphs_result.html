@@ -129,32 +129,7 @@
             </div>
         </div>
         <div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
-            <div class="alert alert-light text-dark" role="alert">Фільтрація:</div>
-            <form>
-                <div class="card">
-                    {% for field in filter_form.visible_fields %}
-                        {% if field.name in 'date_game_start,date_game_end' %}
-                        <div class="card-body">
-                            <h3 class="font-14">{{ field.label }}:</h3>
-                            <div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
-                                {{ field }}
-                                <div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                        {% else %}
-                            <div class="card-body">
-                                <h3 class="font-14">{{ field.label }}:</h3>
-                                {{ field }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                    <div class="card-body border-top">
-                        <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
-                    </div>
-                </div>
-            </form>
+            {% include 'addition/filter_form.html' %}
         </div>
     </div>
 </div>
