@@ -1,11 +1,11 @@
 
 
-<a href="#" class="btn btn-outline-success" data-toggle="modal" data-target="#create-form">Додати</a>
-<div id="create-form" class="modal fade">
+<a href="#" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#{{create_form_action}}">Додати</a>
+<div id="{{create_form_action}}" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title">Login</h1>
+                <h1 class="modal-title">Додавання ставки</h1>
             </div>
             <div class="modal-body">
                 <form method="POST" action="{% url create_form_action %}">

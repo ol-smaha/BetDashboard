@@ -8,11 +8,15 @@
 		<div class="container-fluid dashboard-content">
 			<div class="row">
 				<div class="col-xl-10 col-lg-6 col-md-6 col-sm-12 col-12">
-					<div class="alert alert-light text-dark" role="alert">Список ставок на Футбол:</div>
+					<div class="alert alert-dark" role="alert">
+						Список ставок на Футбол:
+					</div>
 					<div class="card">
 						<div class="email-filters">
 							<div class="email-filters-left">
-								{% include 'addition/create_form_modal.html' with create_form_action='bet_football_create' %}
+								<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+									{% include 'addition/create_form_modal.html' with create_form_action='bet_create' %}
+								</div>
 							</div>
 							<div class="email-filters-right">
 								<span class="email-pagination-indicator">{{ page_obj_count_string }}</span>

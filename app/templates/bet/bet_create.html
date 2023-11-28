@@ -3,66 +3,49 @@
 {% load bet_tags %}
 
 {% block main %}
-    <div class="influence-finder">
-		<div class="container-fluid  dashboard-content">
-			<div class="row">
-				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-
-						{% if form.errors %}
-							 <div class="alert alert-danger">
-								{{ form.errors }}
-							</div>
-						{% endif %}
-
-						<div class="alert alert-light text-dark" role="alert">Додати загальну ставку:</div>
-						<div class="card">
-							<div class="card-body">
-								<form method="POST">
-									<div class="form-group">
-										{% csrf_token %}
-										{% for field in form.hidden_fields %}
-											{{ field }}
-										{% endfor %}
-										{% for field in form.visible_fields %}
-											{% if field.name in 'date_game' %}
-												<div class="form-group row">
-													<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
-													<div class="col-9 col-lg-10">
-														<div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
-														{{ field }}
-														<div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
-															<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
-														</div>
-														</div>
-													</div>
-												</div>
-											{% elif field.name in 'is_favourite' %}
-												<div class="form-group row">
-													<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
-													<div class="col-9 col-lg-2">
-														{{ field }}
-													</div>
-												</div>
-											{% else %}
-												<div class="form-group row">
-													<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
-													<div class="col-9 col-lg-10">
-														{{ field }}
-													</div>
-												</div>
-											{% endif %}
-										{% endfor %}
-										<div class="col-sm-12">
-											<p class="text-right">
-												<button type="submit" class="btn btn-success">Додати</button>
-											</p>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container-fluid dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+                <div class="alert alert-dark" role="alert">
+                    Виберіть яку ставку додати:
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-center p-3">
+                        <h4 class="mb-0 text-white btn-lg"></h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <h1 class="mb-1">Загальна</h1>
+                    </div>
+                    <div class="card-body border-top">
+                        <ul class="list-unstyled bullet-check font-14">
+                            <li style="font-size: 18px;">Базова інформація</li>
+							<li style="font-size: 18px;">Для всіх видів спорту</li>
+                            <li style="font-size: 18px;">Швидко та легко</li>
+                        </ul>
+                        {% include 'addition/create_form_modal.html' with create_form=form create_form_action='bet_create' %}
+                    </div>
+                </div>
+            </div>
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-center p-3 ">
+						<h4 class="mb-0 text-white btn-lg"></h4>
+					</div>
+                    <div class="card-body text-center">
+                        <h1 class="mb-1">Футбол</h1>
+                    </div>
+                    <div class="card-body border-top">
+                        <ul class="list-unstyled bullet-check font-14">
+                            <li style="font-size: 18px;">Розширена інформація</li>
+							<li style="font-size: 18px;">Можливість вказати команди</li>
+                            <li style="font-size: 18px;">Вибір футбольної ліги</li>
+                        </ul>
+                        {% include 'addition/create_form_modal.html' with create_form=football_create_form create_form_action='bet_football_create' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock main %}

@@ -637,11 +637,15 @@ class BetCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['form'].fields['user'].initial = self.request.user.pk
-        context['form'].fields['user'].widget = HiddenInput()
+        football_create_form = BetFootballCreateForm()
         context.update({
+            'football_create_form': football_create_form,
             'menu_key': 'bet_create',
         })
+        context['form'].fields['user'].initial = self.request.user.pk
+        context['form'].fields['user'].widget = HiddenInput()
+        context['football_create_form'].fields['user'].initial = self.request.user.pk
+        context['football_create_form'].fields['user'].widget = HiddenInput()
         return context
 
 

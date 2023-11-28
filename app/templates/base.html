@@ -100,22 +100,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link {% if menu_key == 'bet_football_list' %} active {% endif %}" href="{% url 'bet_football_list' %}">Футбол</a>
                                             </li>
-
-<!--                                            <li class="nav-item">-->
-<!--                                            <a class="nav-link {% if 'add_bet'|is_parent_menu_active:menu_key %} active {% endif %}" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-11" aria-controls="submenu-11">-->
-<!--                                                Додати ставку</a>-->
-<!--                                            <div id="submenu-11" class="collapse submenu {% if 'add_bet'|is_parent_menu_active:menu_key %} show {% endif %}" style="">-->
-<!--                                                <ul class="nav flex-column">-->
-<!--                                                    <li class="nav-item">-->
-<!--                                                        <a class="nav-link {% if menu_key == 'bet_create' %} active {% endif %}" href="{% url 'bet_create' %}">Загальна</a>-->
-<!--                                                    </li>-->
-<!--                                                    <li class="nav-item">-->
-<!--                                                        <a class="nav-link {% if menu_key == 'bet_football_create' %} active {% endif %}" href="{% url 'bet_football_create' %}">Футбол</a>-->
-<!--                                                    </li>-->
-<!--                                                </ul>-->
-<!--                                            </div>-->
-<!--                                        </li>-->
-
+                                            <li class="nav-item">
+                                                <a class="nav-link {% if menu_key == 'bet_create' %} active {% endif %}" href="{% url 'bet_create' %}">Додати ставку</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
