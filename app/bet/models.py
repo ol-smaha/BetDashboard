@@ -104,7 +104,6 @@ class BetBase(models.Model):
     sport_kind = models.ForeignKey(to=SportKind, on_delete=models.SET_NULL,
                                    related_name='bets', null=True, blank=True)
     date_game = models.DateField(null=True, blank=True)
-    date_betting = models.DateField(null=True, blank=True)
     is_favourite = models.BooleanField(default=False)
     live_type = models.CharField(max_length=32, blank=True, null=True, choices=LiveTypeEnum.choices())
     betting_service = models.ForeignKey(to=BettingService, on_delete=models.SET_NULL,
@@ -143,11 +142,13 @@ class BetFootball(BetBase):
                                     related_name='bets_football', null=True, blank=True)
     game_status = models.CharField(max_length=16, choices=GameStatusEnum.choices(),
                                    default=GameStatusEnum.UNKNOWN)
-    is_home_guest = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        if self.bet_type == BetTypeEnum.UNKNOWN or not self.bet_type or self.prediction:
-            self.bet_type = BetTypeEnum.get_value_by_bet(self.prediction)
+        sport_kind, _ = SportKind.objects.get_or_create(name='Футбол')
+        self.sport_kind = sport_kind
+        if self.bet_type == BetTypeEnum.UNKNOWN or not self.bet_type:
+            if self.prediction:
+                self.bet_type = BetTypeEnum.get_value_by_bet(self.prediction)
         super().save(*args, **kwargs)
 
 

@@ -117,20 +117,7 @@
 				</div>
 			</div>
 			<div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
-				<div class="alert alert-light text-dark" role="alert">Фільтрація:</div>
-				<form>
-					<div class="card">
-						{% for field in filter_form.visible_fields %}
-							<div class="card-body">
-								<h3 class="font-14">{{ field.label }}:</h3>
-								{{ field }}
-							</div>
-						{% endfor %}
-						<div class="card-body border-top">
-							<button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
-						</div>
-					</div>
-				</form>
+				{% include 'addition/filter_form.html' %}
 			</div>
 		</div>
 	</div>

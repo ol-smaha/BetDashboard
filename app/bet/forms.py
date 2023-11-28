@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from django import forms
 from django.forms import ModelForm
-from django.forms.utils import ErrorDict
 
 from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
     GameStatusEnum, BetPredictionEnum, LiveTypeEnum
@@ -150,41 +151,59 @@ class BetCreateForm(ModelForm):
         fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'live_type', 'sport_kind',
                   'date_game', 'is_favourite']
         widgets = {
-            'prediction': forms.Select(attrs={'class': 'form-control'}),
+            'prediction': forms.Select(attrs={'class': 'selectize-control single',
+                                              'placeholder': 'Виберіть значення...'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control',
+                                               'placeholder': '0',
                                                'min': '0.00',
                                                'step': '1.0'}),
             'coefficient': forms.NumberInput(attrs={'class': 'form-control',
+                                                    'placeholder': '1.00',
                                                     'min': '1.00',
                                                     'step': '0.01'}),
-            'result': forms.Select(attrs={'class': 'form-control'}),
-            'live_type': forms.Select(attrs={'class': 'form-control'}),
-            'sport_kind': forms.Select(attrs={'class': 'form-control'}),
-            'date_game': forms.DateInput(attrs={'class': 'form-control'}),
-            'is_favourite': forms.Select(attrs={'class': 'form-control'}, choices=BOOL_FIELD_CHOICES),
+            'result': forms.Select(attrs={'class': 'selectize-control single',
+                                          'placeholder': 'Виберіть значення...'}),
+            'live_type': forms.Select(attrs={'class': 'selectize-control single',
+                                             'placeholder': 'Виберіть значення...'}),
+            'sport_kind': forms.Select(attrs={'class': 'selectize-control single',
+                                              'placeholder': 'Виберіть значення...'}),
+            'date_game': forms.DateInput(attrs={'class': 'form-control',
+                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}'}),
+            'is_favourite': forms.Select(attrs={'class': 'selectize-control single'}, choices=BOOL_FIELD_CHOICES),
         }
 
 
 class BetFootballCreateForm(ModelForm):
     class Meta:
         model = BetFootball
-        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'live_type', 'sport_kind',
-                  'date_game', 'is_favourite', 'bet_type', 'competition']
+        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'competition', 'team_home', 'team_guest',
+                  'date_game', 'live_type', 'is_favourite']
         widgets = {
-            'prediction': forms.Select(attrs={'class': 'form-control'}),
+            'prediction': forms.Select(attrs={'class': 'selectize-control single',
+                                              'placeholder': 'Виберіть значення...'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control',
+                                               'placeholder': '0',
                                                'min': '0.00',
-                                               'step': '10.0'}),
+                                               'step': '1.0'}),
             'coefficient': forms.NumberInput(attrs={'class': 'form-control',
+                                                    'placeholder': '1.00',
                                                     'min': '1.00',
                                                     'step': '0.01'}),
-            'result': forms.Select(attrs={'class': 'form-control'}),
-            'live_type': forms.Select(attrs={'class': 'form-control'}),
-            'sport_kind': forms.Select(attrs={'class': 'form-control'}),
-            'date_game': forms.DateInput(attrs={'class': 'form-control datetimepicker-input'}),
-            'bet_type': forms.Select(attrs={'class': 'form-control'}),
-            'competition': forms.Select(attrs={'class': 'form-control'}),
-            'is_favourite': forms.Select(attrs={'class': 'form-control'}, choices=BOOL_FIELD_CHOICES),
+            'result': forms.Select(attrs={'class': 'selectize-control single',
+                                          'placeholder': 'Виберіть значення...'}),
+            'sport_kind': forms.Select(attrs={'class': 'selectize-control single',
+                                              'placeholder': 'Виберіть значення...'}),
+            'competition': forms.Select(attrs={'class': 'selectize-control single',
+                                               'placeholder': 'Виберіть значення...'}),
+            'live_type': forms.Select(attrs={'class': 'selectize-control single',
+                                             'placeholder': 'Виберіть значення...'}),
+            'team_home': forms.Select(attrs={'class': 'selectize-control single',
+                                             'placeholder': 'Виберіть значення...'}),
+            'team_guest': forms.Select(attrs={'class': 'selectize-control single',
+                                              'placeholder': 'Виберіть значення...'}),
+            'date_game': forms.DateInput(attrs={'class': 'form-control',
+                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}'}),
+            'is_favourite': forms.Select(attrs={'class': 'selectize-control single'}, choices=BOOL_FIELD_CHOICES),
         }
 
 
@@ -204,9 +223,3 @@ class StatisticFilterForm(BetBaseFilterForm):
     result = None
     is_favourite = None
 
-    bet_type = forms.MultipleChoiceField(
-        choices=BetTypeEnum.choices(),
-        required=False,
-        label='Тип ставки',
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
-    )

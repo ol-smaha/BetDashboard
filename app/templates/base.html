@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{% static 'vendor/full-calendar/css/fullcalendar.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/full-calendar/css/fullcalendar.print.css' %}" media='print'>
     <link rel="stylesheet" href="{% static 'vendor/fonts/flag-icon-css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 
 </head>
 
@@ -100,19 +101,8 @@
                                                 <a class="nav-link {% if menu_key == 'bet_football_list' %} active {% endif %}" href="{% url 'bet_football_list' %}">Футбол</a>
                                             </li>
                                             <li class="nav-item">
-                                            <a class="nav-link {% if 'add_bet'|is_parent_menu_active:menu_key %} active {% endif %}" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-11" aria-controls="submenu-11">
-                                                Додати ставку</a>
-                                            <div id="submenu-11" class="collapse submenu {% if 'add_bet'|is_parent_menu_active:menu_key %} show {% endif %}" style="">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link {% if menu_key == 'bet_create' %} active {% endif %}" href="{% url 'bet_create' %}">Загальна</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link {% if menu_key == 'bet_football_create' %} active {% endif %}" href="{% url 'bet_football_create' %}">Футбол</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
+                                                <a class="nav-link {% if menu_key == 'bet_create' %} active {% endif %}" href="{% url 'bet_create' %}">Додати ставку</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </li>
@@ -194,12 +184,17 @@
     <script src="{% static 'vendor/full-calendar/js/fullcalendar.js' %}"></script>
     <script src="{% static 'vendor/full-calendar/js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'vendor/full-calendar/js/calendar.js' %}"></script>
-
-
     <script>
-    $('#confirm-delete').on('show.bs.modal', function(e) {
-        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-    });
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
     </script>
-
+    <script>
+      $(document).ready(function () {
+          $('select').selectize({
+              sortField: 'text'
+          });
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
 </body>

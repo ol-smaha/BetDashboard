@@ -47,7 +47,7 @@ class BetBaseAdmin(admin.ModelAdmin):
 class BetFootballAdmin(admin.ModelAdmin):
     list_display = ['get_user_username', 'prediction', 'amount', 'coefficient', 'result',
                     'team_home', 'team_guest', 'bet_type',
-                    'competition', 'game_status', 'is_home_guest']
+                    'competition', 'game_status']
     actions = ["generate_bet_football", "trigger_save"]
 
     @admin.display(ordering='user__username', description='User')
