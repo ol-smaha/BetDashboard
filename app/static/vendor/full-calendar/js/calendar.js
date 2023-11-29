@@ -98,16 +98,16 @@ $(function() {
         $('#calendar_bet').fullCalendar({
             customButtons: {
               createNewBetButton: {
-                text: 'додати ставку',
+                text: 'додати',
                 click: function() {
                     window.location.href = JSON.parse(element.dataset.betcreateurl);
                 }
               }
             },
             header: {
-                left: 'prev,next today createNewBetButton',
+                left: 'prev,next createNewBetButton',
                 center: 'title',
-                right: 'month'
+                right: 'today month'
             },
             defaultDate: JSON.parse(element.dataset.now),
             navLinks: true, // can click day/week names to navigate views

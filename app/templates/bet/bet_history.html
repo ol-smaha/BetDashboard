@@ -11,7 +11,9 @@
 				<div class="card">
 					<div class="email-filters">
 						<div class="email-filters-left">
+							<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
 								{% include 'addition/create_form_modal.html' with create_form_action='bet_create' %}
+							</div>
 						</div>
 
 						<div class="email-filters-right">
@@ -48,8 +50,7 @@
 								<tbody>
 									{% for bet in page_obj %}
 									<tr>
-										<td>{{ bet.date_game }}</td>
-										<td>{{ bet.prediction }}</td>
+										<td>{{ bet.date_game|date:"d-m-Y" }}</td>
 										<td>{{ bet.amount }} $</td>
 										<td>{{ bet.coefficient }}</td>
 										<td>{{ bet.result }}</td>

@@ -3,9 +3,10 @@ import random
 
 from django.contrib.auth import get_user_model
 
-from bet.constants import BetPredictionEnum, BetResultEnum, BetTypeEnum, GameStatusEnum, TeamCategoryEnum, \
-    CompetitionFootballCategoryEnum
-from bet.models import SportKind, BetBase, BetFootball, Team, CompetitionFootball, Country
+from bet.constants import BetFootballPredictionEnum, BetResultEnum, BetFootballTypeEnum, GameStatusEnum, \
+    TeamCategoryEnum, \
+    CompetitionFootballCategoryEnum, LiveTypeEnum
+from bet.models import SportKind, BetBase, BetFootball, Team, CompetitionFootball, Country, BettingService
 
 UserModel = get_user_model()
 
@@ -21,8 +22,8 @@ def reverse_dict(dct):
 
 
 def generate_bets():
-    # BetBase.objects.all().delete()
-    sport_kind = SportKind.objects.get(name="Футбол")
+    BetBase.objects.all().delete()
+    sport_kind, _ = SportKind.objects.get_or_create(name="Футбол")
 
     for year in range(2020, 2024):
         for month in range(1, 13):
@@ -30,22 +31,18 @@ def generate_bets():
                 bet_count = random.randrange(3, 6)
                 for i in range(bet_count):
                     user = UserModel.objects.get(username='admin')
-                    bet = random.choice(BetPredictionEnum.values())
-                    amount = random.randrange(100, 500)
-                    coefficient = round(random.uniform(1.5, 2.5), 2)
+                    amount = random.randrange(100, 300)
+                    coefficient = round(random.uniform(1.5, 2.2), 2)
                     result = random.choice(BetResultEnum.values())
                     date_game = datetime.date(year=year, month=month, day=day)
-                    date_betting = date_game
 
                     bet = BetBase.objects.create(
                         user=user,
-                        prediction=bet,
                         amount=amount,
                         coefficient=coefficient,
                         result=result,
                         sport_kind=sport_kind,
                         date_game=date_game,
-                        date_betting=date_betting
                     )
                     print(date_game)
                     del bet
@@ -53,25 +50,37 @@ def generate_bets():
 
 def generate_football_bets():
     BetFootball.objects.all().delete()
-    sport_kind, _ = SportKind.objects.get_or_create(name="Футбол")
-    country, _ = Country.objects.get_or_create(name='Іспанія')
-    team_home, _ = Team.objects.get_or_create(
+    user = UserModel.objects.get(username='admin')
+
+    sport_kind_football, _ = SportKind.objects.get_or_create(name="Футбол")
+    sport_kind_basketball, _ = SportKind.objects.get_or_create(name="Баскетбол")
+    sport_kind_tennis, _ = SportKind.objects.get_or_create(name="Теніс")
+
+    country_spain, _ = Country.objects.get_or_create(name='Іспанія', flag_code='es')
+    country_germany, _ = Country.objects.get_or_create(name='Німеччина', flag_code='ge')
+    country_england, _ = Country.objects.get_or_create(name='Англія', flag_code='gb')
+    country_italy, _ = Country.objects.get_or_create(name='Італія', flag_code='it')
+
+    service_vbet, _ = BettingService.objects.get_or_create(user=user, name='Vbet')
+    service_favbet, _ = BettingService.objects.get_or_create(user=user, name='FavBet')
+
+    team_real, _ = Team.objects.get_or_create(
         name='Реал',
         defaults={
             'name_extended': 'ФК Реал Мадрид',
             'category': TeamCategoryEnum.CLUB,
-            'sport_kind': sport_kind,
-            'country': country,
+            'sport_kind': sport_kind_football,
+            'country': country_spain,
 
         }
     )
-    team_guest, _ = Team.objects.get_or_create(
+    team_barcelona, _ = Team.objects.get_or_create(
         name='Барселона',
         defaults={
             'name_extended': 'ФК Барселона',
             'category': TeamCategoryEnum.CLUB,
-            'sport_kind': sport_kind,
-            'country': country,
+            'sport_kind': sport_kind_football,
+            'country': country_spain,
 
         }
     )
@@ -79,8 +88,8 @@ def generate_football_bets():
         name='Ла Ліга',
         defaults={
             'category': CompetitionFootballCategoryEnum.CLUB,
-            'sport_kind': sport_kind,
-            'country': country,
+            'sport_kind': sport_kind_football,
+            'country': country_spain,
 
         }
     )
@@ -90,30 +99,29 @@ def generate_football_bets():
             for day in range(1, 29):
                 bet_count = random.randrange(2, 4)
                 for i in range(bet_count):
-                    user = UserModel.objects.get(username='admin')
-                    bet = random.choice(BetPredictionEnum.values())
-                    amount = random.randrange(100, 500)
-                    coefficient = round(random.uniform(1.5, 2.5), 2)
+                    prediction = random.choice(BetFootballPredictionEnum.values())
+                    amount = random.randrange(100, 300)
+                    coefficient = round(random.uniform(1.5, 2.2), 2)
                     result = random.choice(BetResultEnum.values())
                     date_game = datetime.date(year=year, month=month, day=day)
-                    date_betting = date_game
-                    bet_type = random.choice(BetTypeEnum.values())
+                    bet_type = random.choice(BetFootballTypeEnum.values())
                     game_status = random.choice(GameStatusEnum.values())
 
                     bet = BetFootball.objects.create(
                         user=user,
-                        prediction=bet,
+                        prediction=prediction,
                         amount=amount,
                         coefficient=coefficient,
                         result=result,
-                        sport_kind=sport_kind,
+                        sport_kind=sport_kind_football,
                         date_game=date_game,
-                        date_betting=date_betting,
                         bet_type=bet_type,
                         game_status=game_status,
-                        team_home=team_home,
-                        team_guest=team_guest,
+                        team_home=team_real,
+                        team_guest=team_barcelona,
                         competition=competition,
+                        betting_service=random.choice([service_vbet, service_favbet]),
+                        live_type=random.choice([LiveTypeEnum.LIVE, LiveTypeEnum.PREMATCH]),
                     )
                     print(date_game)
                     del bet
