@@ -30,10 +30,12 @@ class BetHistoryView(BetFilterMixin, ListView):
     template_name = 'bet/bet_history.html'
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user).order_by('-date_game', '-id')
+        return (self.model.objects.filter(user=self.request.user).order_by('-date_game', '-id')
+                .select_related('user', 'sport_kind', 'betting_service'))
 
     def get_queryset(self):
-        filtered_qs = self.filtered_queryset(self.base_queryset())
+        filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('user', 'sport_kind',
+                                                                                  'betting_service')
         return filtered_qs
 
     def get_context_data(self, **kwargs):
@@ -316,10 +318,11 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
 
     def base_queryset(self):
         return (self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
-                .order_by('-date_game', '-id'))
+                .order_by('-date_game', '-id').select_related('team_home', 'team_guest', 'competition'))
 
     def get_queryset(self):
-        filtered_qs = self.filtered_queryset(self.base_queryset())
+        filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('team_home', 'team_guest',
+                                                                                  'competition')
         return filtered_qs
 
     def get_context_data(self, **kwargs):
