@@ -28,6 +28,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url=reverse_lazy('bet_calendar'), permanent=False), name='index'),
     path('', include('users.urls')),
     path('bet/', include('bet.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
 
 ]
 
