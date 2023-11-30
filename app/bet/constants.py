@@ -5,7 +5,7 @@ class BetResultEnum(StrEnum):
     WIN = 'Виграш'
     DRAWN = 'Повернення'
     LOSE = 'Програш'
-    UNKNOWN = 'Невідомо'
+    UNKNOWN = '-'
 
     @classmethod
     def choices(cls):
@@ -18,7 +18,7 @@ class BetResultEnum(StrEnum):
         return res
 
 
-class BetPredictionEnum(StrEnum):
+class BetFootballPredictionEnum(StrEnum):
     EXPRESS = 'Експрес'
     W1 = 'П1'
     X = 'Нічия'
@@ -93,7 +93,7 @@ class BetPredictionEnum(StrEnum):
         return res
 
 
-class BetTypeEnum(StrEnum):
+class BetFootballTypeEnum(StrEnum):
     WDL = 'П1-Х-П2'
     WX = '1Х-12-Х2'
     FORA = 'Фора'
@@ -111,69 +111,69 @@ class BetTypeEnum(StrEnum):
     def prediction_type_dict(cls):
         mapper = {
             cls.WDL: (
-                BetPredictionEnum.W1,
-                BetPredictionEnum.X,
-                BetPredictionEnum.W2,
+                BetFootballPredictionEnum.W1,
+                BetFootballPredictionEnum.X,
+                BetFootballPredictionEnum.W2,
             ),
             cls.WX: (
-                BetPredictionEnum.WX1,
-                BetPredictionEnum.NOT_X,
-                BetPredictionEnum.WX2,
+                BetFootballPredictionEnum.WX1,
+                BetFootballPredictionEnum.NOT_X,
+                BetFootballPredictionEnum.WX2,
             ),
             cls.FORA: (
-                BetPredictionEnum.F1_0_0,
-                BetPredictionEnum.F1_MINUS_0_5,
-                BetPredictionEnum.F1_MINUS_1_0,
-                BetPredictionEnum.F1_MINUS_1_5,
-                BetPredictionEnum.F1_MINUS_2_0,
-                BetPredictionEnum.F1_MINUS_2_5,
-                BetPredictionEnum.F1_MINUS_3_0,
-                BetPredictionEnum.F2_0_0,
-                BetPredictionEnum.F2_MINUS_0_5,
-                BetPredictionEnum.F2_MINUS_1_0,
-                BetPredictionEnum.F2_MINUS_1_5,
-                BetPredictionEnum.F2_MINUS_2_0,
-                BetPredictionEnum.F2_MINUS_2_5,
-                BetPredictionEnum.F2_MINUS_3_0,
-                BetPredictionEnum.F1_PLUS_0_5,
-                BetPredictionEnum.F1_PLUS_1_0,
-                BetPredictionEnum.F1_PLUS_1_5,
-                BetPredictionEnum.F1_PLUS_2_0,
-                BetPredictionEnum.F1_PLUS_2_5,
-                BetPredictionEnum.F1_PLUS_3_0,
-                BetPredictionEnum.F2_PLUS_0_5,
-                BetPredictionEnum.F2_PLUS_1_0,
-                BetPredictionEnum.F2_PLUS_1_5,
-                BetPredictionEnum.F2_PLUS_2_0,
-                BetPredictionEnum.F2_PLUS_2_5,
-                BetPredictionEnum.F2_PLUS_3_0,
+                BetFootballPredictionEnum.F1_0_0,
+                BetFootballPredictionEnum.F1_MINUS_0_5,
+                BetFootballPredictionEnum.F1_MINUS_1_0,
+                BetFootballPredictionEnum.F1_MINUS_1_5,
+                BetFootballPredictionEnum.F1_MINUS_2_0,
+                BetFootballPredictionEnum.F1_MINUS_2_5,
+                BetFootballPredictionEnum.F1_MINUS_3_0,
+                BetFootballPredictionEnum.F2_0_0,
+                BetFootballPredictionEnum.F2_MINUS_0_5,
+                BetFootballPredictionEnum.F2_MINUS_1_0,
+                BetFootballPredictionEnum.F2_MINUS_1_5,
+                BetFootballPredictionEnum.F2_MINUS_2_0,
+                BetFootballPredictionEnum.F2_MINUS_2_5,
+                BetFootballPredictionEnum.F2_MINUS_3_0,
+                BetFootballPredictionEnum.F1_PLUS_0_5,
+                BetFootballPredictionEnum.F1_PLUS_1_0,
+                BetFootballPredictionEnum.F1_PLUS_1_5,
+                BetFootballPredictionEnum.F1_PLUS_2_0,
+                BetFootballPredictionEnum.F1_PLUS_2_5,
+                BetFootballPredictionEnum.F1_PLUS_3_0,
+                BetFootballPredictionEnum.F2_PLUS_0_5,
+                BetFootballPredictionEnum.F2_PLUS_1_0,
+                BetFootballPredictionEnum.F2_PLUS_1_5,
+                BetFootballPredictionEnum.F2_PLUS_2_0,
+                BetFootballPredictionEnum.F2_PLUS_2_5,
+                BetFootballPredictionEnum.F2_PLUS_3_0,
             ),
             cls.TOTAL: (
-                BetPredictionEnum.TO_0_5,
-                BetPredictionEnum.TO_1_0,
-                BetPredictionEnum.TO_1_5,
-                BetPredictionEnum.TO_2_0,
-                BetPredictionEnum.TO_2_5,
-                BetPredictionEnum.TO_3_0,
-                BetPredictionEnum.TO_3_5,
-                BetPredictionEnum.TO_4_0,
-                BetPredictionEnum.TO_4_5,
-                BetPredictionEnum.TO_5_0,
-                BetPredictionEnum.TO_5_5,
-                BetPredictionEnum.TU_0_5,
-                BetPredictionEnum.TU_1_0,
-                BetPredictionEnum.TU_1_5,
-                BetPredictionEnum.TU_2_0,
-                BetPredictionEnum.TU_2_5,
-                BetPredictionEnum.TU_3_0,
-                BetPredictionEnum.TU_3_5,
-                BetPredictionEnum.TU_4_0,
-                BetPredictionEnum.TU_4_5,
-                BetPredictionEnum.TU_5_0,
-                BetPredictionEnum.TU_5_5,
+                BetFootballPredictionEnum.TO_0_5,
+                BetFootballPredictionEnum.TO_1_0,
+                BetFootballPredictionEnum.TO_1_5,
+                BetFootballPredictionEnum.TO_2_0,
+                BetFootballPredictionEnum.TO_2_5,
+                BetFootballPredictionEnum.TO_3_0,
+                BetFootballPredictionEnum.TO_3_5,
+                BetFootballPredictionEnum.TO_4_0,
+                BetFootballPredictionEnum.TO_4_5,
+                BetFootballPredictionEnum.TO_5_0,
+                BetFootballPredictionEnum.TO_5_5,
+                BetFootballPredictionEnum.TU_0_5,
+                BetFootballPredictionEnum.TU_1_0,
+                BetFootballPredictionEnum.TU_1_5,
+                BetFootballPredictionEnum.TU_2_0,
+                BetFootballPredictionEnum.TU_2_5,
+                BetFootballPredictionEnum.TU_3_0,
+                BetFootballPredictionEnum.TU_3_5,
+                BetFootballPredictionEnum.TU_4_0,
+                BetFootballPredictionEnum.TU_4_5,
+                BetFootballPredictionEnum.TU_5_0,
+                BetFootballPredictionEnum.TU_5_5,
             ),
             cls.EXPRESS: (
-                BetPredictionEnum.EXPRESS,
+                BetFootballPredictionEnum.EXPRESS,
             ),
         }
         reverse_dict = {}
@@ -194,9 +194,9 @@ class BetTypeEnum(StrEnum):
 
 
 class GameStatusEnum(StrEnum):
-    OFFICIAL = 'OFFICIAL'
-    FRIENDLY = 'FRIENDLY'
-    UNKNOWN = 'UNKNOWN'
+    OFFICIAL = 'Офіційний'
+    FRIENDLY = 'Товариський'
+    UNKNOWN = '-'
 
     @classmethod
     def choices(cls):
@@ -220,9 +220,9 @@ class LiveTypeEnum(StrEnum):
 
 
 class TeamCategoryEnum(StrEnum):
-    CLUB = 'CLUB'
-    NATIONAL = 'NATIONAL'
-    UNKNOWN = 'UNKNOWN'
+    CLUB = 'Клуб'
+    NATIONAL = 'Збірна'
+    UNKNOWN = '-'
 
     @classmethod
     def choices(cls):
@@ -231,9 +231,9 @@ class TeamCategoryEnum(StrEnum):
 
 
 class CompetitionFootballCategoryEnum(StrEnum):
-    CLUB = 'CLUB'
-    NATIONAL = 'NATIONAL'
-    UNKNOWN = 'UNKNOWN'
+    CLUB = 'Клубний'
+    NATIONAL = 'Збірний'
+    UNKNOWN = '-'
 
     @classmethod
     def choices(cls):
@@ -243,14 +243,13 @@ class CompetitionFootballCategoryEnum(StrEnum):
 
 BET_BASE_TABLE_FIELD_NAMES = {
     'date_game': 'Дата',
-    'prediction': 'Прогноз',
     'amount': 'Сума',
-    'coefficient': 'Коефіцієнт',
+    'coefficient': 'Коеф.',
     'result': 'Результат ставки',
     'profit': 'Прибуток',
     'sport_kind__name': 'Спорт',
     'betting_service': 'Сервіс',
-    'live_type': 'Момент ставки',
+    'live_type': 'Тип',
     'is_favourite': '⭐',
     'action_delete': '☒',
 }
@@ -259,15 +258,15 @@ BET_FOOTBALL_FIELDS_NAMES = {
     'date_game': 'Дата',
     'prediction': 'Прогноз',
     'amount': 'Сума',
-    'coefficient': 'Коефіцієнт',
+    'coefficient': 'Коеф.',
     'result': 'Результат ставки',
-    'live_type': 'Момент ставки',
+    'live_type': 'Тип',
     'profit': 'Прибуток',
-    'team_home': 'Team Home',
-    'team_guest': 'Team Guess',
+    'team_home': 'Команда 1',
+    'team_guest': 'Команда 2',
     'competition': 'Змагання',
     'betting_service': 'Сервіс',
-    'game_status': 'Статус ігри',
+    'game_status': 'Статус',
     'is_favourite': '⭐',
     'action_delete': '☒',
 }
@@ -329,7 +328,6 @@ def get_result_color(result):
 
 BET_BASE_ORDERING_FIELDS_CHOICES = (
     ('date_game', 'Дата події'),
-    ('prediction', 'Прогноз'),
     ('amount', 'Сума ставки'),
     ('coefficient', 'Коефіцієнт'),
     ('result', 'Результат ставки'),

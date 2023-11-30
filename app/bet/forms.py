@@ -3,8 +3,8 @@ from datetime import datetime
 from django import forms
 from django.forms import ModelForm
 
-from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetTypeEnum, \
-    GameStatusEnum, BetPredictionEnum, LiveTypeEnum
+from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetFootballTypeEnum, \
+    GameStatusEnum, BetFootballPredictionEnum, LiveTypeEnum
 from bet.models import SportKind, CompetitionBase, BetBase, BetFootball, BettingService
 
 
@@ -22,12 +22,6 @@ class BetBaseFilterForm(forms.Form):
         choices=SportKind.name_choices(),
         required=False,
         label='Вид спорту',
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
-    )
-    prediction = forms.MultipleChoiceField(
-        choices=BetPredictionEnum.choices(),
-        required=False,
-        label='Прогноз',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
     amount_min = forms.DecimalField(
@@ -65,7 +59,7 @@ class BetBaseFilterForm(forms.Form):
     result = forms.MultipleChoiceField(
         choices=BetResultEnum.choices(),
         required=False,
-        label='Результат події',
+        label='Результат ставки',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
     betting_service = forms.MultipleChoiceField(
@@ -77,7 +71,7 @@ class BetBaseFilterForm(forms.Form):
     live_type = forms.MultipleChoiceField(
         choices=LiveTypeEnum.choices(),
         required=False,
-        label='Момент ставки',
+        label='Тип',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
     date_game_start = forms.DateField(
@@ -101,7 +95,7 @@ class BetBaseFilterForm(forms.Form):
 
 
 class BetHistoryFilterForm(BetBaseFilterForm):
-    prediction = None
+    pass
 
 
 class FootballSearchForm(forms.Form):
@@ -114,10 +108,9 @@ class FootballSearchForm(forms.Form):
 
 class FootballBetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm, FootballSearchForm):
     sport_kind = None
-    prediction = None
 
     bet_type = forms.MultipleChoiceField(
-        choices=BetTypeEnum.choices(),
+        choices=BetFootballTypeEnum.choices(),
         required=False,
         label='Тип ставки',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
@@ -148,11 +141,9 @@ class BetCreateForm(ModelForm):
 
     class Meta:
         model = BetBase
-        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'live_type', 'sport_kind',
+        fields = ['user', 'amount', 'coefficient', 'result', 'live_type', 'sport_kind',
                   'date_game', 'is_favourite']
         widgets = {
-            'prediction': forms.Select(attrs={'class': 'selectize-control single',
-                                              'placeholder': 'Виберіть значення...'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control',
                                                'placeholder': '0',
                                                'min': '0.00',
@@ -209,13 +200,11 @@ class BetFootballCreateForm(ModelForm):
 
 class RatingFilterForm(BetBaseFilterForm):
     sport_kind = None
-    prediction = None
     result = None
     is_favourite = None
 
 
 class StatisticFilterForm(BetBaseFilterForm):
-    prediction = None
     amount_min = None
     amount_max = None
     coefficient_min = None

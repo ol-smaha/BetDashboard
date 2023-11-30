@@ -8,7 +8,6 @@ from django.forms import HiddenInput
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
-from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.utils.timezone import now
 
@@ -16,7 +15,7 @@ from .mixins import BetFilterMixin
 from .models import BetBase, BetFootball, CompetitionFootball, CompetitionBase
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES, \
-    COMPETITION_RATING_TABLE_FIELD_NAMES, BetTypeEnum, SPORT_KIND_RATING_TABLE_FIELD_NAMES, \
+    COMPETITION_RATING_TABLE_FIELD_NAMES, BetFootballTypeEnum, SPORT_KIND_RATING_TABLE_FIELD_NAMES, \
     BET_TYPE_RATING_TABLE_FIELD_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
     BetFootballCreateForm, RatingFilterForm, StatisticFilterForm
@@ -144,6 +143,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
 
     def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -186,6 +187,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
 
     def _get_profit_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
@@ -365,6 +368,8 @@ class BetGraphsResultView(BetFilterMixin, ListView):
 
     def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -407,6 +412,8 @@ class BetGraphsResultView(BetFilterMixin, ListView):
 
     def _get_profit_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
@@ -509,6 +516,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
 
     def _get_roi_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -551,6 +560,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
 
     def _get_roi_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
@@ -718,6 +729,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
 
     def _get_amount_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -760,6 +773,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
 
     def _get_amount_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
@@ -897,7 +912,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
         data = []
         for obj in self.annotate_qs('bet_type', BET_TYPE_RATING_TABLE_FIELD_NAMES):
             data.append({
-                'name': obj.get('bet_type') or BetTypeEnum.UNKNOWN,
+                'name': obj.get('bet_type') or BetFootballTypeEnum.UNKNOWN,
                 'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
                 'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
                 'total_roi': round(float(obj.get('roi', 0.00)), 2),

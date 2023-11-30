@@ -8,7 +8,7 @@
 		<div class="container-fluid dashboard-content">
 			<div class="row">
 				<div class="col-xl-10 col-lg-6 col-md-6 col-sm-12 col-12">
-					<div class="alert alert-dark" role="alert">
+					<div class="alert alert-light text-dark" role="alert">
 						Список ставок на Футбол:
 					</div>
 					<div class="card">
@@ -52,7 +52,7 @@
 									<tbody>
 										{% for bet in page_obj %}
 										<tr>
-											<td>{{ bet.date_game }}</td>
+											<td>{{ bet.date_game|date:"d-m-Y" }}</td>
 											<td>{{ bet.prediction }}</td>
 											<td>{{ bet.amount }} $</td>
 											<td>{{ bet.coefficient }}</td>
