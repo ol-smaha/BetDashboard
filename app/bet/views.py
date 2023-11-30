@@ -141,6 +141,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
 
     def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -183,6 +185,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
 
     def _get_profit_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
@@ -361,6 +365,8 @@ class BetGraphsResultView(BetFilterMixin, ListView):
 
     def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -403,6 +409,8 @@ class BetGraphsResultView(BetFilterMixin, ListView):
 
     def _get_profit_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
@@ -505,6 +513,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
 
     def _get_roi_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -547,6 +557,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
 
     def _get_roi_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
@@ -714,6 +726,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
 
     def _get_amount_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # всі ставки від найпершої по кожен день поточного місяця
@@ -756,6 +770,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
 
     def _get_amount_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
         data = {}
+        if not self.get_queryset().exists():
+            return data
 
         if date_type == ChartDateType.NOW:
             # ставки за кожен окремий день поточного місяця
