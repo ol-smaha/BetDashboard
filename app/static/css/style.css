@@ -167,7 +167,12 @@ body {
 
 h1,
 h2,
-h3,
+h3 {
+    color: #0e0c28;
+    margin: 0px 0px 15px 0px;
+    font-family: 'Jura Bold';
+}
+
 h4,
 h5,
 h6 {
@@ -856,7 +861,7 @@ Background Color / Color
 -------------------------*/
 
 .bg-primary {
-    background-color: #5969ff !important;
+    background-color: #242849 !important;
     color: #fff !important;
 }
 
@@ -882,7 +887,7 @@ Background Color / Color
 }
 
 .bg-info {
-    background-color: #25d5f2 !important;
+    background-color: #236995 !important;
 }
 
 .bg-light {
@@ -899,7 +904,7 @@ Background Color / Color
 }
 
 .bg-info-light {
-    background-color: #dffaff !important;
+    background-color: #88daeb !important;
     color: #fff;
 }
 
@@ -958,11 +963,11 @@ Borders
 -------------------------*/
 
 .text-primary {
-    color: #5969ff !important;
+    color: #242849 !important;
 }
 
 .text-brand {
-    color: #ffc750 !important;
+    color: #d69e1e !important;
 }
 
 .text-secondary {
@@ -978,11 +983,11 @@ Borders
 }
 
 .text-warning {
-    bcolor: #ffc108 !important;
+    color: #b88f12 !important;
 }
 
 .text-info {
-    color: #25d5f2 !important;
+    color: #23699 !important;
 }
 
 .text-light {
@@ -990,7 +995,8 @@ Borders
 }
 
 .text-dark {
-    color: #3d405c !important;
+    font-family: "Jura Bold" !important;
+    color: #0e0c28 !important;
 }
 
 .text-gray {
@@ -1011,7 +1017,7 @@ Borders
 -------------------------*/
 
 .border-top-primary {
-    border-top-color: #5969ff !important;
+    border-top-color: #242849 !important;
 }
 
 .border-3 {
@@ -1027,7 +1033,7 @@ Borders
 }
 
 .border-info {
-    border-color: #25d5f2 !important;
+    border-color: #236995 !important;
 }
 
 
@@ -1141,7 +1147,7 @@ Progress bar
 }
 
 .primary-progress-bar {
-    background-color: #5969ff;
+    background-color: #242849;
 }
 
 .progress-sm {
@@ -1245,7 +1251,7 @@ Top Header
     color: #236995;
 }
 .navbar-brand:hover{
-    color: #17A2B8;
+    color: #236995;
 }
 .navbar-right-top {}
 
@@ -1331,7 +1337,7 @@ Top Header
     font-size: 11px;
     margin-top: 4px;
     text-transform: uppercase;
-    color: #71748d;
+    color: #23699;
 }
 
 .notification .dropdown-toggle::after,
@@ -2657,21 +2663,21 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 
 .btn-primary {
     color: #fff;
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #242849;
+    border-color: #0e0c28;
 }
 
 .btn-primary:hover {
     color: #fff;
-    background-color: #4656e9;
-    border-color: #4656e9;
+    background-color: #0e0c28;
+    border-color: #242849;
 }
 
 .btn-primary.focus,
 .btn-primary:focus {
     color: #fff;
-    background-color: #4656e9;
-    border-color: #4656e9;
+    background-color: #242849;
+    border-color: #0e0c28;
     box-shadow: 0 0 0 1px rgb(37, 52, 158);
 }
 
@@ -2685,8 +2691,8 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 .btn-primary:not(:disabled):not(.disabled):active,
 .show>.btn-primary.dropdown-toggle {
     color: #fff;
-    background-color: #4656e9;
-    border-color: #4656e9;
+    background-color: #242849;
+    border-color: #0e0c28;
 }
 
 
@@ -2818,20 +2824,20 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 
 .btn-info {
     color: #fff;
-    background-color: #25d5f2;
-    border-color: #25d5f2;
+    background-color: #23699;
+    border-color: #23699;
 }
 
 .btn-info:hover {
     color: #fff;
-    background-color: #17c0dc;
-    border-color: #17c0dc;
+    background-color: #23699;
+    border-color: #23699;
 }
 
 .btn-info.focus,
 .btn-info:focus {
     color: #fff;
-    background-color: #17c0dc;
+    background-color: #23699;
     border-color: #17c0dc;
     box-shadow: 0 0 0 1px rgb(238, 184, 22);
 }
@@ -2840,8 +2846,8 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 .btn-info:not(:disabled):not(.disabled):active,
 .show>.btn-info.dropdown-toggle {
     color: #fff;
-    background-color: #17c0dc;
-    border-color: #17c0dc;
+    background-color: #23699;
+    border-color: #23699;
 }
 
 
@@ -2917,22 +2923,22 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 /*--- btn outline primary --*/
 
 .btn-outline-primary {
-    color: #5969ff;
+    color: #242849;
     background-color: transparent;
-    border-color: #5969ff;
+    border-color: #0e0c28;
 }
 
 .btn-outline-primary:hover {
     color: #fff;
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #242849;
+    border-color: #0e0c28;
 }
 
 .btn-outline-primary.focus,
 .btn-outline-primary:focus {
     color: #fff;
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #242849;
+    border-color: #0e0c28;
     box-shadow: 0 0 0 1px rgb(65, 77, 167);
 }
 
@@ -3040,21 +3046,21 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
 /*--- btn outline info --*/
 
 .btn-outline-info {
-    color: #25d5f2;
+    color: #23699;
     background-color: transparent;
-    border-color: #25d5f2;
+    border-color: #23699;
 }
 
 .btn-outline-info:hover {
     color: #fff;
-    background-color: #25d5f2;
-    border-color: #25d5f2;
+    background-color: #23699;
+    border-color: #23699;
 }
 
 .btn-outline-info.focus,
 .btn-outline-info:focus {
     color: #fff;
-    background-color: #25d5f2;
+    background-color: #23699;
     border-color: #0998b0;
     box-shadow: 0 0 0 1px rgb(238, 184, 22);
 }
@@ -3560,6 +3566,7 @@ btn-link
 .tab-regular .nav.nav-tabs .nav-item {}
 
 .tab-regular .nav.nav-tabs .nav-link {
+    font-family: 'Jura Bold';
     display: block;
     padding: 17px 49px;
     color: #71748d;
@@ -4159,15 +4166,15 @@ Pills vertical
     z-index: 2;
     color: #fff;
     text-decoration: none;
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #242849;
+    border-color: #242849;
 }
 
 .page-item.active .page-link {
     z-index: 1;
     color: #fff;
-    background-color: #5969ff;
-    border-color: #5969ff;
+    background-color: #242849;
+    border-color: #242849;
 }
 
 
@@ -4243,8 +4250,8 @@ Pills vertical
 }
 
 .spinner-info {
-    border-top-color: #17a2b8;
-    border-left-color: #17a2b8;
+    border-top-color: #236995;
+    border-left-color: #236995;
 }
 
 @-webkit-keyframes spin {
@@ -4502,6 +4509,7 @@ Pills vertical
 
 .table td,
 .table th {
+    color: #63657a;
     padding: 10px;
     vertical-align: middle;
     border-top: 1px solid #e6e6f2;
@@ -4515,8 +4523,9 @@ Pills vertical
 
 .table thead th,
 .table th {
+    font-size: 14px;
     color: #3d405c;
-    font-family: 'Jura SemiBold';
+    font-family: 'Jura Bold';
 }
 
 .table-bordered {
@@ -6843,6 +6852,7 @@ Media Query
     }
     .influencer-profile .tab-regular .nav.nav-tabs .nav-item .nav-link,
     .influencer-profile .tab-regular .nav.nav-pills .nav-item .nav-link {
+        font-family: 'Jura SemiBold';
         display: block;
         padding: 17px 13px;
     }

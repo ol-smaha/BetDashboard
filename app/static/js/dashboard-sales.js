@@ -32,7 +32,7 @@ $(function() {
                         position: 'bottom',
 
                         labels: {
-                            fontColor: '#71748d',
+                            fontColor: '#236995',
                             fontFamily: 'Circular Std Book',
                             fontSize: 14,
                         }
@@ -54,14 +54,14 @@ $(function() {
                                         ticks: {
                                             fontSize: 14,
                                             fontFamily: 'Circular Std Book',
-                                            fontColor: '#71748d',
+                                            fontColor: '#236995',
                                         }
                                     }],
                                     yAxes: [{
                                         ticks: {
                                             fontSize: 14,
                                             fontFamily: 'Circular Std Book',
-                                            fontColor: '#71748d',
+                                            fontColor: '#236995',
                                         }
                                     }]
                                 }

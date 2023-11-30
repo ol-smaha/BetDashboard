@@ -51,12 +51,20 @@
 									{% for bet in page_obj %}
 									<tr>
 										<td>{{ bet.date_game|date:"d-m-Y" }}</td>
+										<td>{{ bet.betting_service }}</td>
 										<td>{{ bet.amount }} $</td>
 										<td>{{ bet.coefficient }}</td>
-										<td>{{ bet.result }}</td>
-										<td>{{ bet.profit }}</td>
+										<td>
+											<span class="ml-1 text{% if bet.result == 'Виграш' %}-success{% elif bet.result == 'Повернення' %}-warning{% elif bet.result == 'Програш' %}-danger{% else %}{% endif %}">
+												{{ bet.result }}
+											</span>
+										</td>
+										<td>
+											<span class="ml-1 text{% if bet.profit > 0 %}-success{% elif bet.profit == 0 %}-warning{% else %}-danger{% endif %}">
+												{% if bet.profit > 0%}+{% endif %}{{ bet.profit }} $
+											</span>
+										</td>
 										<td>{{ bet.sport_kind }}</td>
-										<td>{{ bet.betting_service }}</td>
 										<td>{{ bet.live_type }}</td>
 
 										{% if bet.is_favourite %}

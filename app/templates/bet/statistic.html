@@ -12,8 +12,8 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">Total Bets</h5>
-									<h2 class="mb-0">{{ total_bets_count }}</h2>
+									<h3 class="text">Ставок зроблено:</h3>
+									<h2 class="mb-0" style="color:#236995">{{ total_bets_count }}</h2>
 								</div>
 								<div class="float-right icon-circle-medium  icon-box-lg  bg-secondary-light mt-1">
 									<i class="fa fa-handshake fa-fw fa-sm text-secondary"></i>
@@ -25,11 +25,11 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">Total ROI</h5>
-									<h2 class="mb-0"> {{ total_bets_roi }} % </h2>
+									<h3 class="text">Рентабельність:</h3>
+									<h2 class="mb-0" style="color:#236995"> {{ total_bets_roi }} % </h2>
 								</div>
-								<div class="float-right icon-circle-medium  icon-box-lg  bg-info-light mt-1">
-									<i class="fa fa-percent fa-fw fa-sm text-info"></i>
+								<div class="float-right icon-circle-medium  icon-box-lg  bg-primary-light mt-1">
+									<i class="fa fa-percent fa-fw fa-sm text-primary"></i>
 								</div>
 							</div>
 						</div>
@@ -38,8 +38,8 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">Total Profit</h5>
-									<h2 class="mb-0"> {{ total_bets_profit }} $ </h2>
+									<h3 class="text">Прибуток:</h3>
+									<h2 class="mb-0" style="color:#236995"> {{ total_bets_profit }} $ </h2>
 								</div>
 								<div class="float-right icon-circle-medium  icon-box-lg  bg-success-light mt-1">
 									<i class="fa fa-hand-holding-usd fa-fw fa-sm text-success"></i>
@@ -51,8 +51,8 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">Total Bets Amount </h5>
-									<h2 class="mb-0">{{ total_bets_amount }} $ </h2>
+									<h3 class="text">Сума ставок:</h3>
+									<h2 class="mb-0" style="color:#236995">{{ total_bets_amount }} $ </h2>
 								</div>
 								<div class="float-right icon-circle-medium  icon-box-lg  bg-brand-light mt-1">
 									<i class="fa fa-dollar-sign fa-fw fa-sm text-brand"></i>
@@ -66,8 +66,8 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">WINS</h5>
-									<h2 class="mb-0">{{ res_win }}</h2>
+									<h3 class="text">Виграшів:</h3>
+									<h2 class="mb-0" style="color:#236995">{{ res_win }}</h2>
 								</div>
 								<div class="float-right icon-circle-medium  icon-box-lg  bg-success-light mt-1">
 									<i class="mdi mdi-plus fa-fw fa-sm text-success"></i>
@@ -79,8 +79,8 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">DRAWNS</h5>
-									<h2 class="mb-0"> {{ res_drawn }}</h2>
+									<h3 class="text">Повернень:</h3>
+									<h2 class="mb-0" style="color:#236995"> {{ res_drawn }}</h2>
 								</div>
 								<div class="float-right icon-circle-medium  icon-box-lg  bg-brand-light mt-1">
 									<i class="mdi mdi-equal fa-fw fa-sm text-brand"></i>
@@ -92,8 +92,8 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">LOSES</h5>
-									<h2 class="mb-0"> {{ res_lose }}</h2>
+									<h3 class="text">Програшів:</h3>
+									<h2 class="mb-0" style="color:#236995"> {{ res_lose }}</h2>
 								</div>
 								<div class="float-right icon-circle-medium  icon-box-lg  bg-danger-light mt-1">
 									<i class="mdi mdi-minus fa-fw fa-sm text-danger"></i>
@@ -105,11 +105,11 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="d-inline-block">
-									<h5 class="text-muted">UNKNOWN</h5>
-									<h2 class="mb-0">{{ res_unknown }}</h2>
+									<h3 class="text">Невідомо:</h3>
+									<h2 class="mb-0" style="color:#236995">{{ res_unknown }}</h2>
 								</div>
-								<div class="float-right icon-circle-medium  icon-box-lg  bg-info-light mt-1">
-									<i class="mdi mdi-help fa-fw fa-sm text-info"></i>
+								<div class="float-right icon-circle-medium  icon-box-lg  bg-primary-light mt-1">
+									<i class="mdi mdi-help fa-fw fa-sm text-primary"></i>
 								</div>
 							</div>
 						</div>

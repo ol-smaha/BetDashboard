@@ -106,7 +106,7 @@ class FootballSearchForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
-class FootballBetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm, FootballSearchForm):
+class FootballBetHistoryFilterForm(BetBaseFilterForm, FootballSearchForm):
     sport_kind = None
 
     bet_type = forms.MultipleChoiceField(
@@ -119,7 +119,7 @@ class FootballBetHistoryFilterForm(BetBaseFilterForm, OrderingBaseForm, Football
     game_status = forms.MultipleChoiceField(
         choices=GameStatusEnum.choices(),
         required=False,
-        label='Статус Ігри',
+        label='Статус',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
 
@@ -142,7 +142,17 @@ class BetCreateForm(ModelForm):
     class Meta:
         model = BetBase
         fields = ['user', 'amount', 'coefficient', 'result', 'live_type', 'sport_kind',
-                  'date_game', 'is_favourite']
+                  'date_game', 'betting_service', 'is_favourite']
+        labels = {
+            'amount': 'Сума',
+            'coefficient': 'Коефіцієнт',
+            'result': 'Результат',
+            'live_type': 'Тип',
+            'sport_kind': 'Вид спорту',
+            'betting_service': 'Сервіс',
+            'date_game': 'Дата події',
+            'is_favourite': 'Улюблене?',
+        }
         widgets = {
             'amount': forms.NumberInput(attrs={'class': 'form-control',
                                                'placeholder': '0',
@@ -158,9 +168,12 @@ class BetCreateForm(ModelForm):
                                              'placeholder': 'Виберіть значення...'}),
             'sport_kind': forms.Select(attrs={'class': 'selectize-control single',
                                               'placeholder': 'Виберіть значення...'}),
+            'betting_service': forms.Select(attrs={'class': 'selectize-control single',
+                                                   'placeholder': 'Виберіть значення...'}),
             'date_game': forms.DateInput(attrs={'class': 'form-control',
                                                 'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}'}),
-            'is_favourite': forms.Select(attrs={'class': 'selectize-control single'}, choices=BOOL_FIELD_CHOICES),
+            'is_favourite': forms.Select(attrs={'class': 'selectize-control single'},
+                                         choices=BOOL_FIELD_CHOICES),
         }
 
 
@@ -168,7 +181,20 @@ class BetFootballCreateForm(ModelForm):
     class Meta:
         model = BetFootball
         fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'competition', 'team_home', 'team_guest',
-                  'date_game', 'live_type', 'is_favourite']
+                  'date_game', 'live_type', 'betting_service', 'is_favourite']
+        labels = {
+            'prediction': 'Прогноз',
+            'amount': 'Сума',
+            'coefficient': 'Коефіцієнт',
+            'result': 'Результат',
+            'live_type': 'Тип',
+            'competition': 'Змагання',
+            'betting_service': 'Сервіс',
+            'team_home': 'Команда 1',
+            'team_guest': 'Команда 2',
+            'date_game': 'Дата події',
+            'is_favourite': 'Улюблене?',
+        }
         widgets = {
             'prediction': forms.Select(attrs={'class': 'selectize-control single',
                                               'placeholder': 'Виберіть значення...'}),
@@ -182,19 +208,20 @@ class BetFootballCreateForm(ModelForm):
                                                     'step': '0.01'}),
             'result': forms.Select(attrs={'class': 'selectize-control single',
                                           'placeholder': 'Виберіть значення...'}),
-            'sport_kind': forms.Select(attrs={'class': 'selectize-control single',
-                                              'placeholder': 'Виберіть значення...'}),
             'competition': forms.Select(attrs={'class': 'selectize-control single',
                                                'placeholder': 'Виберіть значення...'}),
             'live_type': forms.Select(attrs={'class': 'selectize-control single',
                                              'placeholder': 'Виберіть значення...'}),
+            'betting_service': forms.Select(attrs={'class': 'selectize-control single',
+                                                   'placeholder': 'Виберіть значення...'}),
             'team_home': forms.Select(attrs={'class': 'selectize-control single',
                                              'placeholder': 'Виберіть значення...'}),
             'team_guest': forms.Select(attrs={'class': 'selectize-control single',
                                               'placeholder': 'Виберіть значення...'}),
             'date_game': forms.DateInput(attrs={'class': 'form-control',
                                                 'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}'}),
-            'is_favourite': forms.Select(attrs={'class': 'selectize-control single'}, choices=BOOL_FIELD_CHOICES),
+            'is_favourite': forms.Select(attrs={'class': 'selectize-control single'},
+                                         choices=BOOL_FIELD_CHOICES),
         }
 
 

@@ -1,11 +1,11 @@
 
 
-<a href="#" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#{{create_form_action}}">Додати</a>
+<a href="#" class="btn btn-outline-{% if button_color %}{{ button_color }}{% else %}primary{% endif %} btn-block" data-toggle="modal" data-target="#{{create_form_action}}">Додати</a>
 <div id="{{create_form_action}}" class="modal fade">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title">Додавання ставки</h1>
+                <h1 class="modal-title text-{{button_color}}">Додавання ставки</h1>
             </div>
             <div class="modal-body">
                 <form method="POST" action="{% url create_form_action %}">
@@ -17,7 +17,9 @@
                         {% for field in create_form.visible_fields %}
                             {% if field.name in 'date_game' %}
                                 <div class="form-group row">
-                                    <label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+                                    <label class="col-3 col-lg-2 col-form-label text-right">
+                                        {{ field.label }} {% if field.field.required %} <span style="color: red">*</span> {% endif %}
+                                    </label>
                                     <div class="col-9 col-lg-10">
                                         <div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
                                         {{ field }}
@@ -29,14 +31,18 @@
                                 </div>
                             {% elif field.name in 'is_favourite' %}
                                 <div class="form-group row">
-                                    <label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+                                    <label class="col-3 col-lg-2 col-form-label text-right">
+                                        {{ field.label }} {% if field.field.required %} <span style="color: red">*</span> {% endif %}
+                                    </label>
                                     <div class="col-9 col-lg-3">
                                         {{ field }}
                                     </div>
                                 </div>
                             {% else %}
                                 <div class="form-group row">
-                                    <label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
+                                    <label class="col-3 col-lg-2 col-form-label text-right">
+                                        {{ field.label }} {% if field.field.required %} <span style="color: red">*</span> {% endif %}
+                                    </label>
                                     <div class="col-9 col-lg-10">
                                         {{ field }}
                                     </div>
@@ -45,7 +51,7 @@
                         {% endfor %}
                         <div class="col-sm-12">
                             <p class="text-right">
-                                <button type="submit" class="btn btn-success">Додати</button>
+                                <button type="submit" class="btn btn-{% if button_color %}{{ button_color }}{% else %}primary{% endif %}">Додати</button>
                             </p>
                         </div>
                     </div>
