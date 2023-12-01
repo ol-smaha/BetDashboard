@@ -3,43 +3,24 @@
 {% load tariff_tags %}
 
 
-{% block title %} Tariff Plan {% endblock title %}
+{% block title %}  Тарифний план {% endblock title %}
 
 {% block main %}
     <div class="container-fluid dashboard-content">
         <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="page-header">
-                    <h2 class="pageheader-title">Pricing </h2>
-                    <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
-                    <div class="page-breadcrumb">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Pages</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Pricing</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
+			<div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+				<div class="alert alert-light text-dark" role="alert">Тарифний план:</div>
         <div class="offset-xl-1 col-xl-10">
         <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
-                <div class="section-block">
-                <h3>BetDashboard Pricing Table</h3>
-                </div>
-            </div>
             {% for tariff in tariffs %}
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+            <div class="col-xl-6 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="card">
                     <div class="card-header bg-primary text-center p-3 ">
                         <h4 class="mb-0 text-white"> {{ tariff.name }}</h4>
                     </div>
                     <div class="card-body text-center">
                         <h1 class="mb-1">{{ tariff.price }} UAH</h1>
-                        <p>Per Month Plateform</p>
+                        <p> за місяць </p>
                     </div>
                     <div class="card-body border-top">
                         <ul class="list-unstyled bullet-check font-14">
@@ -47,7 +28,7 @@
                             <li>{{ text }}</li>
                             {% endfor %}
                         </ul>
-                        <a href="#" class="btn btn-outline-secondary btn-block btn-lg">Get Started</a>
+                        <a href="#" class="btn btn-outline-secondary btn-block btn-lg"> Підключити </a>
                     </div>
                 </div>
             </div>

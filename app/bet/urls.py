@@ -4,7 +4,9 @@ from django.urls import path
 from bet.views import (BetHistoryView, BetGraphsView, Statistic, BetGraphsProfitView, BetGraphsResultView,
                        FootballBetHistoryView, BetGraphsRoiView, BetCreateView, BetBaseChangeFavouriteStatusView,
                        BetBaseDeleteView, BetFootballChangeFavouriteStatusView, BetFootballDeleteView,
-                       BetFootballCreateView, BetGraphsAvgAmountView, RatingGraphsView, CalendarView)
+                       BetFootballCreateView, BetGraphsAvgAmountView, RatingGraphsView, CalendarView, ProfileView,
+                       CompetitionCreateView, ServiceCreateView, SportKindCreateView)
+
 
 urlpatterns = [
     path('list/', BetHistoryView.as_view(), name='bet_list'),
@@ -28,4 +30,10 @@ urlpatterns = [
     path('calendar/', CalendarView.as_view(), name='bet_calendar'),
     path('statistic/', Statistic.as_view(), name='bet_statistic'),
     path('ratings/', RatingGraphsView.as_view(), name='bet_ratings'),
+
+    path('profile/', ProfileView.as_view(), name='bet_profile'),
+    path('sport_kind/create', SportKindCreateView.as_view(), name='create_sport_kind_form'),
+    path('competition/create', CompetitionCreateView.as_view(), name='create_competition_form'),
+    path('service/create', ServiceCreateView.as_view(), name='create_service_form'),
+
 ]

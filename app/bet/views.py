@@ -18,7 +18,8 @@ from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_F
     COMPETITION_RATING_TABLE_FIELD_NAMES, BetFootballTypeEnum, SPORT_KIND_RATING_TABLE_FIELD_NAMES, \
     BET_TYPE_RATING_TABLE_FIELD_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
-    BetFootballCreateForm, RatingFilterForm, StatisticFilterForm
+    BetFootballCreateForm, RatingFilterForm, StatisticFilterForm, CompetitionCreateForm, ServiceCreateForm, \
+    SportKindCreateForm
 from bet.constants import BetResultEnum
 from .utils import reverse_dict
 
@@ -47,7 +48,7 @@ class BetHistoryView(BetFilterMixin, ListView):
         page_obj_end = page_obj_end if page_obj_end <= self.get_queryset().count() else self.get_queryset().count()
         page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
         context.update({
-            'title': 'Bet History',
+            'title': 'Загальна історія',
             'menu_key': 'bet_list',
             'bet_fields': BET_BASE_TABLE_FIELD_NAMES.values(),
             'filter_form': filter_form,
@@ -265,7 +266,7 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
             'profit_bar_labels': json.dumps(["Прибуток"]),
 
             'filter_form': filter_form,
-            'title': 'Profit Graphs',
+            'title': 'Прибутковість',
             'menu_key': 'bet_graphs_profit',
         })
         return context
@@ -298,7 +299,7 @@ class Statistic(BetFilterMixin, ListView):
         res_unknown = self.get_queryset().filter(result=BetResultEnum.UNKNOWN).count()
 
         context.update({
-            'title': 'Bet Statistic',
+            'title': 'Статистика',
             'menu_key': 'bet_statistic',
             'filter_form': filter_form,
             'total_bets_count': total_bets_count,
@@ -338,7 +339,7 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
         page_obj_end = page_obj_end if page_obj_end <= self.get_queryset().count() else self.get_queryset().count()
         page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
         context.update({
-            'title': 'Football Bet History',
+            'title': 'Історія Футбол',
             'menu_key': 'bet_football_list',
             'total_bets_count': self.get_queryset().count(),
             'football_bet_fields': BET_FOOTBALL_FIELDS_NAMES.values(),
@@ -490,7 +491,7 @@ class BetGraphsResultView(BetFilterMixin, ListView):
             'profit_bar_labels': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
 
             'filter_form': filter_form,
-            'title': 'Profit Graphs',
+            'title': 'Результати',
             'menu_key': 'bet_graphs_result',
         })
         return context
@@ -638,7 +639,7 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
             'roi_bar_labels': json.dumps(["ROI"]),
 
             'filter_form': filter_form,
-            'title': 'ROI Graphs',
+            'title': 'Рентабельність',
             'menu_key': 'bet_graphs_roi',
         })
         return context
@@ -653,6 +654,7 @@ class BetCreateView(CreateView):
         context = super().get_context_data()
         football_create_form = BetFootballCreateForm()
         context.update({
+            'title': 'Додати ставку',
             'football_create_form': football_create_form,
             'menu_key': 'bet_create',
         })
@@ -851,7 +853,7 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
             'amount_bar_labels': json.dumps(["Середня ставка"]),
 
             'filter_form': filter_form,
-            'title': 'Amount Graphs',
+            'title': 'Середня ставка',
             'menu_key': 'bet_graphs_amount',
         })
         return context
@@ -932,7 +934,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
         filter_form = RatingFilterForm(self.request.GET)
 
         context.update({
-            'title': 'Rating',
+            'title': 'Рейтинги',
             'menu_key': 'bet_ratings',
             'filter_form': filter_form,
             'active_tab': self.get_active_tab(),
@@ -978,8 +980,50 @@ class CalendarView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         context.update({
+            'title': 'Календар',
             'menu_key': 'bet_calendar',
             'calendar_data': CalendarDashboard.to_json_data(self._prepare_calendar_data()),
             'date_now': json.dumps(datetime.strftime(now().date(), '%Y-%m-%d'))
         })
         return context
+
+
+class ProfileView(ListView):
+    model = BetBase
+    template_name = 'bet/profile.html'
+
+    def get_queryset(self):
+        return (self.model.objects.filter(user=self.request.user)
+                                  .select_related('user', 'sport_kind', 'betting_service'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        create_sport_kind_form = SportKindCreateForm()
+        create_competition_form = CompetitionCreateForm()
+        create_service_form = ServiceCreateForm()
+        context.update({
+            'title': 'Профіль',
+            'menu_key': 'bet_profile',
+            'create_sport_kind_form': create_sport_kind_form,
+            'create_competition_form': create_competition_form,
+            'create_service_form': create_service_form,
+            'query_parametes': self.request.GET,
+        })
+        context['create_service_form'].fields['user'].initial = self.request.user.pk
+        context['create_service_form'].fields['user'].widget = HiddenInput()
+        return context
+
+
+class SportKindCreateView(CreateView):
+    form_class = SportKindCreateForm
+    success_url = reverse_lazy('bet_profile')
+
+
+class CompetitionCreateView(CreateView):
+    form_class = CompetitionCreateForm
+    success_url = reverse_lazy('bet_profile')
+
+
+class ServiceCreateView(CreateView):
+    form_class = ServiceCreateForm
+    success_url = reverse_lazy('bet_profile')

@@ -1,25 +1,25 @@
 {% extends "account/base_auth.html" %}
 {% load static %}
 
-{% block title %} Confirmation Your Email {% endblock title%}
+{% block title %} Підтвердження електронної адреси {% endblock title%}
 
 {% block content %}
 
 <div class="splash-container">
     <div class="card">
         <div class="card-header text-center"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="logo">
-            <span class="splash-description">Please confirm your email address.</span>
+            <span class="splash-description">Будь ласка, підтвердіть Вашу електронну адресу.</span>
         </div>
 
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Confirm Email</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Підтвердити електронну адресу</button>
             </form>
         </div>
 
         <div class="card-footer text-center">
-            <span>Don't have an account? <a href="{% url 'account_signup' %}">Sign Up</a></span>
+            <span>Ще не маєте акаунту?<a href="{% url 'account_signup' %}"> Зареєструватись </a></span>
         </div>
 </div>
 

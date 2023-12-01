@@ -1,7 +1,7 @@
 {% extends "account/base_auth.html" %}
 {% load static %}
 
-{% block title %} Sing in Bet Dashboard via Google {% endblock title%}
+{% block title %} Увійти через Google {% endblock title%}
 
 
 {% block content %}
@@ -17,12 +17,12 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Continue</button>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Продовжити</button>
             </form>
         </div>
 
         <div class="card-footer text-center">
-            <span>Don't have an account? <a href="{% url 'account_signup' %}">Sign Up</a></span>
+            <span> Ще не маєте акаунту? <a href="{% url 'account_signup' %}"> Зареєструватись </a></span>
         </div>
     </div>
 </div>
