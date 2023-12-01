@@ -21,7 +21,7 @@ class Tariff(ListView):
     def get_context_data(self, **kwargs):
         context_data = {
             'tariffs': self.get_queryset(),
-            'title': 'Tariffs',
+            'title': 'Тарифний план',
         }
         return context_data
 
@@ -39,7 +39,7 @@ class AboutUsView(CreateView):
         model_object = self.model.objects.all().first()
         context.update({
             'object': model_object,
-            'title': 'About Us'
+            'title': 'Про нас'
         })
         return context
 

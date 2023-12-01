@@ -239,3 +239,44 @@ class StatisticFilterForm(BetBaseFilterForm):
     result = None
     is_favourite = None
 
+
+class SportKindCreateForm(ModelForm):
+    class Meta:
+        model = SportKind
+        fields = ['name', 'is_active']
+        labels = {'name': 'Назва', 'is_active': 'Активність'}
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введіть значення ...'}),
+            'is_active': forms.Select(attrs={'class': 'selectize-control single'},
+                                      choices=BOOL_FIELD_CHOICES)
+        }
+
+
+class CompetitionCreateForm(ModelForm):
+    class Meta:
+        model = CompetitionBase
+        fields = ['name', 'sport_kind', 'country']
+        labels = {
+            'name': 'Назва',
+            'sport_kind': 'Вид спорту',
+            'country': 'Країна'
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введіть значення...'}),
+            'sport_kind': forms.Select(attrs={'class': 'selectize-control single',
+                                              'placeholder': 'Виберіть значення...'}),
+            'country': forms.Select(attrs={'class': 'selectize-control single',
+                                           'placeholder': 'Виберіть значення...'}),
+        }
+
+
+class ServiceCreateForm(ModelForm):
+    class Meta:
+        model = BettingService
+        fields = ['user', 'name', 'is_active']
+        labels = {'name': 'Назва', 'is_active': 'Активність'}
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введіть значення...'}),
+            'is_active': forms.Select(attrs={'class': 'selectize-control single'},
+                                      choices=BOOL_FIELD_CHOICES)
+        }

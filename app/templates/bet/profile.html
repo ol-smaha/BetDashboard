@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bet_tags %}
+
+{% block main %}
+    <div class="container-fluid dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+                <div class="alert alert-light text-dark" role="alert">
+                    Додати:
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-center p-3">
+                        <h4 class="mb-0 text-white btn-lg"></h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <h1 class="mb-1">Вид спорту</h1>
+                    </div>
+                    <div class="card-body border-top">
+                        {% include 'addition/create_form_modal.html' with create_form=create_sport_kind_form create_form_action='create_sport_kind_form' button_color='primary'%}
+                    </div>
+                </div>
+            </div>
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-center p-3 ">
+						<h4 class="mb-0 text-white btn-lg"></h4>
+					</div>
+                    <div class="card-body text-center">
+                        <h1 class="mb-1">Змагання</h1>
+                    </div>
+                    <div class="card-body border-top">
+                        {% include 'addition/create_form_modal.html' with create_form=create_competition_form create_form_action='create_competition_form' button_color='primary'%}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-center p-3 ">
+						<h4 class="mb-0 text-white btn-lg"></h4>
+					</div>
+                    <div class="card-body text-center">
+                        <h1 class="mb-1">Сервіс</h1>
+                    </div>
+                    <div class="card-body border-top">
+                        {% include 'addition/create_form_modal.html' with create_form=create_service_form create_form_action='create_service_form' button_color='primary'%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
