@@ -407,3 +407,8 @@ MENU_TREE = {
     'bet_graphs_result': ['graphs'],
     'bet_graphs_amount': ['graphs'],
 }
+
+
+class ChartType(StrEnum):
+    LINE = 'LINE'
+    BAR = 'BAR'

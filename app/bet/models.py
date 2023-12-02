@@ -145,10 +145,11 @@ class BetBase(models.Model):
         if self.profit is None:
             self.profit = self.calculate_profit()
 
-        if self.sport_kind.name == 'Футбол' and not is_saved:
+        if self.sport_kind and self.sport_kind.name == 'Футбол' and not is_saved:
             self.save_to_child_model('BetFootball', is_saved=True)
         else:
-            kwargs.pop('is_saved')
+            if kwargs.get('is_saved'):
+                kwargs.pop('is_saved')
             super().save(*args, **kwargs)
 
     def __str__(self):
@@ -163,11 +164,11 @@ class BetFootball(BetBase):
     prediction = models.CharField(max_length=128, choices=BetFootballPredictionEnum.choices(),
                                   null=True, blank=True)
     bet_type = models.CharField(max_length=64, choices=BetFootballTypeEnum.choices(),
-                                default=BetFootballTypeEnum.UNKNOWN)
+                                null=True, blank=True, default=BetFootballTypeEnum.UNKNOWN)
     competition = models.ForeignKey(to=CompetitionFootball, on_delete=models.SET_NULL,
                                     related_name='bets_football', null=True, blank=True)
     game_status = models.CharField(max_length=16, choices=GameStatusEnum.choices(),
-                                   default=GameStatusEnum.UNKNOWN)
+                                   null=True, blank=True, default=GameStatusEnum.UNKNOWN)
 
     def save(self, *args, **kwargs):
         self.sport_kind, _ = SportKind.objects.get_or_create(name='Футбол')

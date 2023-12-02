@@ -32,8 +32,8 @@ urlpatterns = [
     path('ratings/', RatingGraphsView.as_view(), name='bet_ratings'),
 
     path('profile/', ProfileView.as_view(), name='bet_profile'),
-    path('sport_kind/create', SportKindCreateView.as_view(), name='create_sport_kind_form'),
-    path('competition/create', CompetitionCreateView.as_view(), name='create_competition_form'),
-    path('service/create', ServiceCreateView.as_view(), name='create_service_form'),
+    path('sport_kind/create', SportKindCreateView.as_view(), name='create_sport_kind_form'),   # use modal form on bet_profile
+    path('competition/create', CompetitionCreateView.as_view(), name='create_competition_form'),   # use modal form on bet_profile
+    path('service/create', ServiceCreateView.as_view(), name='create_service_form'),   # use modal form on bet_profile
 
 ]
