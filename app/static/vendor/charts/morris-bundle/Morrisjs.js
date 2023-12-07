@@ -456,9 +456,6 @@
         }
     });
 
-    const BetProfitGraphNowProfitLineTab = document.getElementById("now-profit-line-tab");
-    BetProfitGraphNowProfitLineTab.addEventListener('click', updateTab);
-
     const BetProfitGraphLastProfitLineTab = document.getElementById("last-profit-line-tab");
     BetProfitGraphLastProfitLineTab.addEventListener('click', updateTab);
 
@@ -467,9 +464,6 @@
 
     const BetProfitGraphYearProfitLineTab = document.getElementById("year-profit-line-tab");
     BetProfitGraphYearProfitLineTab.addEventListener('click', updateTab);
-
-    const BetProfitGraphNowProfitBarTab = document.getElementById("now-profit-bar-tab");
-    BetProfitGraphNowProfitBarTab.addEventListener('click', updateTab);
 
     const BetProfitGraphLastProfitBarTab = document.getElementById("last-profit-bar-tab");
     BetProfitGraphLastProfitBarTab.addEventListener('click', updateTab);

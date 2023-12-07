@@ -3,7 +3,7 @@ from datetime import datetime, date
 
 from dateutil.relativedelta import relativedelta
 
-from django.db.models import Count, Sum, F, Avg, Min, Func, Window
+from django.db.models import Count, Sum, F, Avg, Min, Case, Window, When, IntegerField, Q
 from django.db.models.functions import TruncMonth, TruncYear
 from django.forms import HiddenInput
 from django.shortcuts import redirect
@@ -32,11 +32,10 @@ class BetHistoryView(BetFilterMixin, ListView):
 
     def base_queryset(self):
         return (self.model.objects.filter(user=self.request.user).order_by('-date_game', '-id')
-                .select_related('user', 'sport_kind', 'betting_service'))
+                .select_related('sport_kind', 'betting_service'))
 
     def get_queryset(self):
-        filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('user', 'sport_kind',
-                                                                                  'betting_service')
+        filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('sport_kind', 'betting_service')
         return filtered_qs
 
     def get_context_data(self, **kwargs):
@@ -139,120 +138,120 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
 
     def _get_chart_queryset(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW):
         qs_now_line = (self.get_queryset()
-                       .filter(date_game__lte=now().date())
-                       .distinct('date_game')
-                       .annotate(profit_sum=Window(
-                                     expression=Sum("profit"),
-                                     partition_by=None,
-                                     order_by="date_game"),
-                                 count=Window(
-                                     expression=Count("pk"),
-                                     partition_by=None,
-                                     order_by="date_game"))
-                       .values('date_game', 'profit_sum', 'count')
-                       .order_by('date_game'))
+                           .filter(date_game__lte=now().date())
+                           .distinct('date_game')
+                           .annotate(profit_sum=Window(
+                                         expression=Sum("profit"),
+                                         partition_by=None,
+                                         order_by="date_game"),
+                                     count=Window(
+                                         expression=Count("pk"),
+                                         partition_by=None,
+                                         order_by="date_game"))
+                           .values('date_game', 'profit_sum', 'count')
+                           .order_by('date_game'))
 
         qs_now_bar = (self.get_queryset()
-                      .distinct('date_game')
-                      .filter(date_game__lte=now().date())
-                      .annotate(profit_sum=Window(
-                                    expression=Sum("profit"),
-                                    partition_by=F("date_game"),
-                                    order_by="date_game"),
-                                count=Window(
-                                    expression=Count("pk"),
-                                    partition_by=F("date_game"),
-                                    order_by="date_game"))
-                      .values('date_game', 'profit_sum', 'count')
-                      .order_by('date_game'))
-
-        qs_last_line = (self.get_queryset()
-                        .filter(date_game__lte=now().date())
-                        .distinct('date_game')
-                        .annotate(profit_sum=Window(
-                                     expression=Sum("profit"),
-                                     partition_by=None,
-                                     order_by="date_game"),
-                                  count=Window(
-                                     expression=Count("pk"),
-                                     partition_by=None,
-                                     order_by="date_game"))
-                        .values('date_game', 'profit_sum', 'count')
-                        .order_by('date_game'))
-
-        qs_last_bar = (self.get_queryset()
-                       .distinct('date_game')
-                       .filter(date_game__lte=now().date())
-                       .annotate(profit_sum=Window(
-                                     expression=Sum("profit"),
-                                     partition_by=F("date_game"),
-                                     order_by="date_game"),
-                                 count=Window(
-                                     expression=Count("pk"),
-                                     partition_by=F("date_game"),
-                                     order_by="date_game"))
-                       .values('date_game', 'profit_sum', 'count')
-                       .order_by('date_game'))
-
-        qs_months_line = (self.get_queryset()
-                          .filter(date_game__lte=now().date())
-                          .annotate(month=TruncMonth('date_game'))
                           .distinct('date_game')
+                          .filter(date_game__range=[now().date().replace(day=1), now().date()])
                           .annotate(profit_sum=Window(
                                         expression=Sum("profit"),
-                                        partition_by=None,
-                                        order_by="month"),
+                                        partition_by=F("date_game"),
+                                        order_by="date_game"),
                                     count=Window(
                                         expression=Count("pk"),
-                                        partition_by=None,
-                                        order_by="month"))
+                                        partition_by=F("date_game"),
+                                        order_by="date_game"))
                           .values('date_game', 'profit_sum', 'count')
                           .order_by('date_game'))
 
+        qs_last_line = (self.get_queryset()
+                            .filter(date_game__lte=now().date())
+                            .distinct('date_game')
+                            .annotate(profit_sum=Window(
+                                         expression=Sum("profit"),
+                                         partition_by=None,
+                                         order_by="date_game"),
+                                      count=Window(
+                                         expression=Count("pk"),
+                                         partition_by=None,
+                                         order_by="date_game"))
+                            .values('date_game', 'profit_sum', 'count')
+                            .order_by('date_game'))
+
+        qs_last_bar = (self.get_queryset()
+                           .distinct('date_game')
+                           .filter(date_game__range=[now().date() - relativedelta(days=30), now().date()])
+                           .annotate(profit_sum=Window(
+                                         expression=Sum("profit"),
+                                         partition_by=F("date_game"),
+                                         order_by="date_game"),
+                                     count=Window(
+                                         expression=Count("pk"),
+                                         partition_by=F("date_game"),
+                                         order_by="date_game"))
+                           .values('date_game', 'profit_sum', 'count')
+                           .order_by('date_game'))
+
+        qs_months_line = (self.get_queryset()
+                              .filter(date_game__lte=now().date())
+                              .annotate(month=TruncMonth('date_game'))
+                              .distinct('date_game')
+                              .annotate(profit_sum=Window(
+                                            expression=Sum("profit"),
+                                            partition_by=None,
+                                            order_by="month"),
+                                        count=Window(
+                                            expression=Count("pk"),
+                                            partition_by=None,
+                                            order_by="month"))
+                              .values('date_game', 'profit_sum', 'count')
+                              .order_by('date_game'))
+
         qs_months_bar = (self.get_queryset()
-                         .filter(date_game__lte=now().date())
-                         .annotate(month=TruncMonth('date_game'))
-                         .distinct('date_game')
-                         .annotate(profit_sum=Window(
-                                       expression=Sum("profit"),
-                                       partition_by='month',
-                                       order_by="month"),
-                                   count=Window(
-                                       expression=Count("pk"),
-                                       partition_by='month',
-                                       order_by="month"))
-                         .values('date_game', 'profit_sum', 'count')
-                         .order_by('date_game'))
+                             .filter(date_game__lte=now().date())
+                             .annotate(month=TruncMonth('date_game'))
+                             .distinct('date_game')
+                             .annotate(profit_sum=Window(
+                                           expression=Sum("profit"),
+                                           partition_by='month',
+                                           order_by="month"),
+                                       count=Window(
+                                           expression=Count("pk"),
+                                           partition_by='month',
+                                           order_by="month"))
+                             .values('date_game', 'profit_sum', 'count')
+                             .order_by('date_game'))
 
         qs_years_line = (self.get_queryset()
-                         .filter(date_game__lte=now().date())
-                         .annotate(year=TruncYear('date_game'))
-                         .distinct('date_game')
-                         .annotate(profit_sum=Window(
-                                       expression=Sum("profit"),
-                                       partition_by=None,
-                                       order_by="year"),
-                                   count=Window(
-                                       expression=Count("pk"),
-                                       partition_by=None,
-                                       order_by="year"))
-                         .values('date_game', 'profit_sum', 'count')
-                         .order_by('date_game'))
+                             .filter(date_game__lte=now().date())
+                             .annotate(year=TruncYear('date_game'))
+                             .distinct('date_game')
+                             .annotate(profit_sum=Window(
+                                           expression=Sum("profit"),
+                                           partition_by=None,
+                                           order_by="year"),
+                                       count=Window(
+                                           expression=Count("pk"),
+                                           partition_by=None,
+                                           order_by="year"))
+                             .values('date_game', 'profit_sum', 'count')
+                             .order_by('date_game'))
 
         qs_years_bar = (self.get_queryset()
-                        .filter(date_game__lte=now().date())
-                        .annotate(year=TruncYear('date_game'))
-                        .distinct('date_game')
-                        .annotate(profit_sum=Window(
-                                      expression=Sum("profit"),
-                                      partition_by='year',
-                                      order_by="year"),
-                                  count=Window(
-                                      expression=Count("pk"),
-                                      partition_by='year',
-                                      order_by="year"))
-                        .values('date_game', 'profit_sum', 'count')
-                        .order_by('date_game'))
+                            .filter(date_game__lte=now().date())
+                            .annotate(year=TruncYear('date_game'))
+                            .distinct('date_game')
+                            .annotate(profit_sum=Window(
+                                          expression=Sum("profit"),
+                                          partition_by='year',
+                                          order_by="year"),
+                                      count=Window(
+                                          expression=Count("pk"),
+                                          partition_by='year',
+                                          order_by="year"))
+                            .values('date_game', 'profit_sum', 'count')
+                            .order_by('date_game'))
 
         qs = self.model.objects.none()    # імітація пустого queryset
 
@@ -290,12 +289,11 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
         for elem in qs:
             day_date = elem.get('date_game')
             if graph_start_date and day_date < graph_start_date:
-                print('--11--11--11--11')
                 continue
             date_str = day_date.strftime(date_format)
             profit = elem.get('profit_sum', 0.00)
             count = elem.get('count', 0)
-            data.update({date_str: {'Прибуток': float(profit), 'count': count}})
+            data.update({date_str: {'Прибуток': round(float(profit), 2), 'count': count}})
         return data
 
     def base_queryset(self):
@@ -310,8 +308,6 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
         filter_form = BetProfitGraphFilterForm(self.request.GET)
 
         context.update({
-            'profit_now_line_data': MorrisChartLine.to_json_data(
-                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.NOW)),
             'profit_last_line_data': MorrisChartLine.to_json_data(
                 self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.LAST_30_DAYS)),
             'profit_month_line_data': MorrisChartLine.to_json_data(
@@ -321,8 +317,6 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
             'profit_line_ykeys': json.dumps(["Прибуток"]),
             'profit_line_labels': json.dumps(["Прибуток"]),
 
-            'profit_now_bar_data': MorrisChartBar.to_json_data(
-                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.NOW)),
             'profit_last_bar_data': MorrisChartBar.to_json_data(
                 self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.LAST_30_DAYS)),
             'profit_month_bar_data': MorrisChartBar.to_json_data(
@@ -390,7 +384,8 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
 
     def base_queryset(self):
         return (self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
-                .order_by('-date_game', '-id').select_related('team_home', 'team_guest', 'competition'))
+                .order_by('-date_game', '-id').select_related('sport_kind', 'betting_service',
+                                                              'team_home', 'team_guest', 'competition'))
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('team_home', 'team_guest',
@@ -426,101 +421,176 @@ class BetGraphsResultView(BetFilterMixin, ListView):
     template_name = 'bet/bet_graphs_result.html'
 
     @staticmethod
-    def _process_result_count(qs, check_date, data, date_format='%Y-%m-%d'):
-        valid_values = [BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]
-        raw_data = qs.values('result').annotate(Count('result'))
-        date_str = check_date.strftime(date_format)
-        data.update({date_str: {BetResultEnum.WIN: 0, BetResultEnum.DRAWN: 0, BetResultEnum.LOSE: 0}})
-        for obj in raw_data:
-            if obj.get('result') in valid_values:
-                data.get(date_str).update({obj.get('result'): obj.get('result__count')})
+    def _cumulative_result_counts(qs, date_field='date_game'):
+        list_data = []
+        dict_data = {}
+        count_win = 0
+        count_drawn = 0
+        count_lose = 0
 
-    def _get_profit_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
-        data = {}
-        if not self.get_queryset().exists():
-            return data
+        for el in qs:
+            count_win += el.get('count_win', 0)
+            count_drawn += el.get('count_drawn', 0)
+            count_lose += el.get('count_lose', 0)
 
-        if date_type == ChartDateType.NOW:
-            # всі ставки від найпершої по кожен день поточного місяця
-            now_date = now().date()
-            for day in range(1, now_date.day+1):
-                check_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_result_count(qs, check_date, data)
+            result_dict = {
+                BetResultEnum.WIN: count_win,
+                BetResultEnum.DRAWN: count_drawn,
+                BetResultEnum.LOSE: count_lose,
+            }
+            dict_data[el.get(date_field)] = result_dict
 
-        elif date_type == ChartDateType.LAST_30_DAYS:
-            # всі ставки від найпершої по кожен день останніх 30 днів
-            start_date = now() - relativedelta(days=30)
-            for day in range(0, 31):
-                check_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_result_count(qs, check_date, data)
+        for day, inner_dict in dict_data.items():
+            for result, count in inner_dict.items():
+                list_data.append({
+                    'date_game': day,
+                    'result': result,
+                    'count': count,
+                })
 
-        elif date_type == ChartDateType.MONTHS:
-            # всі ставки від найпершої по останній день місяця останніх 12 місяців
-            start_date = now() - relativedelta(years=1)
-            start_date = start_date.replace(day=1)
-            for month in range(1, 13):
-                month_date_start = start_date + relativedelta(months=month)
-                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
+        return list_data
 
-        elif ChartDateType.YEARS:
-            # всі ставки від найпершої по останній день року всіх років
-            earliest_bet = self.get_queryset().earliest('date_game')
-            start_year = earliest_bet.date_game.year
-            end_year = now().year
-
-            for year in range(start_year, end_year+1):
-                check_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
-
+    @staticmethod
+    def _structure_bars(qs, date_field='date_game'):
+        data = []
+        for el in qs:
+            data.append({
+                'date_game': el.get(date_field),
+                'result': BetResultEnum.WIN,
+                'count': el.get('count_win'),
+            })
+            data.append({
+                'date_game': el.get(date_field),
+                'result': BetResultEnum.DRAWN,
+                'count': el.get('count_drawn'),
+            })
+            data.append({
+                'date_game': el.get(date_field),
+                'result': BetResultEnum.LOSE,
+                'count': el.get('count_lose'),
+            })
         return data
 
-    def _get_profit_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
+    def _get_chart_queryset(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW):
+        qs_now_line_raw = (self.get_queryset()
+                           .filter(date_game__lte=now().date())
+                           .values('date_game')
+                           .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                     count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                     count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)),)
+                           .order_by('date_game'))
+        qs_now_line = self._cumulative_result_counts(qs_now_line_raw)
+
+        qs_now_bar_raw = (self.get_queryset()
+                              .filter(date_game__range=[now().date().replace(day=1), now().date()])
+                              .values('date_game')
+                              .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                        count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                        count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)), )
+                              .order_by('date_game'))
+        qs_now_bar = self._structure_bars(qs_now_bar_raw)
+
+        qs_last_line_raw = (self.get_queryset()
+                                .filter(date_game__lte=now().date())
+                                .values('date_game')
+                                .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                          count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                          count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)),)
+                                .order_by('date_game'))
+        qs_last_line = self._cumulative_result_counts(qs_last_line_raw)
+
+        qs_last_bar_raw = (self.get_queryset()
+                               .filter(date_game__range=[now().date() - relativedelta(days=30), now().date()])
+                               .values('date_game')
+                               .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                         count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                         count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)), )
+                               .order_by('date_game'))
+        qs_last_bar = self._structure_bars(qs_last_bar_raw)
+
+        qs_months_line_raw = (self.get_queryset()
+                                  .filter(date_game__lte=now().date())
+                                  .annotate(date=TruncMonth('date_game'))
+                                  .values('date')
+                                  .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                            count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                            count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)),)
+                                  .order_by('date'))
+        qs_months_line = self._cumulative_result_counts(qs_months_line_raw, date_field='date')
+
+        qs_months_bar_raw = (self.get_queryset()
+                                 .filter(date_game__lte=now().date())
+                                 .annotate(date=TruncMonth('date_game'))
+                                 .values('date')
+                                 .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                           count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                           count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)), )
+                                 .order_by('date'))
+        qs_months_bar = self._structure_bars(qs_months_bar_raw, date_field='date')
+
+        qs_years_line_raw = (self.get_queryset()
+                                 .filter(date_game__lte=now().date())
+                                 .annotate(date=TruncYear('date_game'))
+                                 .values('date')
+                                 .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                           count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                           count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)),)
+                                 .order_by('date'))
+        qs_years_line = self._cumulative_result_counts(qs_years_line_raw, date_field='date')
+
+        qs_years_bar_raw = (self.get_queryset()
+                                .filter(date_game__lte=now().date())
+                                .annotate(date=TruncYear('date_game'))
+                                .values('date')
+                                .annotate(count_win=Count('pk', filter=Q(result=BetResultEnum.WIN)),
+                                          count_drawn=Count('pk', filter=Q(result=BetResultEnum.DRAWN)),
+                                          count_lose=Count('pk', filter=Q(result=BetResultEnum.LOSE)), )
+                                .order_by('date'))
+        qs_years_bar = self._structure_bars(qs_years_bar_raw, date_field='date')
+
+        qs = self.model.objects.none()    # імітація пустого queryset
+
+        if chart_type == ChartType.LINE:
+            if date_type == ChartDateType.NOW:
+                qs = qs_now_line
+            elif date_type == ChartDateType.LAST_30_DAYS:
+                qs = qs_last_line
+            elif date_type == ChartDateType.MONTHS:
+                qs = qs_months_line
+            elif date_type == ChartDateType.YEARS:
+                qs = qs_years_line
+        elif chart_type == ChartType.BAR:
+            if date_type == ChartDateType.NOW:
+                qs = qs_now_bar
+            elif date_type == ChartDateType.LAST_30_DAYS:
+                qs = qs_last_bar
+            elif date_type == ChartDateType.MONTHS:
+                qs = qs_months_bar
+            elif date_type == ChartDateType.YEARS:
+                qs = qs_years_bar
+
+        return qs
+
+    def _get_chart_data(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW, date_format='%Y-%m-%d'):
         data = {}
-        if not self.get_queryset().exists():
-            return data
+        qs = self._get_chart_queryset(chart_type, date_type)
 
+        graph_start_date = None
         if date_type == ChartDateType.NOW:
-            # ставки за кожен окремий день поточного місяця
-            now_date = now().date()
-            for day in range(1, now_date.day+1):
-                check_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
-                self._process_result_count(qs, check_date, data)
-
+            graph_start_date = now().date().replace(day=1)
         elif date_type == ChartDateType.LAST_30_DAYS:
-            # ставки за кожен окремий день останніх 30 днів
-            start_date = now() - relativedelta(days=30)
-            for day in range(0, 31):
-                check_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
-                self._process_result_count(qs, check_date, data)
+            graph_start_date = now().date() - relativedelta(days=30)
 
-        elif date_type == ChartDateType.MONTHS:
-            # ставки за кожен окремий місяць останніх 12 місяців
-            start_date = now() - relativedelta(years=1)
-            start_date = start_date.replace(day=1)
-            for month in range(1, 13):
-                month_date_start = start_date + relativedelta(months=month)
-                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__range=[month_date_start, check_date])
-                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
+        for elem in qs:
 
-        elif ChartDateType.YEARS:
-            # ставки за кожен окремий рік
-            earliest_bet = self.get_queryset().earliest('date_game')
-            start_year = earliest_bet.date_game.year
-            end_year = now().year
+            day_date = elem.get('date_game') or elem.get('date')
+            if graph_start_date and day_date < graph_start_date:
+                continue
+            date_str = day_date.strftime(date_format)
 
-            for year in range(start_year, end_year+1):
-                start_year_date = date(year=year, month=1, day=1)
-                check_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__range=[start_year_date, check_date])
-                self._process_result_count(qs, check_date, data, date_format='%Y-%m')
+            if not data.get(date_str):
+                data.update({date_str: {BetResultEnum.WIN: 0, BetResultEnum.DRAWN: 0, BetResultEnum.LOSE: 0}})
+            data[date_str].update({elem.get('result'): elem.get('count')})
 
         return data
 
@@ -536,25 +606,23 @@ class BetGraphsResultView(BetFilterMixin, ListView):
         filter_form = BetProfitGraphFilterForm(self.request.GET)
 
         context.update({
-            'profit_now_line_data': MorrisChartLine.to_json_data(
-                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
             'profit_last_line_data': MorrisChartLine.to_json_data(
-                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.LAST_30_DAYS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.LAST_30_DAYS)),
             'profit_month_line_data': MorrisChartLine.to_json_data(
-                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'profit_year_line_data': MorrisChartLine.to_json_data(
-                self._get_profit_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.YEARS, date_format='%Y')),
+
             'profit_line_ykeys': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
             'profit_line_labels': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
 
-            'profit_now_bar_data': MorrisChartBar.to_json_data(
-                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
             'profit_last_bar_data': MorrisChartBar.to_json_data(
-                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.LAST_30_DAYS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.LAST_30_DAYS)),
             'profit_month_bar_data': MorrisChartBar.to_json_data(
-                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'profit_year_bar_data': MorrisChartBar.to_json_data(
-                self._get_profit_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.YEARS, date_format='%Y')),
+
             'profit_bar_ykeys': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
             'profit_bar_labels': json.dumps([BetResultEnum.WIN, BetResultEnum.DRAWN, BetResultEnum.LOSE]),
 
@@ -569,107 +637,204 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/bet_graphs_roi.html'
 
-    @staticmethod
-    def _process_roi_sum(qs, check_date, data, date_format='%Y-%m-%d'):
-        date_str = check_date.strftime(date_format)
-        values = qs.values('profit', 'amount').aggregate(Sum('profit'), Sum('amount'))
-        profit_dec = values.get('profit__sum') or 0.00
-        profit = float(profit_dec)
-        amount_dec = values.get('amount__sum') or 0.00
-        amount = float(amount_dec)
-        if amount:
-            roi = round(profit * 100 / amount, 2)
-        else:
-            roi = 0.00
-        data.update({date_str: {'ROI': float(roi), 'count': qs.count()}})
+    def _get_chart_queryset(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW):
+        qs_now_line = (self.get_queryset()
+                           .filter(date_game__lte=now().date())
+                           .distinct('date_game')
+                           .annotate(profit_sum=Window(
+                                         expression=Sum("profit"),
+                                         partition_by=None,
+                                         order_by="date_game"),
+                                     amount_sum=Window(
+                                         expression=Sum("amount"),
+                                         partition_by=None,
+                                         order_by="date_game"),
+                                     count=Window(
+                                         expression=Count("pk"),
+                                         partition_by=None,
+                                         order_by="date_game"))
+                           .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                           .values('date_game', 'roi', 'count')
+                           .order_by('date_game'))
 
-    def _get_roi_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
+        qs_now_bar = (self.get_queryset()
+                          .distinct('date_game')
+                          .filter(date_game__range=[now().date().replace(day=1), now().date()])
+                          .annotate(profit_sum=Window(
+                                        expression=Sum("profit"),
+                                        partition_by=F("date_game"),
+                                        order_by="date_game"),
+                                    amount_sum=Window(
+                                        expression=Sum("amount"),
+                                        partition_by=F("date_game"),
+                                        order_by="date_game"),
+                                    count=Window(
+                                        expression=Count("pk"),
+                                        partition_by=F("date_game"),
+                                        order_by="date_game"))
+                          .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                          .values('date_game', 'roi', 'count')
+                          .order_by('date_game'))
+
+        qs_last_line = (self.get_queryset()
+                            .filter(date_game__lte=now().date())
+                            .distinct('date_game')
+                            .annotate(profit_sum=Window(
+                                          expression=Sum("profit"),
+                                          partition_by=None,
+                                          order_by="date_game"),
+                                      amount_sum=Window(
+                                          expression=Sum("amount"),
+                                          partition_by=None,
+                                          order_by="date_game"),
+                                      count=Window(
+                                          expression=Count("pk"),
+                                          partition_by=None,
+                                          order_by="date_game"))
+                            .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                            .values('date_game', 'roi', 'count')
+                            .order_by('date_game'))
+
+        qs_last_bar = (self.get_queryset()
+                           .distinct('date_game')
+                           .filter(date_game__range=[now().date() - relativedelta(days=30), now().date()])
+                           .annotate(profit_sum=Window(
+                                         expression=Sum("profit"),
+                                         partition_by=F("date_game"),
+                                         order_by="date_game"),
+                                     amount_sum=Window(
+                                         expression=Sum("amount"),
+                                         partition_by=F("date_game"),
+                                         order_by="date_game"),
+                                     count=Window(
+                                         expression=Count("pk"),
+                                         partition_by=F("date_game"),
+                                         order_by="date_game"))
+                           .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                           .values('date_game', 'roi', 'count')
+                           .order_by('date_game'))
+
+        qs_months_line = (self.get_queryset()
+                              .filter(date_game__lte=now().date())
+                              .annotate(month=TruncMonth('date_game'))
+                              .distinct('date_game')
+                              .annotate(profit_sum=Window(
+                                            expression=Sum("profit"),
+                                            partition_by=None,
+                                            order_by="month"),
+                                        amount_sum=Window(
+                                            expression=Sum("amount"),
+                                            partition_by=None,
+                                            order_by="month"),
+                                        count=Window(
+                                            expression=Count("pk"),
+                                            partition_by=None,
+                                            order_by="month"))
+                              .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                              .values('date_game', 'roi', 'count')
+                              .order_by('date_game'))
+
+        qs_months_bar = (self.get_queryset()
+                             .filter(date_game__lte=now().date())
+                             .annotate(month=TruncMonth('date_game'))
+                             .distinct('date_game')
+                             .annotate(profit_sum=Window(
+                                           expression=Sum("profit"),
+                                           partition_by="month",
+                                           order_by="month"),
+                                       amount_sum=Window(
+                                           expression=Sum("amount"),
+                                           partition_by="month",
+                                           order_by="month"),
+                                       count=Window(
+                                           expression=Count("pk"),
+                                           partition_by="month",
+                                           order_by="month"))
+                             .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                             .values('date_game', 'roi', 'count')
+                             .order_by('date_game'))
+
+        qs_years_line = (self.get_queryset()
+                             .filter(date_game__lte=now().date())
+                             .annotate(year=TruncYear('date_game'))
+                             .distinct('date_game')
+                             .annotate(profit_sum=Window(
+                                           expression=Sum("profit"),
+                                           partition_by=None,
+                                           order_by="year"),
+                                       amount_sum=Window(
+                                           expression=Sum("amount"),
+                                           partition_by=None,
+                                           order_by="year"),
+                                       count=Window(
+                                           expression=Count("pk"),
+                                           partition_by=None,
+                                           order_by="year"))
+                             .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                             .values('date_game', 'roi', 'count')
+                             .order_by('date_game'))
+
+        qs_years_bar = (self.get_queryset()
+                            .filter(date_game__lte=now().date())
+                            .annotate(year=TruncYear('date_game'))
+                            .distinct('date_game')
+                            .annotate(profit_sum=Window(
+                                          expression=Sum("profit"),
+                                          partition_by='year',
+                                          order_by="year"),
+                                      amount_sum=Window(
+                                          expression=Sum("amount"),
+                                          partition_by='year',
+                                          order_by="year"),
+                                      count=Window(
+                                          expression=Count("pk"),
+                                          partition_by='year',
+                                          order_by="year"))
+                            .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+                            .values('date_game', 'roi', 'count')
+                            .order_by('date_game'))
+
+        qs = self.model.objects.none()  # імітація пустого queryset
+
+        if chart_type == ChartType.LINE:
+            if date_type == ChartDateType.NOW:
+                qs = qs_now_line
+            elif date_type == ChartDateType.LAST_30_DAYS:
+                qs = qs_last_line
+            elif date_type == ChartDateType.MONTHS:
+                qs = qs_months_line
+            elif date_type == ChartDateType.YEARS:
+                qs = qs_years_line
+        elif chart_type == ChartType.BAR:
+            if date_type == ChartDateType.NOW:
+                qs = qs_now_bar
+            elif date_type == ChartDateType.LAST_30_DAYS:
+                qs = qs_last_bar
+            elif date_type == ChartDateType.MONTHS:
+                qs = qs_months_bar
+            elif date_type == ChartDateType.YEARS:
+                qs = qs_years_bar
+
+        return qs
+
+    def _get_chart_data(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW, date_format='%Y-%m-%d'):
         data = {}
-        if not self.get_queryset().exists():
-            return data
+        qs = self._get_chart_queryset(chart_type, date_type)
 
+        graph_start_date = None
         if date_type == ChartDateType.NOW:
-            # всі ставки від найпершої по кожен день поточного місяця
-            now_date = now().date()
-            for day in range(1, now_date.day+1):
-                check_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_roi_sum(qs, check_date, data)
-
+            graph_start_date = now().date().replace(day=1)
         elif date_type == ChartDateType.LAST_30_DAYS:
-            # всі ставки від найпершої по кожен день останніх 30 днів
-            start_date = now() - relativedelta(days=30)
-            for day in range(0, 31):
-                check_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_roi_sum(qs, check_date, data)
+            graph_start_date = now().date() - relativedelta(days=30)
 
-        elif date_type == ChartDateType.MONTHS:
-            # всі ставки від найпершої по останній день місяця останніх 12 місяців
-            start_date = now() - relativedelta(years=1)
-            start_date = start_date.replace(day=1)
-            for month in range(1, 13):
-                month_date_start = start_date + relativedelta(months=month)
-                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_roi_sum(qs, check_date, data, date_format='%Y-%m')
-
-        elif ChartDateType.YEARS:
-            # всі ставки від найпершої по останній день року всіх років
-            earliest_bet = self.get_queryset().earliest('date_game')
-            start_year = earliest_bet.date_game.year
-            end_year = now().year
-
-            for year in range(start_year, end_year+1):
-                check_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_roi_sum(qs, check_date, data, date_format='%Y-%m')
-
-        return data
-
-    def _get_roi_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
-        data = {}
-        if not self.get_queryset().exists():
-            return data
-
-        if date_type == ChartDateType.NOW:
-            # ставки за кожен окремий день поточного місяця
-            now_date = now().date()
-            for day in range(1, now_date.day+1):
-                check_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
-                self._process_roi_sum(qs, check_date, data)
-
-        elif date_type == ChartDateType.LAST_30_DAYS:
-            # ставки за кожен окремий день останніх 30 днів
-            start_date = now() - relativedelta(days=30)
-            for day in range(0, 31):
-                check_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
-                self._process_roi_sum(qs, check_date, data)
-
-        elif date_type == ChartDateType.MONTHS:
-            # ставки за кожен окремий місяць останніх 12 місяців
-            start_date = now() - relativedelta(years=1)
-            start_date = start_date.replace(day=1)
-            for month in range(1, 13):
-                month_date_start = start_date + relativedelta(months=month)
-                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__range=[month_date_start, check_date])
-                self._process_roi_sum(qs, check_date, data, date_format='%Y-%m')
-
-        elif ChartDateType.YEARS:
-            # ставки за кожен окремий рік
-            earliest_bet = self.get_queryset().earliest('date_game')
-            start_year = earliest_bet.date_game.year
-            end_year = now().year
-
-            for year in range(start_year, end_year+1):
-                start_year_date = date(year=year, month=1, day=1)
-                check_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__range=[start_year_date, check_date])
-                self._process_roi_sum(qs, check_date, data, date_format='%Y-%m')
-
+        for elem in qs:
+            day_date = elem.get('date_game')
+            if graph_start_date and day_date < graph_start_date:
+                continue
+            date_str = day_date.strftime(date_format)
+            roi = elem.get('roi', 0.00)
+            count = elem.get('count', 0)
+            data.update({date_str: {'Рентабельність': round(float(roi), 2), 'count': count}})
         return data
 
     def base_queryset(self):
@@ -684,27 +849,23 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
         filter_form = BetProfitGraphFilterForm(self.request.GET)
 
         context.update({
-            'roi_now_line_data': MorrisChartLine.to_json_data(
-                self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
             'roi_last_line_data': MorrisChartLine.to_json_data(
-                self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.LAST_30_DAYS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.LAST_30_DAYS)),
             'roi_month_line_data': MorrisChartLine.to_json_data(
-                self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'roi_year_line_data': MorrisChartLine.to_json_data(
-                self._get_roi_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
-            'roi_line_ykeys': json.dumps(["ROI"]),
-            'roi_line_labels': json.dumps(["ROI"]),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.YEARS, date_format='%Y')),
+            'roi_line_ykeys': json.dumps(["Рентабельність"]),
+            'roi_line_labels': json.dumps(["Рентабельність"]),
 
-            'roi_now_bar_data': MorrisChartBar.to_json_data(
-                self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
             'roi_last_bar_data': MorrisChartBar.to_json_data(
-                self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.LAST_30_DAYS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.LAST_30_DAYS)),
             'roi_month_bar_data': MorrisChartBar.to_json_data(
-                self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'roi_year_bar_data': MorrisChartBar.to_json_data(
-                self._get_roi_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
-            'roi_bar_ykeys': json.dumps(["ROI"]),
-            'roi_bar_labels': json.dumps(["ROI"]),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.YEARS, date_format='%Y')),
+            'roi_bar_ykeys': json.dumps(["Рентабельність"]),
+            'roi_bar_labels': json.dumps(["Рентабельність"]),
 
             'filter_form': filter_form,
             'title': 'Рентабельність',
@@ -791,99 +952,164 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/bet_graphs_amount.html'
 
-    @staticmethod
-    def _process_amount_avg(qs, check_date, data, date_format='%Y-%m-%d'):
-        date_str = check_date.strftime(date_format)
-        amount = round(qs.values('amount').aggregate(Avg('amount')).get('amount__avg') or 0.00, 2)
-        data.update({date_str: {'Середня ставка': float(amount), 'count': qs.count()}})
+    def _get_chart_queryset(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW):
+        qs_now_line = (self.get_queryset()
+                           .filter(date_game__lte=now().date())
+                           .distinct('date_game')
+                           .annotate(amount_avg=Window(
+                                         expression=Avg("amount"),
+                                         partition_by=None,
+                                         order_by="date_game"),
+                                     count=Window(
+                                         expression=Count("pk"),
+                                         partition_by=None,
+                                         order_by="date_game"))
+                           .values('date_game', 'amount_avg', 'count')
+                           .order_by('date_game'))
 
-    def _get_amount_all_morris_chart_line_data(self, date_type=ChartDateType.NOW):
+        qs_now_bar = (self.get_queryset()
+                          .distinct('date_game')
+                          .filter(date_game__range=[now().date().replace(day=1), now().date()])
+                          .annotate(amount_avg=Window(
+                                        expression=Avg("amount"),
+                                        partition_by=F("date_game"),
+                                        order_by="date_game"),
+                                    count=Window(
+                                        expression=Count("pk"),
+                                        partition_by=F("date_game"),
+                                        order_by="date_game"))
+                          .values('date_game', 'amount_avg', 'count')
+                          .order_by('date_game'))
+
+        qs_last_line = (self.get_queryset()
+                            .filter(date_game__lte=now().date())
+                            .distinct('date_game')
+                            .annotate(amount_avg=Window(
+                                          expression=Avg("amount"),
+                                          partition_by=None,
+                                          order_by="date_game"),
+                                      count=Window(
+                                          expression=Count("pk"),
+                                          partition_by=None,
+                                          order_by="date_game"))
+                            .values('date_game', 'amount_avg', 'count')
+                            .order_by('date_game'))
+
+        qs_last_bar = (self.get_queryset()
+                           .distinct('date_game')
+                           .filter(date_game__range=[now().date() - relativedelta(days=30), now().date()])
+                           .annotate(amount_avg=Window(
+                                         expression=Avg("amount"),
+                                         partition_by=F("date_game"),
+                                         order_by="date_game"),
+                                     count=Window(
+                                         expression=Count("pk"),
+                                         partition_by=F("date_game"),
+                                         order_by="date_game"))
+                           .values('date_game', 'amount_avg', 'count')
+                           .order_by('date_game'))
+
+        qs_months_line = (self.get_queryset()
+                              .filter(date_game__lte=now().date())
+                              .annotate(month=TruncMonth('date_game'))
+                              .distinct('date_game')
+                              .annotate(amount_avg=Window(
+                                            expression=Avg("amount"),
+                                            partition_by=None,
+                                            order_by="month"),
+                                        count=Window(
+                                            expression=Count("pk"),
+                                            partition_by=None,
+                                            order_by="month"))
+                              .values('date_game', 'amount_avg', 'count')
+                              .order_by('date_game'))
+
+        qs_months_bar = (self.get_queryset()
+                             .filter(date_game__lte=now().date())
+                             .annotate(month=TruncMonth('date_game'))
+                             .distinct('date_game')
+                             .annotate(amount_avg=Window(
+                                           expression=Avg("amount"),
+                                           partition_by="month",
+                                           order_by="month"),
+                                       count=Window(
+                                           expression=Count("pk"),
+                                           partition_by="month",
+                                           order_by="month"))
+                             .values('date_game', 'amount_avg', 'count')
+                             .order_by('date_game'))
+
+        qs_years_line = (self.get_queryset()
+                             .filter(date_game__lte=now().date())
+                             .annotate(year=TruncYear('date_game'))
+                             .distinct('date_game')
+                             .annotate(amount_avg=Window(
+                                           expression=Avg("amount"),
+                                           partition_by=None,
+                                           order_by="year"),
+                                       count=Window(
+                                           expression=Count("pk"),
+                                           partition_by=None,
+                                           order_by="year"))
+                             .values('date_game', 'amount_avg', 'count')
+                             .order_by('date_game'))
+
+        qs_years_bar = (self.get_queryset()
+                            .filter(date_game__lte=now().date())
+                            .annotate(year=TruncYear('date_game'))
+                            .distinct('date_game')
+                            .annotate(amount_avg=Window(
+                                          expression=Avg("amount"),
+                                          partition_by='year',
+                                          order_by="year"),
+                                      count=Window(
+                                          expression=Count("pk"),
+                                          partition_by='year',
+                                          order_by="year"))
+                            .values('date_game', 'amount_avg', 'count')
+                            .order_by('date_game'))
+
+        qs = self.model.objects.none()  # імітація пустого queryset
+
+        if chart_type == ChartType.LINE:
+            if date_type == ChartDateType.NOW:
+                qs = qs_now_line
+            elif date_type == ChartDateType.LAST_30_DAYS:
+                qs = qs_last_line
+            elif date_type == ChartDateType.MONTHS:
+                qs = qs_months_line
+            elif date_type == ChartDateType.YEARS:
+                qs = qs_years_line
+        elif chart_type == ChartType.BAR:
+            if date_type == ChartDateType.NOW:
+                qs = qs_now_bar
+            elif date_type == ChartDateType.LAST_30_DAYS:
+                qs = qs_last_bar
+            elif date_type == ChartDateType.MONTHS:
+                qs = qs_months_bar
+            elif date_type == ChartDateType.YEARS:
+                qs = qs_years_bar
+
+        return qs
+
+    def _get_chart_data(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW, date_format='%Y-%m-%d'):
         data = {}
-        if not self.get_queryset().exists():
-            return data
+        qs = self._get_chart_queryset(chart_type, date_type)
 
+        graph_start_date = None
         if date_type == ChartDateType.NOW:
-            # всі ставки від найпершої по кожен день поточного місяця
-            now_date = now().date()
-            for day in range(1, now_date.day+1):
-                check_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_amount_avg(qs, check_date, data)
-
+            graph_start_date = now().date().replace(day=1)
         elif date_type == ChartDateType.LAST_30_DAYS:
-            # всі ставки від найпершої по кожен день останніх 30 днів
-            start_date = now() - relativedelta(days=30)
-            for day in range(0, 31):
-                check_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_amount_avg(qs, check_date, data)
+            graph_start_date = now().date() - relativedelta(days=30)
 
-        elif date_type == ChartDateType.MONTHS:
-            # всі ставки від найпершої по останній день місяця останніх 12 місяців
-            start_date = now() - relativedelta(years=1)
-            start_date = start_date.replace(day=1)
-            for month in range(1, 13):
-                month_date_start = start_date + relativedelta(months=month)
-                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
-
-        elif ChartDateType.YEARS:
-            # всі ставки від найпершої по останній день року всіх років
-            earliest_bet = self.get_queryset().earliest('date_game')
-            start_year = earliest_bet.date_game.year
-            end_year = now().year
-
-            for year in range(start_year, end_year+1):
-                check_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__lte=check_date)
-                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
-
-        return data
-
-    def _get_amount_period_morris_chart_bar_data(self, date_type=ChartDateType.NOW):
-        data = {}
-        if not self.get_queryset().exists():
-            return data
-
-        if date_type == ChartDateType.NOW:
-            # ставки за кожен окремий день поточного місяця
-            now_date = now().date()
-            for day in range(1, now_date.day+1):
-                check_date = now_date.replace(day=day)
-                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
-                self._process_amount_avg(qs, check_date, data)
-
-        elif date_type == ChartDateType.LAST_30_DAYS:
-            # ставки за кожен окремий день останніх 30 днів
-            start_date = now() - relativedelta(days=30)
-            for day in range(0, 31):
-                check_date = start_date + relativedelta(days=day)
-                qs = self.get_queryset().filter(date_game__range=[check_date, check_date])
-                self._process_amount_avg(qs, check_date, data)
-
-        elif date_type == ChartDateType.MONTHS:
-            # ставки за кожен окремий місяць останніх 12 місяців
-            start_date = now() - relativedelta(years=1)
-            start_date = start_date.replace(day=1)
-            for month in range(1, 13):
-                month_date_start = start_date + relativedelta(months=month)
-                check_date = month_date_start + relativedelta(months=1) - relativedelta(days=1)
-                qs = self.get_queryset().filter(date_game__range=[month_date_start, check_date])
-                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
-
-        elif ChartDateType.YEARS:
-            # ставки за кожен окремий рік
-            earliest_bet = self.get_queryset().earliest('date_game')
-            start_year = earliest_bet.date_game.year
-            end_year = now().year
-
-            for year in range(start_year, end_year+1):
-                start_year_date = date(year=year, month=1, day=1)
-                check_date = date(year=year, month=12, day=31)
-                qs = self.get_queryset().filter(date_game__range=[start_year_date, check_date])
-                self._process_amount_avg(qs, check_date, data, date_format='%Y-%m')
-
+        for elem in qs:
+            day_date = elem.get('date_game')
+            if graph_start_date and day_date < graph_start_date:
+                continue
+            date_str = day_date.strftime(date_format)
+            amount_avg = elem.get('amount_avg', 0.00)
+            count = elem.get('count', 0)
+            data.update({date_str: {'Середня ставка': round(float(amount_avg), 2), 'count': count}})
         return data
 
     def base_queryset(self):
@@ -898,25 +1124,21 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
         filter_form = BetProfitGraphFilterForm(self.request.GET)
 
         context.update({
-            'amount_now_line_data': MorrisChartLine.to_json_data(
-                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.NOW)),
             'amount_last_line_data': MorrisChartLine.to_json_data(
-                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.LAST_30_DAYS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.LAST_30_DAYS)),
             'amount_month_line_data': MorrisChartLine.to_json_data(
-                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.MONTHS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'amount_year_line_data': MorrisChartLine.to_json_data(
-                self._get_amount_all_morris_chart_line_data(date_type=ChartDateType.YEARS)),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.YEARS, date_format='%Y-%m')),
             'amount_line_ykeys': json.dumps(["Середня ставка"]),
             'amount_line_labels': json.dumps(["Середня ставка"]),
 
-            'amount_now_bar_data': MorrisChartBar.to_json_data(
-                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.NOW)),
             'amount_last_bar_data': MorrisChartBar.to_json_data(
-                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.LAST_30_DAYS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.LAST_30_DAYS)),
             'amount_month_bar_data': MorrisChartBar.to_json_data(
-                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.MONTHS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'amount_year_bar_data': MorrisChartBar.to_json_data(
-                self._get_amount_period_morris_chart_bar_data(date_type=ChartDateType.YEARS)),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.YEARS, date_format='%Y-%m')),
             'amount_bar_ykeys': json.dumps(["Середня ставка"]),
             'amount_bar_labels': json.dumps(["Середня ставка"]),
 

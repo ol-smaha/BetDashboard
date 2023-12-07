@@ -12,13 +12,8 @@
             <div class="tab-regular">
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link show active" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
-                            Поточний місяць
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
-                            Останні 30 днів
+                        <a class="nav-link show active" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                            По днях
                         </a>
                     </li>
                     <li class="nav-item">
@@ -33,35 +28,27 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
+                    <div class="tab-pane fade show active" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
                         <div id="morris_line_1"
-                             data-data="{{ profit_now_line_data }}"
-                             data-ykeys="{{ profit_bar_ykeys }}"
-                             data-labels="{{ profit_bar_labels }}"
-                             data-colors="{{ result_colors }}">
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
-                        <div id="morris_line_2"
                              data-data="{{ profit_last_line_data }}"
-                             data-ykeys="{{ profit_bar_ykeys }}"
-                             data-labels="{{ profit_bar_labels }}"
+                             data-ykeys="{{ profit_line_ykeys }}"
+                             data-labels="{{ profit_line_labels }}"
                              data-colors="{{ result_colors }}">
                         </div>
                     </div>
                     <div class="tab-pane fade" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
-                        <div id="morris_line_3"
+                        <div id="morris_line_2"
                              data-data="{{ profit_month_line_data }}"
-                             data-ykeys="{{ profit_bar_ykeys }}"
-                             data-labels="{{ profit_bar_labels }}"
+                             data-ykeys="{{ profit_line_ykeys }}"
+                             data-labels="{{ profit_line_labels }}"
                              data-colors="{{ result_colors }}">
                         </div>
                     </div>
                     <div class="tab-pane fade" id="year-profit-line" role="tabpanel" aria-labelledby="year-profit-line-tab">
-                        <div id="morris_line_4"
+                        <div id="morris_line_3"
                              data-data="{{ profit_year_line_data }}"
-                             data-ykeys="{{ profit_bar_ykeys }}"
-                             data-labels="{{ profit_bar_labels }}"
+                             data-ykeys="{{ profit_line_ykeys }}"
+                             data-labels="{{ profit_line_labels }}"
                              data-colors="{{ result_colors }}">
                         </div>
                     </div>
@@ -72,13 +59,8 @@
             <div class="tab-regular">
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link show active" id="now-profit-bar-tab" href="#now-profit-bar" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
-                            Поточний місяць
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="last-profit-bar-tab" href="#last-profit-bar" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
-                            Останні 30 днів
+                        <a class="nav-link show active" id="last-profit-bar-tab" href="#last-profit-bar" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                            По днях
                         </a>
                     </li>
                     <li class="nav-item">
@@ -93,16 +75,8 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="now-profit-bar" role="tabpanel" aria-labelledby="now-profit-bar-tab">
+                    <div class="tab-pane fade show active" id="last-profit-bar" role="tabpanel" aria-labelledby="last-profit-bar-tab">
                         <div id="morris_bar_1"
-                             data-data="{{ profit_now_bar_data }}"
-                             data-ykeys="{{ profit_bar_ykeys }}"
-                             data-labels="{{ profit_bar_labels }}"
-                             data-colors="{{ result_colors }}">
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="last-profit-bar" role="tabpanel" aria-labelledby="last-profit-bar-tab">
-                        <div id="morris_bar_2"
                              data-data="{{ profit_last_bar_data }}"
                              data-ykeys="{{ profit_bar_ykeys }}"
                              data-labels="{{ profit_bar_labels }}"
@@ -110,7 +84,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="month-profit-bar" role="tabpanel" aria-labelledby="month-profit-bar-tab">
-                        <div id="morris_bar_3"
+                        <div id="morris_bar_2"
                              data-data="{{ profit_month_bar_data }}"
                              data-ykeys="{{ profit_bar_ykeys }}"
                              data-labels="{{ profit_bar_labels }}"
@@ -118,7 +92,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="year-profit-bar" role="tabpanel" aria-labelledby="year-profit-bar-tab">
-                        <div id="morris_bar_4"
+                        <div id="morris_bar_3"
                              data-data="{{ profit_year_bar_data }}"
                              data-ykeys="{{ profit_bar_ykeys }}"
                              data-labels="{{ profit_bar_labels }}"
