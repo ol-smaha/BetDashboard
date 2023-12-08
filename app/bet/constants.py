@@ -230,17 +230,6 @@ class TeamCategoryEnum(StrEnum):
         return res
 
 
-class CompetitionFootballCategoryEnum(StrEnum):
-    CLUB = 'Клубний'
-    NATIONAL = 'Збірний'
-    UNKNOWN = '-'
-
-    @classmethod
-    def choices(cls):
-        res = tuple([(e.value, e.value) for e in cls])
-        return res
-
-
 BET_BASE_TABLE_FIELD_NAMES = {
     'date_game': 'Дата',
     'betting_service': 'Сервіс',
@@ -433,16 +422,16 @@ DEFAULT_BETTING_SERVICES = [
 
 
 DEFAULT_COMPETITIONS_FOOTBALL = [
-    ("АПЛ", "Англія", CompetitionFootballCategoryEnum.CLUB),
-    ("Ла Ліга", "Іспанія", CompetitionFootballCategoryEnum.CLUB),
-    ("Серія А", "Італія", CompetitionFootballCategoryEnum.CLUB),
-    ("Бундесліга", "Німеччина", CompetitionFootballCategoryEnum.CLUB),
-    ("Ліга 1", "Франція", CompetitionFootballCategoryEnum.CLUB),
-    ("Ередивізі", "Нідерланди", CompetitionFootballCategoryEnum.CLUB),
-    ("Ліга Португалії", "Португалія", CompetitionFootballCategoryEnum.CLUB),
-    ("Ліга Чемпіонів", "Європа", CompetitionFootballCategoryEnum.CLUB),
-    ("Ліга Європи", "Європа", CompetitionFootballCategoryEnum.CLUB),
-    ("Ліга Конференцій", "Європа", CompetitionFootballCategoryEnum.CLUB),
+    ("АПЛ", "Англія"),
+    ("Ла Ліга", "Іспанія"),
+    ("Серія А", "Італія"),
+    ("Бундесліга", "Німеччина"),
+    ("Ліга 1", "Франція",),
+    ("Ередивізі", "Нідерланди"),
+    ("Ліга Португалії", "Португалія"),
+    ("Ліга Чемпіонів", "Європа"),
+    ("Ліга Європи", "Європа"),
+    ("Ліга Конференцій", "Європа"),
 
 ]
 

@@ -4,8 +4,7 @@ from django.db import models
 from django.apps import apps
 
 from bet.constants import (BetResultEnum, GameStatusEnum, BetFootballTypeEnum,
-                           CompetitionFootballCategoryEnum, TeamCategoryEnum, LiveTypeEnum,
-                           BetFootballPredictionEnum)
+                           TeamCategoryEnum, LiveTypeEnum, BetFootballPredictionEnum)
 from users.models import CustomUser
 
 
@@ -32,7 +31,6 @@ class SportKind(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
                              related_name='sport_kinds')
     name = models.CharField(max_length=128)
-    is_active = models.BooleanField(default=False)
 
     class Meta:
         constraints = [
@@ -41,9 +39,10 @@ class SportKind(models.Model):
 
     @classmethod
     def name_choices(cls):
-        qs = cls.objects.filter(is_active=True)
+        qs = cls.objects.all()
         if current_request and current_request.user:
             qs = qs.filter(user=current_request.user)
+
         choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
         return choices
 
@@ -91,16 +90,10 @@ class CompetitionBase(models.Model):
         return f"{self.name}"
 
 
-class CompetitionFootball(CompetitionBase):
-    category = models.CharField(max_length=32, choices=CompetitionFootballCategoryEnum.choices(),
-                                default=CompetitionFootballCategoryEnum.UNKNOWN)
-
-
 class BettingService(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
-                             related_name='service')
+                             related_name='services')
     name = models.CharField(max_length=64)
-    is_active = models.BooleanField(default=False)
 
     class Meta:
         constraints = [
@@ -109,7 +102,7 @@ class BettingService(models.Model):
 
     @classmethod
     def name_choices(cls):
-        qs = cls.objects.filter(is_active=True)
+        qs = cls.objects.all()
         if current_request and current_request.user:
             qs = qs.filter(user=current_request.user)
         choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
@@ -188,13 +181,13 @@ class BetFootball(BetBase):
                                   null=True, blank=True)
     bet_type = models.CharField(max_length=64, choices=BetFootballTypeEnum.choices(),
                                 null=True, blank=True, default=BetFootballTypeEnum.UNKNOWN)
-    competition = models.ForeignKey(to=CompetitionFootball, on_delete=models.SET_NULL,
+    competition = models.ForeignKey(to=CompetitionBase, on_delete=models.SET_NULL,
                                     related_name='bets_football', null=True, blank=True)
     game_status = models.CharField(max_length=16, choices=GameStatusEnum.choices(),
                                    null=True, blank=True, default=GameStatusEnum.UNKNOWN)
 
     def save(self, *args, **kwargs):
-        self.sport_kind, _ = SportKind.objects.get_or_create(name='Футбол')
+        self.sport_kind, _ = SportKind.objects.get_or_create(user=self.user, name='Футбол')
         if self.bet_type == BetFootballTypeEnum.UNKNOWN or not self.bet_type:
             if self.prediction:
                 self.bet_type = BetFootballTypeEnum.get_value_by_bet(self.prediction)

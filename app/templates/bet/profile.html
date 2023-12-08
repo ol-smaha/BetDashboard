@@ -5,47 +5,207 @@
 {% block main %}
     <div class="container-fluid dashboard-content">
         <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
-                <div class="alert alert-light text-dark" role="alert">
-                    Додати:
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-center p-3">
-                        <h4 class="mb-0 text-white btn-lg"></h4>
-                    </div>
-                    <div class="card-body text-center">
-                        <h1 class="mb-1">Вид спорту</h1>
-                    </div>
-                    <div class="card-body border-top">
-                        {% include 'addition/create_form_modal.html' with create_form=create_sport_kind_form create_form_action='create_sport_kind_form' button_color='primary'%}
-                    </div>
-                </div>
-            </div>
-			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-center p-3 ">
-						<h4 class="mb-0 text-white btn-lg"></h4>
-					</div>
-                    <div class="card-body text-center">
-                        <h1 class="mb-1">Змагання</h1>
-                    </div>
-                    <div class="card-body border-top">
-                        {% include 'addition/create_form_modal.html' with create_form=create_competition_form create_form_action='create_competition_form' button_color='primary'%}
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-center p-3 ">
-						<h4 class="mb-0 text-white btn-lg"></h4>
-					</div>
-                    <div class="card-body text-center">
-                        <h1 class="mb-1">Сервіс</h1>
-                    </div>
-                    <div class="card-body border-top">
-                        {% include 'addition/create_form_modal.html' with create_form=create_service_form create_form_action='create_service_form' button_color='primary'%}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-5">
+                <div class="alert alert-light text-dark" role="alert">Ваші варіанти:</div>
+                <div class="tab-regular">
+                    <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link show active" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
+                                Турніри
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                                Види спорту
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="month-profit-line-tab" href="#month-profit-line" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
+                                Сервіси
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
+                                {% include 'addition/create_form_modal.html' with create_form=create_competition_form create_form_action='create_competition_form' button_color='primary'%}
+                            </div>
+                            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered first">
+                                            <thead>
+                                                <tr>
+                                                    {% for field in competition_table_fields %}
+                                                    <th>
+                                                        {{ field }}
+                                                    </th>
+                                                    {% endfor %}
+                                                    <th>
+                                                        <span style="float: right;">☒</span>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for obj in competition_objects %}
+                                                <tr>
+                                                    <td>
+                                                        <span class="mr-2" ><i class="flag-icon flag-icon-{{obj.country.flag_code}}" title="{{obj.country.name}}" id="{{obj.country.name}}"></i></span>
+                                                        <span class="traffic-sales-name">{{obj.country.name}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="traffic-sales-name">{{obj.name}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="traffic-sales-name">{{obj.sport_kind.name}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_competition_delete' obj.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete">
+                                                            <span><i class="mdi mdi-close-box-outline"></i></span>
+                                                        </a>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">Підтвердження</h5>
+                                                                        <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <p>Ви підтверджуєте видалення ставки?</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <a href="#" class="btn btn-primary" data-dismiss="modal">Скасувати</a>
+                                                                        <a class="btn btn-danger btn-ok">Підтвердити</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
+                                {% include 'addition/create_form_modal.html' with create_form=create_sport_kind_form create_form_action='create_sport_kind_form' button_color='primary'%}
+                            </div>
+                            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered first">
+                                        <thead>
+                                            <tr>
+                                                {% for field in sport_kind_table_fields %}
+                                                <th>
+                                                    {{ field }}
+                                                </th>
+                                                {% endfor %}
+                                                <th>
+                                                   <span style="float: right;">☒</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for obj in sport_kind_objects %}
+                                            <tr>
+                                                <td>
+                                                    <span class="traffic-sales-name">{{obj.name}}</span>
+                                                </td>
+                                                <td>
+                                                    <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_sport_kind_delete' obj.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete-2">
+                                                        <span><i class="mdi mdi-close-box-outline"></i></span>
+                                                    </a>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="confirm-delete-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel2">Підтвердження</h5>
+                                                                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p>Ви підтверджуєте видалення ставки?</p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="#" class="btn btn-primary" data-dismiss="modal">Скасувати</a>
+                                                                    <a class="btn btn-danger btn-ok">Підтвердити</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
+                                {% include 'addition/create_form_modal.html' with create_form=create_service_form create_form_action='create_service_form' button_color='primary'%}
+                            </div>
+                            <div class="col-xl-12 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered first">
+                                        <thead>
+                                            <tr>
+                                                {% for field in service_table_fields %}
+                                                <th>
+                                                    {{ field }}
+                                                </th>
+                                                {% endfor %}
+                                                <th>
+                                                   <span style="float: right;">☒</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for obj in service_objects %}
+                                            <tr>
+                                                <td>
+                                                    <span class="traffic-sales-name">{{obj.name}}</span>
+                                                </td>
+                                                <td>
+                                                    <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_service_delete' obj.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete-3">
+                                                        <span><i class="mdi mdi-close-box-outline"></i></span>
+                                                    </a>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="confirm-delete-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel3">Підтвердження</h5>
+                                                                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p>Ви підтверджуєте видалення ставки?</p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="#" class="btn btn-primary" data-dismiss="modal">Скасувати</a>
+                                                                    <a class="btn btn-danger btn-ok">Підтвердити</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,10 +4,9 @@ import random
 from django.contrib.auth import get_user_model
 
 from bet.constants import BetFootballPredictionEnum, BetResultEnum, BetFootballTypeEnum, GameStatusEnum, \
-    TeamCategoryEnum, \
-    CompetitionFootballCategoryEnum, LiveTypeEnum, COUNTRIES, DEFAULT_SPORT_KINDS, DEFAULT_BETTING_SERVICES, \
+    TeamCategoryEnum, LiveTypeEnum, COUNTRIES, DEFAULT_SPORT_KINDS, DEFAULT_BETTING_SERVICES, \
     DEFAULT_COMPETITIONS_FOOTBALL
-from bet.models import SportKind, BetBase, BetFootball, Team, CompetitionFootball, Country, BettingService
+from bet.models import SportKind, BetBase, BetFootball, Team, Country, BettingService, CompetitionBase
 
 UserModel = get_user_model()
 
@@ -85,10 +84,9 @@ def generate_football_bets():
 
         }
     )
-    competition, _ = CompetitionFootball.objects.get_or_create(
+    competition, _ = CompetitionBase.objects.get_or_create(
         name='Ла Ліга',
         defaults={
-            'category': CompetitionFootballCategoryEnum.CLUB,
             'sport_kind': sport_kind_football,
             'country': country_spain,
 
@@ -145,7 +143,7 @@ def create_default_sport_kind(user):
     try:
         objs = []
         for name in DEFAULT_SPORT_KINDS:
-            objs.append(SportKind(user=user, name=name, is_active=True))
+            objs.append(SportKind(user=user, name=name))
         SportKind.objects.bulk_create(objs, ignore_conflicts=True)
     except Exception as e:
         print(e)
@@ -155,7 +153,7 @@ def create_default_betting_services(user):
     try:
         objs = []
         for name in DEFAULT_BETTING_SERVICES:
-            objs.append(BettingService(user=user, name=name, is_active=True))
+            objs.append(BettingService(user=user, name=name))
         BettingService.objects.bulk_create(objs, ignore_conflicts=True)
     except Exception as e:
         print(e)
@@ -167,7 +165,6 @@ def create_default_competition_football(user):
         for el in DEFAULT_COMPETITIONS_FOOTBALL:
             name = el[0]
             country = Country.objects.get(name=el[1])
-            category = el[2]
-            CompetitionFootball.objects.create(user=user, name=name, sport_kind=sport_kind, country=country, category=category)
+            CompetitionBase.objects.create(user=user, name=name, sport_kind=sport_kind, country=country)
     except Exception as e:
         print(e)

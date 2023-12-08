@@ -188,6 +188,16 @@
         });
     </script>
     <script>
+        $('#confirm-delete-2').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
+    </script>
+    <script>
+        $('#confirm-delete-3').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
+    </script>
+    <script>
       $(document).ready(function () {
           $('select').selectize({
               sortField: 'text'

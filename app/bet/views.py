@@ -13,7 +13,7 @@ from django.views.generic.list import ListView
 from django.utils.timezone import now
 
 from .mixins import BetFilterMixin
-from .models import BetBase, BetFootball, CompetitionFootball, CompetitionBase, SportKind
+from .models import BetBase, BetFootball, CompetitionBase, SportKind, BettingService
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES, \
     COMPETITION_RATING_TABLE_FIELD_NAMES, BetFootballTypeEnum, SPORT_KIND_RATING_TABLE_FIELD_NAMES, \
@@ -41,12 +41,21 @@ class BetHistoryView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetHistoryFilterForm(self.request.GET)
+        filter_form.fields['sport_kind'].choices = SportKind.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
+
         create_form = BetCreateForm()
+        create_form.fields['user'].initial = self.request.user.pk
+        create_form.fields['user'].widget = HiddenInput()
+        create_form.fields['sport_kind'].choices = SportKind.name_choices()
+        create_form.fields['betting_service'].choices = BettingService.name_choices()
+
         page_obj = context.get('page_obj')
         page_obj_start = page_obj.number * self.paginate_by - self.paginate_by + 1
         page_obj_end = page_obj.number * self.paginate_by
         page_obj_end = page_obj_end if page_obj_end <= self.get_queryset().count() else self.get_queryset().count()
         page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
+
         context.update({
             'title': 'Загальна історія',
             'menu_key': 'bet_list',
@@ -56,8 +65,6 @@ class BetHistoryView(BetFilterMixin, ListView):
             'page_obj_count_string': page_obj_count_string,
             'query_parametes': self.request.GET,
         })
-        context['create_form'].fields['user'].initial = self.request.user.pk
-        context['create_form'].fields['user'].widget = HiddenInput()
         return context
 
 
@@ -306,6 +313,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetProfitGraphFilterForm(self.request.GET)
+        filter_form.fields['sport_kind'].choices = SportKind.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
         context.update({
             'profit_last_line_data': MorrisChartLine.to_json_data(
@@ -348,6 +357,9 @@ class Statistic(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = StatisticFilterForm(self.request.GET)
+        filter_form.fields['sport_kind'].choices = SportKind.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
+
         total_bets_count = self.get_queryset().count()
         total_bets_profit = self.get_queryset().aggregate(Sum('profit')).get('profit__sum') or 0.00
         total_bets_amount = self.get_queryset().aggregate(Sum('amount')).get('amount__sum') or 0.00
@@ -395,12 +407,21 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = FootballBetHistoryFilterForm(self.request.GET)
+        filter_form.fields['competition'].choices = CompetitionBase.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
+
         create_form = BetFootballCreateForm()
+        create_form.fields['user'].initial = self.request.user.pk
+        create_form.fields['user'].widget = HiddenInput()
+        create_form.fields['competition'].choices = CompetitionBase.name_choices()
+        create_form.fields['betting_service'].choices = BettingService.name_choices()
+
         page_obj = context.get('page_obj')
         page_obj_start = page_obj.number * self.paginate_by - self.paginate_by + 1
         page_obj_end = page_obj.number * self.paginate_by
         page_obj_end = page_obj_end if page_obj_end <= self.get_queryset().count() else self.get_queryset().count()
         page_obj_count_string = f'{page_obj_start} - {page_obj_end} з {self.get_queryset().count()}'
+
         context.update({
             'title': 'Історія Футбол',
             'menu_key': 'bet_football_list',
@@ -411,8 +432,7 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
             'page_obj_count_string': page_obj_count_string,
             'query_parametes': self.request.GET,
         })
-        context['create_form'].fields['user'].initial = self.request.user.pk
-        context['create_form'].fields['user'].widget = HiddenInput()
+
         return context
 
 
@@ -604,6 +624,8 @@ class BetGraphsResultView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetProfitGraphFilterForm(self.request.GET)
+        filter_form.fields['sport_kind'].choices = SportKind.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
         context.update({
             'profit_last_line_data': MorrisChartLine.to_json_data(
@@ -847,6 +869,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetProfitGraphFilterForm(self.request.GET)
+        filter_form.fields['sport_kind'].choices = SportKind.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
         context.update({
             'roi_last_line_data': MorrisChartLine.to_json_data(
@@ -881,16 +905,26 @@ class BetCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+
+        bet_create_form = self.form_class()
+        bet_create_form.fields['user'].initial = self.request.user.pk
+        bet_create_form.fields['user'].widget = HiddenInput()
+        bet_create_form.fields['sport_kind'].choices = SportKind.name_choices()
+        bet_create_form.fields['betting_service'].choices = BettingService.name_choices()
+
         football_create_form = BetFootballCreateForm()
+        football_create_form.fields['user'].initial = self.request.user.pk
+        football_create_form.fields['user'].widget = HiddenInput()
+        football_create_form.fields['competition'].choices = CompetitionBase.name_choices()
+        football_create_form.fields['betting_service'].choices = BettingService.name_choices()
+
         context.update({
             'title': 'Додати ставку',
+            'bet_create_form': bet_create_form,
             'football_create_form': football_create_form,
             'menu_key': 'bet_create',
         })
-        context['form'].fields['user'].initial = self.request.user.pk
-        context['form'].fields['user'].widget = HiddenInput()
-        context['football_create_form'].fields['user'].initial = self.request.user.pk
-        context['football_create_form'].fields['user'].widget = HiddenInput()
+
         return context
 
 
@@ -1122,6 +1156,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetProfitGraphFilterForm(self.request.GET)
+        filter_form.fields['sport_kind'].choices = SportKind.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
         context.update({
             'amount_last_line_data': MorrisChartLine.to_json_data(
@@ -1175,7 +1211,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
         data = []
         for obj in self.annotate_qs('competition__name', COMPETITION_RATING_TABLE_FIELD_NAMES):
             try:
-                flag = CompetitionFootball.objects.get(name=obj.get('competition__name')).country.flag_code
+                flag = CompetitionBase.objects.get(name=obj.get('competition__name')).country.flag_code
             except:
                 flag = ''
             data.append({
@@ -1222,6 +1258,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         filter_form = RatingFilterForm(self.request.GET)
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
         context.update({
             'title': 'Рейтинги',
@@ -1284,19 +1321,42 @@ class ProfileView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        sport_kind_objects = self.request.user.sport_kinds.all()
+        competition_objects = self.request.user.competitions.all()
+        service_objects = self.request.user.services.filter()
+
         create_sport_kind_form = SportKindCreateForm()
-        create_competition_form = CompetitionCreateForm()
+        create_sport_kind_form.fields['user'].initial = self.request.user.pk
+        create_sport_kind_form.fields['user'].widget = HiddenInput()
+
         create_service_form = ServiceCreateForm()
+        create_service_form.fields['user'].initial = self.request.user.pk
+        create_service_form.fields['user'].widget = HiddenInput()
+
+        create_competition_form = CompetitionCreateForm()
+        create_competition_form.fields['user'].initial = self.request.user.pk
+        create_competition_form.fields['user'].widget = HiddenInput()
+        create_competition_form.fields['sport_kind'].choices = SportKind.name_choices()
+
         context.update({
             'title': 'Профіль',
             'menu_key': 'bet_profile',
+
+            'sport_kind_objects': sport_kind_objects,
+            'competition_objects': competition_objects,
+            'service_objects': service_objects,
+
+            'sport_kind_table_fields': ['Назва'],
+            'competition_table_fields': ['Країна', 'Назва', 'Вид спорту'],
+            'service_table_fields': ['Назва'],
+
             'create_sport_kind_form': create_sport_kind_form,
             'create_competition_form': create_competition_form,
             'create_service_form': create_service_form,
+
             'query_parametes': self.request.GET,
         })
-        context['create_service_form'].fields['user'].initial = self.request.user.pk
-        context['create_service_form'].fields['user'].widget = HiddenInput()
+
         return context
 
 
@@ -1313,3 +1373,29 @@ class CompetitionCreateView(CreateView):
 class ServiceCreateView(CreateView):
     form_class = ServiceCreateForm
     success_url = reverse_lazy('bet_profile')
+
+
+class SportKindDeleteView(DetailView):
+    model = SportKind
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().delete()
+        return redirect(reverse_lazy('bet_profile') + f'?{self.request.GET.urlencode()}')
+
+
+class CompetitionDeleteView(DetailView):
+    model = CompetitionBase
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().delete()
+        return redirect(reverse_lazy('bet_profile') + f'?{self.request.GET.urlencode()}')
+
+
+class BettingServiceDeleteView(DetailView):
+    model = BettingService
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().delete()
+        return redirect(reverse_lazy('bet_profile') + f'?{self.request.GET.urlencode()}')

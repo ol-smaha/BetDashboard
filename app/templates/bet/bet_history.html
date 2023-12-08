@@ -40,7 +40,7 @@
 										{% for field in bet_fields %}
 										<th>
 											{{ field }}
-											{% if field not in '☒,bar'%}
+											{% if field not in '☒'%}
 												<a href="?{% query_transform ordering=field|bet_base_ordering_value %}"><i class="fas fa-sort" style="float: right;"></i></a>
 											{% endif %}
 										</th>

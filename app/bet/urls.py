@@ -1,11 +1,12 @@
 from django.urls import path
 
 
-from bet.views import (BetHistoryView, BetGraphsView, Statistic, BetGraphsProfitView, BetGraphsResultView,
+from bet.views import (BetHistoryView, Statistic, BetGraphsProfitView, BetGraphsResultView,
                        FootballBetHistoryView, BetGraphsRoiView, BetCreateView, BetBaseChangeFavouriteStatusView,
                        BetBaseDeleteView, BetFootballChangeFavouriteStatusView, BetFootballDeleteView,
                        BetFootballCreateView, BetGraphsAvgAmountView, RatingGraphsView, CalendarView, ProfileView,
-                       CompetitionCreateView, ServiceCreateView, SportKindCreateView)
+                       CompetitionCreateView, ServiceCreateView, SportKindCreateView, SportKindDeleteView,
+                       BettingServiceDeleteView, CompetitionDeleteView)
 
 
 urlpatterns = [
@@ -21,7 +22,6 @@ urlpatterns = [
     path('change-is-favourite/football/<int:id>', BetFootballChangeFavouriteStatusView.as_view(),
          name='bet_football_change_is_favourite'),
 
-    # path('graphs/', BetGraphsView.as_view(), name='bet_graphs'),
     path('graphs/profit/', BetGraphsProfitView.as_view(), name='bet_graphs_profit'),
     path('graphs/roi/', BetGraphsRoiView.as_view(), name='bet_graphs_roi'),
     path('graphs/result/', BetGraphsResultView.as_view(), name='bet_graphs_result'),
@@ -32,8 +32,13 @@ urlpatterns = [
     path('ratings/', RatingGraphsView.as_view(), name='bet_ratings'),
 
     path('profile/', ProfileView.as_view(), name='bet_profile'),
+
     path('sport_kind/create', SportKindCreateView.as_view(), name='create_sport_kind_form'),   # use modal form on bet_profile
     path('competition/create', CompetitionCreateView.as_view(), name='create_competition_form'),   # use modal form on bet_profile
     path('service/create', ServiceCreateView.as_view(), name='create_service_form'),   # use modal form on bet_profile
+
+    path('sport_kind/delete/<int:id>', SportKindDeleteView.as_view(), name='bet_sport_kind_delete'),
+    path('competition/delete/<int:id>', CompetitionDeleteView.as_view(), name='bet_competition_delete'),
+    path('service/delete/<int:id>', BettingServiceDeleteView.as_view(), name='bet_service_delete'),
 
 ]
