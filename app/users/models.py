@@ -33,8 +33,20 @@ class CustomUser(AbstractUser):
                                     null=True,
                                     blank=True)
 
+    def save(self, *args, **kwargs):
+        created = self.pk is None
+        super(CustomUser, self).save(*args, **kwargs)
+        if created:
+            from bet.utils import (create_default_sport_kind, create_default_countries,
+                                   create_default_competition_football, create_default_betting_services)
+
+            create_default_countries()
+            create_default_sport_kind(self)
+            create_default_competition_football(self)
+            create_default_betting_services(self)
+
     def __str__(self):
-        return self.email
+        return self.email or self.username
 
 
 class AboutUs(models.Model):

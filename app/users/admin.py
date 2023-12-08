@@ -10,6 +10,7 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = CustomUser
     list_display = ["email", "username",]
+    list_display_links = list_display
     fieldsets = (
         *UserAdmin.fieldsets,  # original form fieldsets, expanded
         (

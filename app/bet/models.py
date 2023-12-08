@@ -9,6 +9,9 @@ from bet.constants import (BetResultEnum, GameStatusEnum, BetFootballTypeEnum,
 from users.models import CustomUser
 
 
+current_request = None
+
+
 class Country(models.Model):
     name = models.CharField(max_length=64, unique=True)
     code2 = models.CharField(max_length=2, null=True, blank=True)
@@ -26,13 +29,22 @@ class Country(models.Model):
 
 
 class SportKind(models.Model):
-    name = models.CharField(unique=True, max_length=128)
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
+                             related_name='sport_kinds')
+    name = models.CharField(max_length=128)
     is_active = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'name'], name='sport kind name and user unique'),
+        ]
 
     @classmethod
     def name_choices(cls):
-        qs = cls.objects.filter(is_active=True).values_list('name', flat=True).distinct()
-        choices = tuple([(name, name) for name in qs])
+        qs = cls.objects.filter(is_active=True)
+        if current_request and current_request.user:
+            qs = qs.filter(user=current_request.user)
+        choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
         return choices
 
     def __str__(self):
@@ -54,16 +66,25 @@ class Team(models.Model):
 
 
 class CompetitionBase(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
+                             related_name='competitions')
+    name = models.CharField(max_length=128)
     sport_kind = models.ForeignKey(to=SportKind, on_delete=models.SET_NULL,
                                    related_name='competitions', null=True, blank=True)
     country = models.ForeignKey(to=Country, on_delete=models.SET_NULL,
                                 related_name='competitions', null=True, blank=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'name'], name='competition name and user unique'),
+        ]
+
     @classmethod
     def name_choices(cls):
-        qs = cls.objects.all().values_list('name', flat=True).distinct()
-        choices = tuple([(name, name) for name in qs])
+        qs = cls.objects.all().values_list('name', flat=True)
+        if current_request and current_request.user:
+            qs = qs.filter(user=current_request.user)
+        choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
         return choices
 
     def __str__(self):
@@ -83,13 +104,15 @@ class BettingService(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'name'], name='name and user unique'),
+            models.UniqueConstraint(fields=['user', 'name'], name='service name and user unique'),
         ]
 
     @classmethod
     def name_choices(cls):
-        qs = cls.objects.all().values_list('name', flat=True).distinct()
-        choices = tuple([(name, name) for name in qs])
+        qs = cls.objects.filter(is_active=True)
+        if current_request and current_request.user:
+            qs = qs.filter(user=current_request.user)
+        choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
         return choices
 
     def __str__(self):

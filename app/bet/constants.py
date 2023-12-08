@@ -412,3 +412,95 @@ MENU_TREE = {
 class ChartType(StrEnum):
     LINE = 'LINE'
     BAR = 'BAR'
+
+
+DEFAULT_SPORT_KINDS = [
+    'Футбол',
+    'Баскетбол',
+    'Теніс',
+    'Хокей',
+    'Кіберспорт',
+    'Волейбол',
+    'Віртуальний спорт',
+]
+
+
+DEFAULT_BETTING_SERVICES = [
+    'VBet',
+    'FavBet',
+    'Паріматч',
+]
+
+
+DEFAULT_COMPETITIONS_FOOTBALL = [
+    ("АПЛ", "Англія", CompetitionFootballCategoryEnum.CLUB),
+    ("Ла Ліга", "Іспанія", CompetitionFootballCategoryEnum.CLUB),
+    ("Серія А", "Італія", CompetitionFootballCategoryEnum.CLUB),
+    ("Бундесліга", "Німеччина", CompetitionFootballCategoryEnum.CLUB),
+    ("Ліга 1", "Франція", CompetitionFootballCategoryEnum.CLUB),
+    ("Ередивізі", "Нідерланди", CompetitionFootballCategoryEnum.CLUB),
+    ("Ліга Португалії", "Португалія", CompetitionFootballCategoryEnum.CLUB),
+    ("Ліга Чемпіонів", "Європа", CompetitionFootballCategoryEnum.CLUB),
+    ("Ліга Європи", "Європа", CompetitionFootballCategoryEnum.CLUB),
+    ("Ліга Конференцій", "Європа", CompetitionFootballCategoryEnum.CLUB),
+
+]
+
+
+COUNTRIES = {
+    'Україна': {
+        'code_2': 'ua',
+        'code_3': 'ukr',
+        'flag_code': 'ua',
+    },
+    'Англія': {
+        'code_2': 'en',
+        'code_3': 'eng',
+        'flag_code': 'gb',
+    },
+    'Іспанія': {
+        'code_2': 'es',
+        'code_3': 'esp',
+        'flag_code': 'es',
+    },
+    'Італія': {
+        'code_2': 'it',
+        'code_3': 'its',
+        'flag_code': 'it',
+    },
+    'Німеччина': {
+        'code_2': 'ge',
+        'code_3': 'ger',
+        'flag_code': 'ge',
+    },
+    'Франція': {
+        'code_2': 'fr',
+        'code_3': 'fra',
+        'flag_code': 'fr',
+    },
+    'Нідерланди': {
+        'code_2': 'nl',
+        'code_3': 'nld',
+        'flag_code': 'nl',
+    },
+    'Португалія': {
+        'code_2': 'pt',
+        'code_3': 'prt',
+        'flag_code': 'pt',
+    },
+    'Європа': {
+        'code_2': '-',
+        'code_3': '-',
+        'flag_code': '-',
+    },
+    'Світ': {
+        'code_2': '-',
+        'code_3': '-',
+        'flag_code': '-',
+    },
+    'Інше': {
+        'code_2': '-',
+        'code_3': '-',
+        'flag_code': '-',
+    },
+}

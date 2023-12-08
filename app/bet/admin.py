@@ -10,7 +10,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class SportKindAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_active']
+    list_display = ['user', 'name', 'is_active']
 
 
 class TeamAdmin(admin.ModelAdmin):
@@ -18,21 +18,17 @@ class TeamAdmin(admin.ModelAdmin):
 
 
 class CompetitionBaseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'sport_kind', 'country']
+    list_display = ['user', 'name', 'sport_kind', 'country']
 
 
 class CompetitionFootballAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'sport_kind', 'country']
+    list_display = ['user', 'name', 'category', 'sport_kind', 'country']
 
 
 class BetBaseAdmin(admin.ModelAdmin):
-    list_display = ['get_user_username', 'amount', 'coefficient', 'profit', 'result', 'live_type',
+    list_display = ['user', 'amount', 'coefficient', 'profit', 'result', 'live_type',
                     'date_game', 'sport_kind', 'is_favourite']
     actions = ["generate_bet_base", "trigger_save"]
-
-    @admin.display(ordering='user__username', description='User')
-    def get_user_username(self, obj):
-        return obj.user.username
 
     @admin.action(description="Generate Bets")
     def generate_bet_base(self, request, queryset):
@@ -45,14 +41,10 @@ class BetBaseAdmin(admin.ModelAdmin):
 
 
 class BetFootballAdmin(admin.ModelAdmin):
-    list_display = ['get_user_username', 'prediction', 'amount', 'coefficient', 'result',
+    list_display = ['user', 'prediction', 'amount', 'coefficient', 'result',
                     'team_home', 'team_guest', 'bet_type',
                     'competition', 'game_status']
     actions = ["generate_bet_football", "trigger_save"]
-
-    @admin.display(ordering='user__username', description='User')
-    def get_user_username(self, obj):
-        return obj.user.username
 
     @admin.action(description="Generate Football Bets")
     def generate_bet_football(self, request, queryset):

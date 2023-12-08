@@ -13,7 +13,7 @@ from django.views.generic.list import ListView
 from django.utils.timezone import now
 
 from .mixins import BetFilterMixin
-from .models import BetBase, BetFootball, CompetitionFootball, CompetitionBase
+from .models import BetBase, BetFootball, CompetitionFootball, CompetitionBase, SportKind
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES, \
     COMPETITION_RATING_TABLE_FIELD_NAMES, BetFootballTypeEnum, SPORT_KIND_RATING_TABLE_FIELD_NAMES, \

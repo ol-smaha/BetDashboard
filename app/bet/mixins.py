@@ -13,11 +13,11 @@ class BetFilterMixin:
 
         sport_kind_values = self.request.GET.getlist('sport_kind')
         if sport_kind_values:
-            qs = qs.filter(sport_kind__name__in=sport_kind_values)
+            qs = qs.filter(sport_kind__id__in=sport_kind_values)
 
         betting_service_values = self.request.GET.getlist('betting_service')
         if betting_service_values:
-            qs = qs.filter(betting_service__name__in=betting_service_values)
+            qs = qs.filter(betting_service__id__in=betting_service_values)
 
         date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
@@ -72,6 +72,6 @@ class BetFilterMixin:
 
         competition_values = self.request.GET.getlist('competition')
         if competition_values:
-            qs = qs.filter(competition__name__in=competition_values)
+            qs = qs.filter(competition__id__in=competition_values)
 
         return qs

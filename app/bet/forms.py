@@ -18,6 +18,10 @@ class OrderingBaseForm(forms.Form):
 
 
 class BetBaseFilterForm(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
     sport_kind = forms.MultipleChoiceField(
         choices=SportKind.name_choices(),
         required=False,
