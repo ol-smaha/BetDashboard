@@ -44,13 +44,13 @@
                     <div class="collapse navbar-collapse " id="navbarSupportedContent">
                         <ul class="navbar-nav ml-auto navbar-right-top">
                             <li class="nav-item dropdown nav-user">
-                                <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/avatar-1.jpg' %}" alt="" class="user-avatar-md rounded-circle"></a>
+                                <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/avatar_img.png' %}" alt="" class="user-avatar-md rounded-circle"></a>
                                 <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
                                     <div class="nav-user-info">
                                         <h5 class="mb-0 text-white nav-user-name"> {{ user.username|title }} </h5>
                                     </div>
                                     <a class="dropdown-item" href="{% url 'bet_profile' %}"><i class="fas fa-user-circle mr-2"></i>Профіль</a>
-                                    <a class="dropdown-item" href="{% url 'about' %}"><i class="fas fa-user-circle mr-2"></i>Зворотній зв'язок</a>
+                                    <a class="dropdown-item" href="{% url 'about' %}"><i class="mdi mdi-message-reply-text mr-2"></i>Зворотній зв'язок</a>
                                     <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fas fa-power-off mr-2"></i>Вийти</a>
                                 </div>
                             </li>
