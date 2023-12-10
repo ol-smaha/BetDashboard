@@ -24,14 +24,14 @@ def reverse_dict(dct):
 
 def generate_bets():
     BetBase.objects.all().delete()
-    sport_kind, _ = SportKind.objects.get_or_create(name="Футбол")
+    user = UserModel.objects.get(username='admin')
+    sport_kind, _ = SportKind.objects.get_or_create(user=user, name="Футбол")
 
     for year in range(2020, 2024):
         for month in range(1, 13):
             for day in range(1, 29):
                 bet_count = random.randrange(3, 6)
                 for i in range(bet_count):
-                    user = UserModel.objects.get(username='admin')
                     amount = random.randrange(100, 300)
                     coefficient = round(random.uniform(1.5, 2.2), 2)
                     result = random.choice(BetResultEnum.values())
@@ -53,12 +53,11 @@ def generate_football_bets():
     BetFootball.objects.all().delete()
     user = UserModel.objects.get(username='admin')
 
-    sport_kind_football, _ = SportKind.objects.get_or_create(name="Футбол")
-    sport_kind_basketball, _ = SportKind.objects.get_or_create(name="Баскетбол")
-    sport_kind_tennis, _ = SportKind.objects.get_or_create(name="Теніс")
+    sport_kind_football, _ = SportKind.objects.get_or_create(user=user, name="Футбол")
+    sport_kind_basketball, _ = SportKind.objects.get_or_create(user=user, name="Баскетбол")
+    sport_kind_tennis, _ = SportKind.objects.get_or_create(user=user, name="Теніс")
 
     country_spain, _ = Country.objects.get_or_create(name='Іспанія', flag_code='es')
-    country_germany, _ = Country.objects.get_or_create(name='Німеччина', flag_code='ge')
     country_england, _ = Country.objects.get_or_create(name='Англія', flag_code='gb')
     country_italy, _ = Country.objects.get_or_create(name='Італія', flag_code='it')
 
