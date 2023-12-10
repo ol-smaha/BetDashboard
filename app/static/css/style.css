@@ -887,7 +887,7 @@ Background Color / Color
 }
 
 .bg-info {
-    background-color: #236995 !important;
+    background-color: #124265 !important;
 }
 
 .bg-light {
@@ -1033,7 +1033,7 @@ Borders
 }
 
 .border-info {
-    border-color: #236995 !important;
+    border-color: #124265 !important;
 }
 
 
@@ -1248,10 +1248,11 @@ Top Header
     font-size: 30px;
     text-transform: uppercase;
     font-weight: 700;
-    color: #236995;
+    color: #124265;
+
 }
 .navbar-brand:hover{
-    color: #236995;
+    color: #124265;
 }
 .navbar-right-top {}
 
@@ -3578,13 +3579,13 @@ btn-link
 
 .tab-regular .nav.nav-tabs .nav-link:focus,
 .tab-regular .nav.nav-tabs .nav-link:hover {
-    color: #236995;
+    color: #124265;
 }
 
 .tab-regular .nav-tabs .nav-link.active {
     background-color: #fff;
     border-color: #e6e6f2 #e6e6f2 #fff;
-    color: #236995;
+    color: #124265;
 }
 
 .tab-regular .tab-content {
@@ -3666,7 +3667,7 @@ btn-link
 .tab-outline .nav.nav-tabs .nav-item {}
 
 .tab-outline .nav-tabs .nav-link.active {
-    color: #236995 !important;
+    color: #124265 !important;
     background-color: transparent !important;
     border-color: #c4c4cf #c4c4cf #efeff6 !important;
 }
@@ -3674,7 +3675,7 @@ btn-link
 .tab-outline .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover {
     border-color: transparent;
-    color: #236995 !important;
+    color: #124265 !important;
 }
 
 .tab-outline .tab-content {
@@ -4251,8 +4252,8 @@ Pills vertical
 }
 
 .spinner-info {
-    border-top-color: #236995;
-    border-left-color: #236995;
+    border-top-color: #124265;
+    border-left-color: #124265;
 }
 
 @-webkit-keyframes spin {

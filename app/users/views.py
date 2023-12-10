@@ -48,5 +48,7 @@ class TermsConditionsView(TemplateView):
     template_name = 'terms/terms_and_conditions.html'
 
 
+class HomeView(TemplateView):
+    template_name = 'landing/index.html'
 
 

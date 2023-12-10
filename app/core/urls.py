@@ -20,13 +20,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
-from users.views import HomePageView, Tariff
+from users.views import HomePageView, Tariff, HomeView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', RedirectView.as_view(url=reverse_lazy('bet_calendar'), permanent=False), name='home'),
+    # path('', RedirectView.as_view(url=reverse_lazy('bet_calendar'), permanent=False), name='home'),
     path('', include('users.urls')),
+    path('', HomeView.as_view(), name='home'),
     path('bet/', include('bet.urls')),
     # path("__debug__/", include("debug_toolbar.urls")),
 

@@ -50,6 +50,7 @@
                                         <h5 class="mb-0 text-white nav-user-name"> {{ user.username|title }} </h5>
                                     </div>
                                     <a class="dropdown-item" href="{% url 'bet_profile' %}"><i class="fas fa-user-circle mr-2"></i>Профіль</a>
+                                    <a class="dropdown-item" href="{% url 'about' %}"><i class="fas fa-user-circle mr-2"></i>Зворотній зв'язок</a>
                                     <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fas fa-power-off mr-2"></i>Вийти</a>
                                 </div>
                             </li>
@@ -139,24 +140,20 @@
         <div class="dashboard-wrapper">
             {% block main %}
             {% endblock main %}
-
-            {% block footer %}
-                <div class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="{% url 'about' %}">Зв'язок з нами</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endblock footer %}
         </div>
     </div>
+
+<!--    {% block footer %}-->
+<!--    <div class="footer">-->
+<!--        <div class="container-fluid">-->
+<!--            <div class="row">-->
+<!--                <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 col-12">-->
+<!--                        <a href="{% url 'about' %}">Про нас</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    {% endblock footer %}-->
 
     <!-- js scripts -->
     <script src="{% static 'vendor/jquery/jquery-3.3.1.min.js' %}"></script>
@@ -182,6 +179,8 @@
     <script src="{% static 'vendor/full-calendar/js/fullcalendar.js' %}"></script>
     <script src="{% static 'vendor/full-calendar/js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'vendor/full-calendar/js/calendar.js' %}"></script>
+    <script src="{% static 'vendor/timeline/js/main.js' %}"></script>
+
     <script>
         $('#confirm-delete').on('show.bs.modal', function(e) {
             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
