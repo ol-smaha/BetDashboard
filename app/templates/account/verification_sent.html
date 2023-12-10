@@ -6,24 +6,24 @@
 
 {% block content %}
 
-<!--<div class="splash-container">-->
-<!--    <div class="card">-->
-<!--        <div class="card-header text-center"><img class="logo-img" src="{% static 'images/logo4.png' %}" alt="logo">-->
-<!--            {% if user.is_authenticated %}-->
-<!--                <span class="splash-description">You are already logged.</span>-->
-<!--            {% else %}-->
-<!--                <span class="splash-description">-->
-<!--                    We have sent an email to you for verification. Follow the link provided to finalize the-->
-<!--                    signup process. If you do not see the verification email in your main inbox, check your spam folder.-->
-<!--                    Please contact us if you do not receive the verification email within a few minutes.-->
-<!--                </span>-->
-<!--            {% endif %}-->
-<!--        </div>-->
-<!--        <div class="card-footer text-center">-->
-<!--            <span>Don't have an account? <a href="{% url 'account_signup' %}">Sign Up</a></span>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="splash-container">
+    <div class="card">
+        <div class="card-header text-center"><a class="navbar-brand" href="#">Bet Dashboard</a>
+            {% if user.is_authenticated %}
+                <span class="splash-description">Ви вже авторизовані!</span>
+            {% else %}
+                <span class="splash-description">
+                    Ми надіслали вам електронний лист для перевірки. Перейдіть за наданим посиланням, щоб завершити
+                    процес реєстрації. Якщо ви не бачите електронного листа для підтвердження у своїй основній папці "Вхідні", перевірте папку зі спамом.
+                    Зв’яжіться з нами, якщо ви не отримаєте електронний лист із підтвердженням протягом кількох хвилин.
+                </span>
+            {% endif %}
+        </div>
+        <div class="card-footer text-center">
+            <span>Ще не маєте акаунту? <a href="{% url 'account_signup' %}" class="text-info">Створити акаунт</a></span>
+        </div>
+    </div>
+</div>
 
 
 {% endblock content %}

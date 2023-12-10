@@ -15,7 +15,7 @@ class Country(models.Model):
     name = models.CharField(max_length=64, unique=True)
     code2 = models.CharField(max_length=2, null=True, blank=True)
     code3 = models.CharField(max_length=4, null=True, blank=True)
-    flag_code = models.CharField(max_length=4, null=True, blank=True)
+    flag_code = models.CharField(max_length=8, null=True, blank=True)
 
     @classmethod
     def name_choices(cls):
@@ -40,9 +40,11 @@ class SportKind(models.Model):
     @classmethod
     def name_choices(cls):
         qs = cls.objects.all()
-        if current_request and current_request.user:
-            qs = qs.filter(user=current_request.user)
-
+        try:
+            if current_request and current_request.user:
+                qs = qs.filter(user=current_request.user)
+        except:
+            pass
         choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
         return choices
 
@@ -51,7 +53,7 @@ class SportKind(models.Model):
 
 
 class Team(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+    name = models.CharField(max_length=128)
     name_extended = models.CharField(max_length=256, unique=True)
     category = models.CharField(max_length=32, choices=TeamCategoryEnum.choices(),
                                 default=TeamCategoryEnum.UNKNOWN)
@@ -81,8 +83,12 @@ class CompetitionBase(models.Model):
     @classmethod
     def name_choices(cls):
         qs = cls.objects.all().values_list('name', flat=True)
-        if current_request and current_request.user:
-            qs = qs.filter(user=current_request.user)
+        try:
+            if current_request and current_request.user:
+                qs = qs.filter(user=current_request.user)
+
+        except:
+            pass
         choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
         return choices
 
@@ -103,8 +109,11 @@ class BettingService(models.Model):
     @classmethod
     def name_choices(cls):
         qs = cls.objects.all()
-        if current_request and current_request.user:
-            qs = qs.filter(user=current_request.user)
+        try:
+            if current_request and current_request.user:
+                qs = qs.filter(user=current_request.user)
+        except:
+            pass
         choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
         return choices
 

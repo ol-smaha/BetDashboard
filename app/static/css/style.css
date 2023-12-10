@@ -1476,11 +1476,11 @@ Top Header
 .nav-user-name {}
 
 .nav-user-info {
-    background-color: #5969ff;
+    background-color: #0e0c28;
     line-height: 1.4;
-    padding: 12px;
+    padding: 15px;
     color: #fff;
-    font-size: 13px;
+    font-size: 15px;
     border-radius: 2px 2px 0 0;
 }
 
@@ -1498,17 +1498,18 @@ Top Header
     padding: 12px 22px 15px;
     clear: both;
     font-weight: 400;
-    color: #686972;
+    color: #0e0c28;
     text-align: inherit;
     white-space: nowrap;
     background-color: transparent;
     border: 0;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 0.4;
 }
 
 .nav-user-dropdown .dropdown-item:hover {
-    background-color: #f7f7fb;
+    background-color: #dedede;
+    color: #0e0c28;
 }
 
 

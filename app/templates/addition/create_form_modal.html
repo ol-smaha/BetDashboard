@@ -11,6 +11,7 @@
                 <form method="POST" action="{% url create_form_action %}">
                     <div class="form-group">
                         {% csrf_token %}
+
                         {% for field in create_form.hidden_fields %}
                             {{ field }}
                         {% endfor %}
@@ -21,9 +22,9 @@
                                         {{ field.label }} {% if field.field.required %} <span style="color: red">*</span> {% endif %}
                                     </label>
                                     <div class="col-9 col-lg-10">
-                                        <div class="input-group date" id="{{field.name}}datepicker" data-target-input="nearest">
+                                        <div class="input-group date" id="{{create_form_action}}_datepicker" data-target-input="nearest">
                                         {{ field }}
-                                        <div class="input-group-append" data-target="#{{field.name}}datepicker" data-toggle="datetimepicker">
+                                        <div class="input-group-append" data-target="#{{create_form_action}}_datepicker" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
                                         </div>
                                         </div>
@@ -48,6 +49,7 @@
                                     </div>
                                 </div>
                             {% endif %}
+
                         {% endfor %}
                         <div class="col-sm-12">
                             <p class="text-right">

@@ -1,3 +1,4 @@
+import csv
 import datetime
 import random
 
@@ -168,3 +169,33 @@ def create_default_competition_football(user):
             CompetitionBase.objects.create(user=user, name=name, sport_kind=sport_kind, country=country)
     except Exception as e:
         print(e)
+
+
+def generate_default_data(user):
+    with open('teams.csv') as csv_file:
+        data = csv.DictReader(csv_file)
+        sport_kind_obj, _ = SportKind.objects.get_or_create(user=user, name='Футбол')
+        for row in data:
+            country_name = row.get('country')
+            competition_name = f"{row.get('competition')} ({country_name})"
+            teams = row.get('teams', '').split('\n')
+
+            for team_name in teams:
+                if country_name and competition_name and team_name and sport_kind_obj:
+                    try:
+                        country_obj, _ = Country.objects.get_or_create(name=country_name)
+                        competition_obj, _ = CompetitionBase.objects.get_or_create(
+                            user=user,
+                            name=competition_name,
+                            sport_kind=sport_kind_obj,
+                            country=country_obj,
+                        )
+                        team_obj, _ = Team.objects.get_or_create(
+                            name=team_name,
+                            name_extended=f'{team_name} ({country_name})',
+                            category=TeamCategoryEnum.CLUB,
+                            sport_kind=sport_kind_obj,
+                            country=country_obj,
+                        )
+                    except Exception as e:
+                        print(e)

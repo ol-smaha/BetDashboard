@@ -37,12 +37,13 @@ class CustomUser(AbstractUser):
         created = self.pk is None
         super(CustomUser, self).save(*args, **kwargs)
         if created:
-            from bet.utils import (create_default_sport_kind, create_default_countries,
+            from bet.utils import (create_default_sport_kind, create_default_countries, generate_default_data,
                                    create_default_competition_football, create_default_betting_services)
 
-            create_default_countries()
-            create_default_sport_kind(self)
-            create_default_competition_football(self)
+            # create_default_countries()
+            # create_default_sport_kind(self)
+            # create_default_competition_football(self)
+            generate_default_data(self)
             create_default_betting_services(self)
 
     def __str__(self):

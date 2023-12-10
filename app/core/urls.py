@@ -25,10 +25,10 @@ from users.views import HomePageView, Tariff
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', RedirectView.as_view(url=reverse_lazy('bet_calendar'), permanent=False), name='index'),
+    path('', RedirectView.as_view(url=reverse_lazy('bet_calendar'), permanent=False), name='home'),
     path('', include('users.urls')),
     path('bet/', include('bet.urls')),
-    path("__debug__/", include("debug_toolbar.urls")),
+    # path("__debug__/", include("debug_toolbar.urls")),
 
 ]
 

@@ -44,6 +44,8 @@ class AboutUsView(CreateView):
         return context
 
 
+class TermsConditionsView(TemplateView):
+    template_name = 'terms/terms_and_conditions.html'
 
 
 

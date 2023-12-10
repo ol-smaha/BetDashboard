@@ -18,10 +18,6 @@ class OrderingBaseForm(forms.Form):
 
 
 class BetBaseFilterForm(forms.Form):
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user = user
-
     sport_kind = forms.MultipleChoiceField(
         choices=SportKind.name_choices(),
         required=False,
@@ -82,13 +78,15 @@ class BetBaseFilterForm(forms.Form):
         required=False,
         input_formats='%m/%d/%Y',
         label='Дата з',
-        widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input'})
+        widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input',
+                                      'pattern': "\d{2}/\d{2}/\d{4}"})
     )
     date_game_end = forms.DateField(
         required=False,
         input_formats='%m/%d/%Y',
         label='Дата по',
-        widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input'})
+        widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input',
+                                      'pattern': "\d{2}/\d{2}/\d{4}"})
     )
     is_favourite = forms.MultipleChoiceField(
         choices=BOOL_FIELD_CHOICES,
@@ -175,7 +173,8 @@ class BetCreateForm(ModelForm):
             'betting_service': forms.Select(attrs={'class': 'selectize-control single',
                                                    'placeholder': 'Виберіть значення...'}),
             'date_game': forms.DateInput(attrs={'class': 'form-control',
-                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}'}),
+                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}',
+                                                'pattern': "\d{2}/\d{2}/\d{4}"}),
             'is_favourite': forms.Select(attrs={'class': 'selectize-control single'},
                                          choices=BOOL_FIELD_CHOICES),
         }
@@ -223,7 +222,8 @@ class BetFootballCreateForm(ModelForm):
             'team_guest': forms.Select(attrs={'class': 'selectize-control single',
                                               'placeholder': 'Виберіть значення...'}),
             'date_game': forms.DateInput(attrs={'class': 'form-control',
-                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}'}),
+                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}',
+                                                'pattern': "\d{2}/\d{2}/\d{4}"}),
             'is_favourite': forms.Select(attrs={'class': 'selectize-control single'},
                                          choices=BOOL_FIELD_CHOICES),
         }

@@ -57,6 +57,21 @@ jQuery(document).ready(function($) {
 
     }
 
+    if ($("#bet_create_datepicker").length) {
+        $('#bet_create_datepicker').datetimepicker({
+            format: 'L'
+        });
+
+    }
+
+    if ($("#bet_football_create_datepicker").length) {
+        $('#bet_football_create_datepicker').datetimepicker({
+            format: 'L'
+        });
+
+    }
+
+
     if ($("#datetimepicker5").length) {
         $('#datetimepicker5').datetimepicker();
 

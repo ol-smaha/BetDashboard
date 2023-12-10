@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from bet.models import Country, SportKind, Team, CompetitionBase, BetBase, BetFootball, \
     BettingService
-from bet.utils import generate_bets, generate_football_bets
+from bet.utils import generate_bets, generate_football_bets, generate_default_data
 
 
 class CountryAdmin(admin.ModelAdmin):
@@ -19,6 +19,11 @@ class TeamAdmin(admin.ModelAdmin):
 
 class CompetitionBaseAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'sport_kind', 'country']
+    actions = ["create_from_csv"]
+
+    @admin.action(description="Generate competitions and teams from csv")
+    def create_from_csv(self, request, queryset):
+        generate_default_data()
 
 
 class BetBaseAdmin(admin.ModelAdmin):

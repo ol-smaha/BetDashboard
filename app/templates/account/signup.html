@@ -7,50 +7,61 @@
 
 {% block content %}
 
-<form class="splash-container" method="post">
+<div class="splash-container">
     <div class="card">
-        <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="logo"></a>
-            <span class="splash-description">Please enter your user information.</span>
+        <div class="card-header text-center"><a class="navbar-brand" href="#">Bet Dashboard</a>
+            <span class="splash-description">Введіть дані для реєстрації.</span>
         </div>
-        <div class="card-body">
-            {% csrf_token %}
-            {% for field in form.visible_fields %}
-            <div class="form-group">
-                {% if field.name == 'email' %}
-                    <input class="form-control form-control-lg" type="email" name="{{ field.name }}"
-                           id="{{ field.auto_id }}" placeholder="{{ field.label }}" autocomplete="off">
-                {% elif field.name == 'password1' or field.name == 'password2'%}
-                    <input class="form-control form-control-lg" type="password" name="{{ field.name }}"
-                           id="{{ field.auto_id }}" placeholder="{{ field.label }}" autocomplete="off">
-                {% else %}
-                    <input class="form-control form-control-lg" type="text" name="{{ field.name }}"
-                           id="{{ field.auto_id }}" placeholder="{{ field.label }}" autocomplete="off">
-                {% endif %}
-            </div>
-            {% endfor %}
-
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Sign up</button>
-
-            <div class="form-group">
-                <label class="custom-control custom-checkbox">
-                    <input class="custom-control-input" type="checkbox"><span class="custom-control-label">By creating an account, you agree the <a href="#">terms and conditions</a></span>
-                </label>
-            </div>
-
-            <div class="form-group row pt-0">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                    <a href="{% provider_login_url 'google' %}">
-                        <button class="btn btn-block btn-social btn-twitter " type="button">
-                            Google
-                        </button>
-                    </a>
+        <form method="post">
+            <div class="card-body">
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                <div class="form-group">
+                    {% if form.errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-error">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if field.name == 'email' %}
+                        <input class="form-control form-control-lg" type="email" name="{{ field.name }}"
+                               id="{{ field.auto_id }}" placeholder="{{ field.label }}" autocomplete="off">
+                    {% elif field.name == 'password1' or field.name == 'password2'%}
+                        <input class="form-control form-control-lg" type="password" name="{{ field.name }}"
+                               id="{{ field.auto_id }}" placeholder="{{ field.label }}" autocomplete="off">
+                    {% else %}
+                        <input class="form-control form-control-lg" type="text" name="{{ field.name }}"
+                               id="{{ field.auto_id }}" placeholder="{{ field.label }}" autocomplete="off">
+                    {% endif %}
+                    {% for error in field.errors %}
+                            <div class="alert alert-error">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                    {% endfor %}
                 </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Sign up</button>
+                <p></p>
+                <div class="form-group row pt-0">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+                        <a href="{% provider_login_url 'google' %}">
+                            <button class="btn btn-block btn-social btn-twitter " type="button">
+                                Google
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+                <span class="custom-label">Реєструючись, Ви підтверджуєте, що ознайомились та погоджуєтесь з <a class="text-info" href="{% url 'terms' %}">правилами та умовами використання сайту.</a></span>
+
             </div>
-        </div>
+        </form>
         <div class="card-footer bg-white">
-            <p>Already member? <a href="{% url 'account_login' %}" class="text-secondary">Sing In.</a></p>
+            <p>Вже маєте акаунт? <a href="{% url 'account_login' %}" class="text-info">Увійти.</a></p>
         </div>
     </div>
-</form>
+</div>
 
 {% endblock content %}

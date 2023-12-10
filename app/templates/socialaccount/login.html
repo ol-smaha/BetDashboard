@@ -7,9 +7,9 @@
 {% block content %}
 <div class="splash-container">
     <div class="card">
-        <div class="card-header text-center"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="logo">
+        <div class="card-header text-center"><a class="navbar-brand" href="#">Bet Dashboard</a>
             <span class="splash-description">
-                You are about to sign in using a third-party account from {{ provider.name }}.
+                Ви збираєтесь увійти, використовуючи обліковий запис третьої сторони з {{ provider.name }}.
             </span>
 
         </div>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="card-footer text-center">
-            <span> Ще не маєте акаунту? <a href="{% url 'account_signup' %}"> Зареєструватись </a></span>
+            <span> Ще не маєте акаунту? <a href="{% url 'account_signup' %}"> Створити акаунт </a></span>
         </div>
     </div>
 </div>

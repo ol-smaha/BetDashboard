@@ -2,6 +2,7 @@ import json
 from datetime import datetime, date
 
 from dateutil.relativedelta import relativedelta
+from django.contrib.auth.models import AnonymousUser
 
 from django.db.models import Count, Sum, F, Avg, Min, Case, Window, When, IntegerField, Q
 from django.db.models.functions import TruncMonth, TruncYear
@@ -31,8 +32,10 @@ class BetHistoryView(BetFilterMixin, ListView):
     template_name = 'bet/bet_history.html'
 
     def base_queryset(self):
-        return (self.model.objects.filter(user=self.request.user).order_by('-date_game', '-id')
-                .select_related('sport_kind', 'betting_service'))
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return (self.model.objects.filter(user=self.request.user).order_by('-date_game', '-id')
+                    .select_related('sport_kind', 'betting_service'))
+        return self.model.objects.none()
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('sport_kind', 'betting_service')
@@ -41,6 +44,8 @@ class BetHistoryView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetHistoryFilterForm(self.request.GET)
+        print(self.request.GET)
+        print(dir(filter_form.fields['amount_min']))
         filter_form.fields['sport_kind'].choices = SportKind.name_choices()
         filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
@@ -116,7 +121,9 @@ class BetGraphsView(ListView):
         return data
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -304,7 +311,9 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
         return data
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -348,7 +357,9 @@ class Statistic(BetFilterMixin, ListView):
     template_name = 'bet/statistic.html'
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -395,9 +406,12 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
     template_name = 'bet/bet_football_history.html'
 
     def base_queryset(self):
-        return (self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
-                .order_by('-date_game', '-id').select_related('sport_kind', 'betting_service',
-                                                              'team_home', 'team_guest', 'competition'))
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return (self.model.objects.filter(sport_kind__name='Футбол', user=self.request.user)
+                    .order_by('-date_game', '-id')
+                    .select_related('sport_kind', 'betting_service', 'team_home', 'team_guest', 'competition'))
+        return self.model.objects.none()
+
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('team_home', 'team_guest',
@@ -615,7 +629,9 @@ class BetGraphsResultView(BetFilterMixin, ListView):
         return data
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -856,11 +872,13 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
             date_str = day_date.strftime(date_format)
             roi = elem.get('roi', 0.00)
             count = elem.get('count', 0)
-            data.update({date_str: {'Рентабельність': round(float(roi), 2), 'count': count}})
+            data.update({date_str: {'Рентабельність (%)': round(float(roi), 2), 'count': count}})
         return data
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -879,8 +897,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
                 self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'roi_year_line_data': MorrisChartLine.to_json_data(
                 self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.YEARS, date_format='%Y')),
-            'roi_line_ykeys': json.dumps(["Рентабельність"]),
-            'roi_line_labels': json.dumps(["Рентабельність"]),
+            'roi_line_ykeys': json.dumps(["Рентабельність (%)"]),
+            'roi_line_labels': json.dumps(["Рентабельність (%)"]),
 
             'roi_last_bar_data': MorrisChartBar.to_json_data(
                 self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.LAST_30_DAYS)),
@@ -888,8 +906,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
                 self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'roi_year_bar_data': MorrisChartBar.to_json_data(
                 self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.YEARS, date_format='%Y')),
-            'roi_bar_ykeys': json.dumps(["Рентабельність"]),
-            'roi_bar_labels': json.dumps(["Рентабельність"]),
+            'roi_bar_ykeys': json.dumps(["Рентабельність (%)"]),
+            'roi_bar_labels': json.dumps(["Рентабельність (%)"]),
 
             'filter_form': filter_form,
             'title': 'Рентабельність',
@@ -905,7 +923,6 @@ class BetCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-
         bet_create_form = self.form_class()
         bet_create_form.fields['user'].initial = self.request.user.pk
         bet_create_form.fields['user'].widget = HiddenInput()
@@ -933,7 +950,9 @@ class BetBaseChangeFavouriteStatusView(DetailView):
     pk_url_kwarg = 'id'
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get(self, request, *args, **kwargs):
         self.get_object().change_is_favourite()
@@ -962,6 +981,9 @@ class BetFootballCreateView(CreateView):
             'menu_key': 'bet_football_create',
         })
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return redirect(reverse_lazy('bet_create'))
 
 
 class BetFootballChangeFavouriteStatusView(DetailView):
@@ -1147,7 +1169,9 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
         return data
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -1249,7 +1273,9 @@ class RatingGraphsView(BetFilterMixin, ListView):
         return data
 
     def base_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
@@ -1281,7 +1307,9 @@ class CalendarView(ListView):
     template_name = 'bet/calendar.html'
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
 
     def _prepare_calendar_data(self):
         data = {}
@@ -1319,6 +1347,9 @@ class ProfileView(ListView):
     model = BetBase
     template_name = 'bet/profile.html'
 
+    def get_active_tab(self):
+        return int(self.request.GET.get('active_tab', 1))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         sport_kind_objects = self.request.user.sport_kinds.all()
@@ -1354,9 +1385,9 @@ class ProfileView(ListView):
             'create_competition_form': create_competition_form,
             'create_service_form': create_service_form,
 
-            'query_parametes': self.request.GET,
+            'active_tab': self.get_active_tab(),
         })
-
+        print(context['active_tab'])
         return context
 
 
@@ -1386,6 +1417,7 @@ class SportKindDeleteView(DetailView):
 
 class CompetitionDeleteView(DetailView):
     model = CompetitionBase
+    pk_url_kwarg = 'id'
 
     def get(self, request, *args, **kwargs):
         self.get_object().delete()

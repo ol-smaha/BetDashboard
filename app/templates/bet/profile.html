@@ -10,23 +10,23 @@
                 <div class="tab-regular">
                     <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link show active" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
+                            <a class="nav-link {% if active_tab == 1 %}show active{% endif %}" id="now-profit-line-tab" href="#now-profit-line" data-toggle="tab"  role="tab" aria-controls="now" aria-selected="true">
                                 Турніри
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
+                            <a class="nav-link {% if active_tab == 2 %}show active{% endif %}" id="last-profit-line-tab" href="#last-profit-line" data-toggle="tab" role="tab" aria-controls="last" aria-selected="false">
                                 Види спорту
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="month-profit-line-tab" href="#month-profit-line" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
+                            <a class="nav-link {% if active_tab == 3 %}show active{% endif %}" id="month-profit-line-tab" href="#month-profit-line" data-toggle="tab" role="tab" aria-controls="month" aria-selected="false">
                                 Сервіси
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
+                        <div class="tab-pane fade {% if active_tab == 1 %}show active{% endif %}" id="now-profit-line" role="tabpanel" aria-labelledby="now-profit-line-tab">
                             <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
                                 {% include 'addition/create_form_modal.html' with create_form=create_competition_form create_form_action='create_competition_form' button_color='primary'%}
                             </div>
@@ -60,7 +60,7 @@
                                                         <span class="traffic-sales-name">{{obj.sport_kind.name}}</span>
                                                     </td>
                                                     <td>
-                                                        <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_competition_delete' obj.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete">
+                                                        <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_competition_delete' obj.id %}?{{ request.GET.urlencode }}&active_tab=1" data-toggle="modal" data-target="#confirm-delete">
                                                             <span><i class="mdi mdi-close-box-outline"></i></span>
                                                         </a>
                                                         <!-- Modal -->
@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
+                        <div class="tab-pane fade {% if active_tab == 2 %}show active{% endif %}" id="last-profit-line" role="tabpanel" aria-labelledby="last-profit-line-tab">
                             <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
                                 {% include 'addition/create_form_modal.html' with create_form=create_sport_kind_form create_form_action='create_sport_kind_form' button_color='primary'%}
                             </div>
@@ -118,7 +118,7 @@
                                                     <span class="traffic-sales-name">{{obj.name}}</span>
                                                 </td>
                                                 <td>
-                                                    <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_sport_kind_delete' obj.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete-2">
+                                                    <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_sport_kind_delete' obj.id %}?{{ request.GET.urlencode }}&active_tab=2" data-toggle="modal" data-target="#confirm-delete-2">
                                                         <span><i class="mdi mdi-close-box-outline"></i></span>
                                                     </a>
                                                     <!-- Modal -->
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
+                        <div class="tab-pane fade {% if active_tab == 3 %}show active{% endif %}" id="month-profit-line" role="tabpanel" aria-labelledby="month-profit-line-tab">
                             <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
                                 {% include 'addition/create_form_modal.html' with create_form=create_service_form create_form_action='create_service_form' button_color='primary'%}
                             </div>
@@ -175,7 +175,7 @@
                                                     <span class="traffic-sales-name">{{obj.name}}</span>
                                                 </td>
                                                 <td>
-                                                    <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_service_delete' obj.id %}?{{ request.GET.urlencode }}" data-toggle="modal" data-target="#confirm-delete-3">
+                                                    <a class="favorite" style="float: right;" href="#" data-href="{% url 'bet_service_delete' obj.id %}?{{ request.GET.urlencode }}&active_tab=3" data-toggle="modal" data-target="#confirm-delete-3">
                                                         <span><i class="mdi mdi-close-box-outline"></i></span>
                                                     </a>
                                                     <!-- Modal -->
