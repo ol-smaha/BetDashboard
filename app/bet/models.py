@@ -170,7 +170,7 @@ class BetBase(models.Model):
         if self.profit is None:
             self.profit = self.calculate_profit()
 
-        if self.sport_kind and self.sport_kind.name == 'Футбол' and not is_saved:
+        if not getattr(self, 'betfootball', None) and self.sport_kind and self.sport_kind.name == 'Футбол' and not is_saved:
             self.save_to_child_model('BetFootball', is_saved=True)
         else:
             if kwargs.get('is_saved'):

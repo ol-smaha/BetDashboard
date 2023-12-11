@@ -44,8 +44,6 @@ class BetHistoryView(BetFilterMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         filter_form = BetHistoryFilterForm(self.request.GET)
-        print(self.request.GET)
-        print(dir(filter_form.fields['amount_min']))
         filter_form.fields['sport_kind'].choices = SportKind.name_choices()
         filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
@@ -411,7 +409,6 @@ class FootballBetHistoryView(BetFilterMixin, ListView):
                     .order_by('-date_game', '-id')
                     .select_related('sport_kind', 'betting_service', 'team_home', 'team_guest', 'competition'))
         return self.model.objects.none()
-
 
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset()).select_related('team_home', 'team_guest',
@@ -1216,7 +1213,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
     def get_active_tab(self):
         return int(self.request.GET.get('active_tab', 1))
 
-    def annotate_qs(self, field_name, fields_dict):
+    def annotate_qs(self, queryset, field_name, fields_dict):
         ordering_tab = '-profit_sum'
         ordering_tab_raw_value = self.request.GET.get('ordering_tab')
         if ordering_tab_raw_value:
@@ -1224,7 +1221,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
             if ordering_tab_value:
                 ordering_tab = f"-{ordering_tab_value}"
 
-        qs = (self.get_queryset()
+        qs = (queryset
               .values(field_name)
               .annotate(profit_avg=Avg('profit'), profit_sum=Sum('profit'), amount_sum=Sum('amount'), count=Count('pk'))
               .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
@@ -1233,7 +1230,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
 
     def get_competitions_data(self):
         data = []
-        for obj in self.annotate_qs('competition__name', COMPETITION_RATING_TABLE_FIELD_NAMES):
+        for obj in self.annotate_qs(self.get_queryset(), 'competition__name', COMPETITION_RATING_TABLE_FIELD_NAMES):
             try:
                 flag = CompetitionBase.objects.get(name=obj.get('competition__name')).country.flag_code
             except:
@@ -1250,7 +1247,8 @@ class RatingGraphsView(BetFilterMixin, ListView):
 
     def get_sport_kind_data(self):
         data = []
-        for obj in self.annotate_qs('sport_kind__name', SPORT_KIND_RATING_TABLE_FIELD_NAMES):
+        queryset = BetBase.objects.filter(user=self.request.user)
+        for obj in self.annotate_qs(queryset, 'sport_kind__name', SPORT_KIND_RATING_TABLE_FIELD_NAMES):
             data.append({
                 'name': obj.get('sport_kind__name') or 'Iнше',
                 'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
@@ -1262,7 +1260,7 @@ class RatingGraphsView(BetFilterMixin, ListView):
 
     def get_bet_type_data(self):
         data = []
-        for obj in self.annotate_qs('bet_type', BET_TYPE_RATING_TABLE_FIELD_NAMES):
+        for obj in self.annotate_qs(self.get_queryset(), 'bet_type', BET_TYPE_RATING_TABLE_FIELD_NAMES):
             data.append({
                 'name': obj.get('bet_type') or BetFootballTypeEnum.UNKNOWN,
                 'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
