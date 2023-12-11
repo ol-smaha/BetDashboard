@@ -496,10 +496,220 @@ COUNTRIES = {
         'code_3': 'prt',
         'flag_code': 'pt',
     },
+    'Австрія': {
+        'code_2': 'at',
+        'code_3': 'atr',
+        'flag_code': 'at',
+    },
+    'Азербайджан': {
+        'code_2': 'az',
+        'code_3': 'azr',
+        'flag_code': 'az',
+    },
+    'Албанія': {
+        'code_2': 'al',
+        'code_3': 'alb',
+        'flag_code': 'al',
+    },
+    'Аргентина': {
+        'code_2': 'ar',
+        'code_3': 'arg',
+        'flag_code': 'ar',
+    },
+    'Бельгія': {
+        'code_2': 'be',
+        'code_3': 'blg',
+        'flag_code': 'be',
+    },
+    'Білорусь': {
+        'code_2': 'by',
+        'code_3': 'blr',
+        'flag_code': 'by',
+    },
+    'Болгарія': {
+        'code_2': 'bg',
+        'code_3': 'bgr',
+        'flag_code': 'bg',
+    },
+    'Боснія та Герцеговина': {
+        'code_2': 'ba',
+        'code_3': 'ba',
+        'flag_code': 'ba',
+    },
+    'Бразилія': {
+        'code_2': 'br',
+        'code_3': 'brz',
+        'flag_code': 'br',
+    },
+    'Греція': {
+        'code_2': 'gr',
+        'code_3': 'gr',
+        'flag_code': 'gr',
+    },
+    'Грузія': {
+        'code_2': 'ge',
+        'code_3': 'ger',
+        'flag_code': 'ge',
+    },
+    'Данія': {
+        'code_2': 'dk',
+        'code_3': 'dmk',
+        'flag_code': 'dk',
+    },
+    'Естонія': {
+        'code_2': 'ee',
+        'code_3': 'ee',
+        'flag_code': 'ee',
+    },
+    'Ізраїль': {
+        'code_2': 'il',
+        'code_3': 'izl',
+        'flag_code': 'il',
+    },
+    'Ірландія': {
+        'code_2': 'ie',
+        'code_3': 'irl',
+        'flag_code': 'ie',
+    },
+    'Ісландія': {
+        'code_2': 'is',
+        'code_3': 'isl',
+        'flag_code': 'is',
+    },
+    'Казахстан': {
+        'code_2': 'kz',
+        'code_3': 'kzh',
+        'flag_code': 'kz',
+    },
+    'Кіпр': {
+        'code_2': 'cy',
+        'code_3': 'cyp',
+        'flag_code': 'cy',
+    },
+    'Латвія': {
+        'code_2': 'lv',
+        'code_3': 'ltv',
+        'flag_code': 'lv',
+    },
+    'Литва': {
+        'code_2': 'lt',
+        'code_3': 'ltv',
+        'flag_code': 'lt',
+    },
+    'Мексика': {
+        'code_2': 'mx',
+        'code_3': 'mxk',
+        'flag_code': 'mx',
+    },
+    'Молдова': {
+        'code_2': 'md',
+        'code_3': 'mld',
+        'flag_code': 'md',
+    },
+    'Норвегія': {
+        'code_2': 'no',
+        'code_3': 'nor',
+        'flag_code': 'no',
+    },
+    'Північна Македонія': {
+        'code_2': 'mk',
+        'code_3': 'mkd',
+        'flag_code': 'mk',
+    },
+    'Польща': {
+        'code_2': 'pl',
+        'code_3': 'pln',
+        'flag_code': 'pl',
+    },
+    'Румунія': {
+        'code_2': 'ro',
+        'code_3': 'rmn',
+        'flag_code': 'ro',
+    },
+    'Саудівська Аравія': {
+        'code_2': 'sa',
+        'code_3': 'sa',
+        'flag_code': 'sa',
+    },
+    'Сербія': {
+        'code_2': 'rs',
+        'code_3': 'srb',
+        'flag_code': 'rs',
+    },
+    'Словаччина': {
+        'code_2': 'sk',
+        'code_3': 'slk',
+        'flag_code': 'sk',
+    },
+    'Словенія': {
+        'code_2': 'si',
+        'code_3': 'slv',
+        'flag_code': 'si',
+    },
+    'США': {
+        'code_2': 'us',
+        'code_3': 'us',
+        'flag_code': 'us',
+    },
+    'Туреччина': {
+        'code_2': 'tr',
+        'code_3': 'trk',
+        'flag_code': 'tr',
+    },
+    'Угорщина': {
+        'code_2': 'hu',
+        'code_3': 'hng',
+        'flag_code': 'hu',
+    },
+    'Уельс': {
+        'code_2': 'gb wls',
+        'code_3': 'gb wls',
+        'flag_code': 'gb wls',
+    },
+    'Фінляндія': {
+        'code_2': 'fi',
+        'code_3': 'fnl',
+        'flag_code': 'fi',
+    },
+    'Хорватія': {
+        'code_2': 'hr',
+        'code_3': 'hrv',
+        'flag_code': 'hr',
+    },
     'Європа': {
         'code_2': '-',
         'code_3': '-',
         'flag_code': '-',
+    },
+    'Чехія': {
+        'code_2': 'cz',
+        'code_3': 'cz',
+        'flag_code': 'cz',
+    },
+    'Чорногорія': {
+        'code_2': 'me',
+        'code_3': 'mnt',
+        'flag_code': 'me',
+    },
+    'Швейцарія': {
+        'code_2': 'ch',
+        'code_3': 'szl',
+        'flag_code': 'ch',
+    },
+    'Швеція': {
+        'code_2': 'se',
+        'code_3': 'swd',
+        'flag_code': 'se',
+    },
+    'Шотландія': {
+        'code_2': 'gb sct',
+        'code_3': 'gb sct',
+        'flag_code': 'gb sct',
+    },
+    'Вірменія': {
+        'code_2': 'am',
+        'code_3': 'arm',
+        'flag_code': 'am',
     },
     'Світ': {
         'code_2': '-',
