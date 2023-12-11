@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 class BetFilterMixin:
@@ -52,11 +52,18 @@ class BetFilterMixin:
             qs = qs.filter(is_favourite__in=is_favourite_value)
 
         ordering = self.request.GET.get('ordering')
+        desc = True if self.request.GET.get('ordering_type') == 'Desc' else False
         if ordering:
-            if ordering == 'is_favourite':
-                qs = qs.order_by('-is_favourite', '-id')
+            if 'is_favourite' in ordering:
+                if desc:
+                    qs = qs.order_by('is_favourite', '-id')
+                else:
+                    qs = qs.order_by('-is_favourite', '-id')
             else:
-                qs = qs.order_by(ordering, '-id')
+                if desc:
+                    qs = qs.order_by(F(ordering).desc(nulls_last=True), '-id')
+                else:
+                    qs = qs.order_by(F(ordering).asc(nulls_last=True), '-id')
 
         coefficient_min = self.request.GET.get('coefficient_min')
         if coefficient_min:

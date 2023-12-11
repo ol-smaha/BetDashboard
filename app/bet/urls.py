@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from bet.views import (BetHistoryView, Statistic, BetGraphsProfitView, BetGraphsResultView,
                        FootballBetHistoryView, BetGraphsRoiView, BetCreateView, BetBaseChangeFavouriteStatusView,
                        BetBaseDeleteView, BetFootballChangeFavouriteStatusView, BetFootballDeleteView,
-                       BetFootballCreateView, BetGraphsAvgAmountView, RatingGraphsView, CalendarView, ProfileView,
-                       CompetitionCreateView, ServiceCreateView, SportKindCreateView, SportKindDeleteView,
+                       BetFootballCreateView, BetGraphsAvgAmountView, RatingsView, RatingFootballView, CalendarView,
+                       ProfileView, CompetitionCreateView, ServiceCreateView, SportKindCreateView, SportKindDeleteView,
                        BettingServiceDeleteView, CompetitionDeleteView)
 
 
@@ -30,7 +30,8 @@ urlpatterns = [
 
     path('calendar/', login_required(CalendarView.as_view()), name='bet_calendar'),
     path('statistic/', login_required(Statistic.as_view()), name='bet_statistic'),
-    path('ratings/', login_required(RatingGraphsView.as_view()), name='bet_ratings'),
+    path('ratings/', login_required(RatingsView.as_view()), name='bet_ratings'),
+    path('ratings/football/', login_required(RatingFootballView.as_view()), name='bet_ratings_football'),
 
     path('profile/', login_required(ProfileView.as_view()), name='bet_profile'),
 

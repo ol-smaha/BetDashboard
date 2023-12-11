@@ -1206,8 +1206,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
         return context
 
 
-class RatingGraphsView(BetFilterMixin, ListView):
-    model = BetFootball
+class RatingsView(BetFilterMixin, ListView):
+    model = BetBase
     template_name = 'bet/rating.html'
 
     def get_active_tab(self):
@@ -1216,10 +1216,81 @@ class RatingGraphsView(BetFilterMixin, ListView):
     def annotate_qs(self, queryset, field_name, fields_dict):
         ordering_tab = '-profit_sum'
         ordering_tab_raw_value = self.request.GET.get('ordering_tab')
+        desc = True if self.request.GET.get('ordering_type') == 'Desc' else False
+
         if ordering_tab_raw_value:
             ordering_tab_value = reverse_dict(fields_dict).get(ordering_tab_raw_value)
             if ordering_tab_value:
-                ordering_tab = f"-{ordering_tab_value}"
+                if desc:
+                    ordering_tab = ordering_tab_value
+                else:
+                    ordering_tab = f"-{ordering_tab_value}"
+
+        qs = (queryset
+              .values(field_name)
+              .annotate(profit_avg=Avg('profit'), profit_sum=Sum('profit'), amount_sum=Sum('amount'), count=Count('pk'))
+              .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+              .order_by(ordering_tab))
+        return qs
+
+    def get_sport_kind_data(self):
+        data = []
+
+        for obj in self.annotate_qs(self.get_queryset(), 'sport_kind__name', SPORT_KIND_RATING_TABLE_FIELD_NAMES):
+            data.append({
+                'name': obj.get('sport_kind__name') or 'Iнше',
+                'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
+                'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
+                'total_roi': round(float(obj.get('roi', 0.00)), 2),
+                'count': obj.get('count', 0),
+            })
+        return data
+
+    def base_queryset(self):
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
+
+    def get_queryset(self):
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        filter_form = RatingFilterForm(self.request.GET)
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
+
+        context.update({
+            'title': 'Рейтинги',
+            'menu_key': 'bet_ratings',
+            'filter_form': filter_form,
+            'active_tab': self.get_active_tab(),
+            'sport_kind_objects': self.get_sport_kind_data(),
+            'sport_kind_fields': SPORT_KIND_RATING_TABLE_FIELD_NAMES.values(),
+        })
+
+        return context
+
+
+class RatingFootballView(BetFilterMixin, ListView):
+    model = BetFootball
+    template_name = 'bet/rating_football.html'
+
+    def get_active_tab(self):
+        return int(self.request.GET.get('active_tab', 1))
+
+    def annotate_qs(self, queryset, field_name, fields_dict):
+        ordering_tab = '-profit_sum'
+        ordering_tab_raw_value = self.request.GET.get('ordering_tab')
+        desc = True if self.request.GET.get('ordering_type') == 'Desc' else False
+
+        if ordering_tab_raw_value:
+            ordering_tab_value = reverse_dict(fields_dict).get(ordering_tab_raw_value)
+            if ordering_tab_value:
+                if desc:
+                    ordering_tab = ordering_tab_value
+                else:
+                    ordering_tab = f"-{ordering_tab_value}"
 
         qs = (queryset
               .values(field_name)
@@ -1238,19 +1309,6 @@ class RatingGraphsView(BetFilterMixin, ListView):
             data.append({
                 'flag': flag,
                 'name': obj.get('competition__name') or 'Iнше',
-                'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
-                'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
-                'total_roi': round(float(obj.get('roi', 0.00)), 2),
-                'count': obj.get('count', 0),
-            })
-        return data
-
-    def get_sport_kind_data(self):
-        data = []
-        queryset = BetBase.objects.filter(user=self.request.user)
-        for obj in self.annotate_qs(queryset, 'sport_kind__name', SPORT_KIND_RATING_TABLE_FIELD_NAMES):
-            data.append({
-                'name': obj.get('sport_kind__name') or 'Iнше',
                 'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
                 'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
                 'total_roi': round(float(obj.get('roi', 0.00)), 2),
@@ -1285,14 +1343,12 @@ class RatingGraphsView(BetFilterMixin, ListView):
         filter_form.fields['betting_service'].choices = BettingService.name_choices()
 
         context.update({
-            'title': 'Рейтинги',
-            'menu_key': 'bet_ratings',
+            'title': 'Рейтинги Футбол',
+            'menu_key': 'bet_ratings_football',
             'filter_form': filter_form,
             'active_tab': self.get_active_tab(),
             'competition_objects': self.get_competitions_data(),
             'competition_fields': COMPETITION_RATING_TABLE_FIELD_NAMES.values(),
-            'sport_kind_objects': self.get_sport_kind_data(),
-            'sport_kind_fields': SPORT_KIND_RATING_TABLE_FIELD_NAMES.values(),
             'bet_type_objects': self.get_bet_type_data(),
             'bet_type_fields': BET_TYPE_RATING_TABLE_FIELD_NAMES.values(),
         })
@@ -1341,18 +1397,29 @@ class CalendarView(ListView):
         return context
 
 
-class ProfileView(ListView):
+class ProfileView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/profile.html'
 
     def get_active_tab(self):
         return int(self.request.GET.get('active_tab', 1))
 
+    def ordered_qs(self, qs):
+        print(qs)
+        ordering = self.request.GET.get('ordering')
+        print(ordering)
+        if ordering:
+            try:
+                qs = qs.order_by(ordering, '-id')
+            except Exception as e:
+                print(e)
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        sport_kind_objects = self.request.user.sport_kinds.all()
-        competition_objects = self.request.user.competitions.all()
-        service_objects = self.request.user.services.filter()
+        sport_kind_objects = self.ordered_qs(self.request.user.sport_kinds.all())
+        competition_objects = self.ordered_qs(self.request.user.competitions.all())
+        service_objects = self.ordered_qs(self.request.user.services.filter())
 
         create_sport_kind_form = SportKindCreateForm()
         create_sport_kind_form.fields['user'].initial = self.request.user.pk

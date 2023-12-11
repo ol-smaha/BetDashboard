@@ -41,7 +41,8 @@
 										<th>
 											{{ field }}
 											{% if field not in '☒'%}
-												<a href="?{% query_transform ordering=field|bet_base_ordering_value %}"><i class="fas fa-sort" style="float: right;"></i></a>
+												<a href="?{% query_transform ordering=field|bet_base_ordering_value ordering_type='Asc'%}"><i class="fas fa-sort-up" style="float: right;"></i></a>
+												<a href="?{% query_transform ordering=field|bet_base_ordering_value ordering_type='Desc'%}"><i class="fas fa-sort-down" style="float: right;"></i></a>
 											{% endif %}
 										</th>
 										{% endfor %}

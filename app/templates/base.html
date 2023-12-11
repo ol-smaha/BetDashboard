@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon2.ico' %}">
     <title>
     {% block title %}
         {% if title %}
@@ -37,7 +37,7 @@
         {% block header %}
             <div class="dashboard-header">
                 <nav class="navbar navbar-expand-lg bg-white fixed-top">
-                    <a class="navbar-brand" href="#">Bet Dashboard</a>
+                    <a class="navbar-brand" href="{% url 'bet_calendar' %}">Bet Office</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -84,8 +84,20 @@
                                              <li class="nav-item">
                                                 <a class="nav-link {% if menu_key == 'bet_statistic' %} active {% endif %}" href="{% url 'bet_statistic' %}">Статистика</a>
                                             </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link {% if 'ratings'|is_parent_menu_active:menu_key %} active {% endif %}" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4">
+                                        <i class="mdi mdi-view-dashboard"></i>Рейтинги <span class="badge badge-success">6</span>
+                                    </a>
+                                    <div id="submenu-4" class="collapse submenu {% if 'ratings'|is_parent_menu_active:menu_key %} show {% endif %}" style="">
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link {% if menu_key == 'bet_ratings' %} active {% endif %}" href="{% url 'bet_ratings' %}">Загальний</a>
+                                            </li>
                                              <li class="nav-item">
-                                                <a class="nav-link {% if menu_key == 'bet_ratings' %} active {% endif %}" href="{% url 'bet_ratings' %}">Рейтинги</a>
+                                                <a class="nav-link {% if menu_key == 'bet_ratings_football' %} active {% endif %}" href="{% url 'bet_ratings_football' %}">Футбол</a>
                                             </li>
                                         </ul>
                                     </div>

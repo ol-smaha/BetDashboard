@@ -39,6 +39,7 @@
                                                     {% for field in competition_table_fields %}
                                                     <th>
                                                         {{ field }}
+                                                        <a href="?{% query_transform ordering=field|competition_ordering_value active_tab=1 %}"><i class="fas fa-sort" style="float: right;"></i></a>
                                                     </th>
                                                     {% endfor %}
                                                     <th>
@@ -104,6 +105,7 @@
                                                 {% for field in sport_kind_table_fields %}
                                                 <th>
                                                     {{ field }}
+                                                    <a href="?{% query_transform ordering=field|sport_kind_ordering_value active_tab=2 %}"><i class="fas fa-sort" style="float: right;"></i></a>
                                                 </th>
                                                 {% endfor %}
                                                 <th>
@@ -161,6 +163,7 @@
                                                 {% for field in service_table_fields %}
                                                 <th>
                                                     {{ field }}
+                                                    <a href="?{% query_transform ordering=field|betting_service_ordering_value active_tab=3 %}"><i class="fas fa-sort" style="float: right;"></i></a>
                                                 </th>
                                                 {% endfor %}
                                                 <th>

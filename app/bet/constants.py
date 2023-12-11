@@ -260,6 +260,23 @@ BET_FOOTBALL_FIELDS_NAMES = {
 }
 
 
+COMPETITION_ORDERING_FIELDS_NAMES = {
+    'country__name': 'Країна',
+    'name': 'Назва',
+    'sport_kind__name': 'Вид спорту',
+}
+
+
+SPORT_KIND_ORDERING_FIELDS_NAMES = {
+    'name': 'Назва',
+}
+
+
+BETTING_SERVICE_ORDERING_FIELDS_NAMES = {
+    'name': 'Назва',
+}
+
+
 DEFAULT_MORRIS_CHART_COLORS = [
     '#07F78A ', #файний салатовий
     '#168251', #зелений як ліс
@@ -384,12 +401,14 @@ BET_TYPE_RATING_TABLE_FIELD_NAMES = {
 MENU_TREE = {
     'bet_calendar': ['dashboard'],
     'bet_statistic': ['dashboard'],
-    'bet_ratings': ['dashboard'],
+
+    'bet_ratings': ['ratings'],
+    'bet_ratings_football': ['ratings'],
 
     'bet_list': ['list'],
     'bet_football_list': ['list'],
-    'bet_create': ['list', 'add_bet'],
-    'bet_football_create': ['list', 'add_bet'],
+    'bet_create': ['list'],
+    # 'bet_football_create': ['list', 'add_bet'],
 
     'bet_graphs_profit': ['graphs'],
     'bet_graphs_roi': ['graphs'],
