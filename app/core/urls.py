@@ -25,6 +25,7 @@ from users.views import HomePageView, Tariff, HomeView
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     # path('', RedirectView.as_view(url=reverse_lazy('bet_calendar'), permanent=False), name='home'),
     path('', include('users.urls')),
     path('', HomeView.as_view(), name='home'),
