@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     'rest_framework',
+    'drf_yasg',
     # 'debug_toolbar',
 
     'users',
@@ -205,6 +206,6 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.AllowAny'
     ]
 }

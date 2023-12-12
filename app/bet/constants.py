@@ -1,7 +1,7 @@
-from enum import StrEnum
+from enum import Enum
 
 
-class BetResultEnum(StrEnum):
+class BetResultEnum(str, Enum):
     WIN = 'Виграш'
     DRAWN = 'Повернення'
     LOSE = 'Програш'
@@ -18,7 +18,7 @@ class BetResultEnum(StrEnum):
         return res
 
 
-class BetFootballPredictionEnum(StrEnum):
+class BetFootballPredictionEnum(str, Enum):
     EXPRESS = 'Експрес'
     W1 = 'П1'
     X = 'Нічия'
@@ -93,7 +93,7 @@ class BetFootballPredictionEnum(StrEnum):
         return res
 
 
-class BetFootballTypeEnum(StrEnum):
+class BetFootballTypeEnum(str, Enum):
     WDL = 'П1-Х-П2'
     WX = '1Х-12-Х2'
     FORA = 'Фора'
@@ -193,7 +193,7 @@ class BetFootballTypeEnum(StrEnum):
         return res
 
 
-class GameStatusEnum(StrEnum):
+class GameStatusEnum(str, Enum):
     OFFICIAL = 'Офіційний'
     FRIENDLY = 'Товариський'
     UNKNOWN = '-'
@@ -209,7 +209,7 @@ class GameStatusEnum(StrEnum):
         return res
 
 
-class LiveTypeEnum(StrEnum):
+class LiveTypeEnum(str, Enum):
     LIVE = 'Лайв'
     PREMATCH = 'Прематч'
 
@@ -219,7 +219,7 @@ class LiveTypeEnum(StrEnum):
         return res
 
 
-class TeamCategoryEnum(StrEnum):
+class TeamCategoryEnum(str, Enum):
     CLUB = 'Клуб'
     NATIONAL = 'Збірна'
     UNKNOWN = '-'
@@ -349,7 +349,7 @@ BOOL_FIELD_CHOICES = (
 )
 
 
-class ChartDateType(StrEnum):
+class ChartDateType(str, Enum):
     NOW = 'Поточний місяць'
     LAST_30_DAYS = 'Останні 30 діб'
     MONTHS = 'По місяцях'
@@ -417,7 +417,7 @@ MENU_TREE = {
 }
 
 
-class ChartType(StrEnum):
+class ChartType(str, Enum):
     LINE = 'LINE'
     BAR = 'BAR'
 
