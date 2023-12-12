@@ -1,9 +1,9 @@
-from enum import StrEnum
+from enum import Enum
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class TariffPlanVariant(StrEnum):
+class TariffPlanVariant(str, Enum):
     FREE = 'FREE'
     MAX = 'MAX'
 
