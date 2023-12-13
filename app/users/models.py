@@ -1,4 +1,6 @@
 from enum import Enum
+from threading import Thread
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -37,14 +39,12 @@ class CustomUser(AbstractUser):
         created = self.pk is None
         super(CustomUser, self).save(*args, **kwargs)
         if created:
-            from bet.utils import (create_default_sport_kind, create_default_countries, generate_default_data,
-                                   create_default_competition_football, create_default_betting_services)
+            from bet.utils import user_data_setup
 
-            # create_default_countries()
-            # create_default_sport_kind(self)
-            # create_default_competition_football(self)
-            generate_default_data(self)
-            create_default_betting_services(self)
+            print(" === 1111 ")
+            thread = Thread(target=user_data_setup, args=(self,))
+            thread.start()
+            print(" === 2222 ")
 
     def __str__(self):
         return self.email or self.username
@@ -53,9 +53,7 @@ class CustomUser(AbstractUser):
 class AboutUs(models.Model):
     email = models.EmailField(max_length=128)
     phone = models.CharField(max_length=32)
-    fb_link = models.URLField(verbose_name='facebook', blank=True, null=True)
-    inst_link = models.URLField(verbose_name='instagram', blank=True, null=True)
-    twit_link = models.URLField(verbose_name='twitter', blank=True, null=True)
+    telegram_link = models.URLField(verbose_name='telegram', blank=True, null=True)
     img = models.ImageField(upload_to='media/images/', blank=True, null=True)
 
 

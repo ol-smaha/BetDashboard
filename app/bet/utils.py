@@ -130,10 +130,14 @@ def create_default_countries():
     try:
         objs = []
         for name, data in COUNTRIES.items():
-            objs.append(Country(name=name,
-                                code2=data.get('code_2'),
-                                code3=data.get('code_3'),
-                                flag_code=data.get('flag_code')))
+            objs.append(
+                Country(
+                    name=name,
+                    code2=data.get('code_2'),
+                    code3=data.get('code_3'),
+                    flag_code=data.get('flag_code')
+                )
+            )
         Country.objects.bulk_create(objs, ignore_conflicts=True)
     except Exception as e:
         print(e)
@@ -159,24 +163,13 @@ def create_default_betting_services(user):
         print(e)
 
 
-def create_default_competition_football(user):
-    try:
-        sport_kind = SportKind.objects.get(name='Футбол', user=user)
-        for el in DEFAULT_COMPETITIONS_FOOTBALL:
-            name = el[0]
-            country = Country.objects.get(name=el[1])
-            CompetitionBase.objects.create(user=user, name=name, sport_kind=sport_kind, country=country)
-    except Exception as e:
-        print(e)
-
-
-def generate_default_data(user):
+def create_default_competitions_teams(user):
     with open('teams.csv') as csv_file:
         data = csv.DictReader(csv_file)
         sport_kind_obj, _ = SportKind.objects.get_or_create(user=user, name='Футбол')
         for row in data:
             country_name = row.get('country')
-            competition_name = f"{row.get('competition')} ({country_name})"
+            competition_name = row.get('competition')
             teams = row.get('teams', '').split('\n')
 
             for team_name in teams:
@@ -186,6 +179,7 @@ def generate_default_data(user):
                         competition_obj, _ = CompetitionBase.objects.get_or_create(
                             user=user,
                             name=competition_name,
+                            name_extended=f'{competition_name} ({country_name})',
                             sport_kind=sport_kind_obj,
                             country=country_obj,
                         )
@@ -198,3 +192,14 @@ def generate_default_data(user):
                         )
                     except Exception as e:
                         print(e)
+
+
+def user_data_setup(user):
+    print('--- START user_data_setup')
+    print('--- START create_default_betting_services')
+    create_default_betting_services(user)
+    print('--- START create_default_sport_kind')
+    create_default_sport_kind(user)
+    print('--- START create_default_competitions_teams')
+    create_default_competitions_teams(user)
+    print('--- FINISH user_data_setup')

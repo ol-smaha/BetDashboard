@@ -6,18 +6,9 @@
     <div class="container-fluid dashboard-content ">
     <div class="row">
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-    <div class="page-header">
-        <h3 class="mb-2"> Contact Information </h3>
-        <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
-        <div class="page-breadcrumb">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"> About Us  </li>
-                </ol>
-            </nav>
+        <div class="alert alert-light text-dark" role="alert">
+            Контактна інформація:
         </div>
-    </div>
     </div>
     </div>
 
@@ -29,12 +20,12 @@
                 <img src="{{ object.img.url }}" alt="User Avatar" class="rounded-circle user-avatar-xxl">
             </div>
             <div class="text-center">
-                <h2 class="font-24 mb-0">Michael J. Christy</h2>
-                <p>Project Manager @Influnce</p>
+                <h2 class="font-24 mb-0">Олег</h2>
+                <p>Оператор підтримки клієнтів @Bet Office</p>
             </div>
         </div>
         <div class="card-body border-top">
-            <h3 class="font-16">Contact Information</h3>
+            <h3 class="font-16">Контакти</h3>
             <div class="">
                 <ul class="list-unstyled mb-0">
                 <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i> {{ object.email }} </li>
@@ -43,24 +34,10 @@
             </div>
         </div>
         <div class="card-body border-top">
-            <h3 class="font-16">Rating</h3>
-            <h1 class="mb-0">4.8</h1>
-            <div class="rating-star">
-                <i class="fa fa-fw fa-star"></i>
-                <i class="fa fa-fw fa-star"></i>
-                <i class="fa fa-fw fa-star"></i>
-                <i class="fa fa-fw fa-star"></i>
-                <i class="fa fa-fw fa-star"></i>
-                <p class="d-inline-block text-dark">14 Reviews </p>
-            </div>
-        </div>
-        <div class="card-body border-top">
-            <h3 class="font-16">Social Channels</h3>
+            <h3 class="font-16">Соціальні мережі</h3>
             <div class="">
                 <ul class="mb-0 list-unstyled">
-                <li class="mb-1"><a href="#"><i class="fab fa-fw fa-facebook-square mr-1 facebook-color"></i>{{ object.fb_link }}</a></li>
-                <li class="mb-1"><a href="#"><i class="fab fa-fw fa-twitter-square mr-1 twitter-color"></i>{{ object.twit_link }}</a></li>
-                <li class="mb-1"><a href="#"><i class="fab fa-fw fa-instagram mr-1 instagram-color"></i>{{ object.inst_link }}</a></li>
+                <li class="mb-1"><a href="{{ object.telegram_link }}"><i class="fab fa-fw fab fa-telegram mr-1 twitter-color"></i>Написати у Telegram</a></li>
             </ul>
             </div>
         </div>
@@ -68,7 +45,7 @@
     </div>
     <div class="col-xl-6 col-lg-9 col-md-7 col-sm-12 col-12">
                 <div class="card">
-                    <h5 class="card-header">Send Messages</h5>
+                    <h5 class="card-header">Зворотній звʼязок</h5>
                     <div class="card-body">
                         <form method="POST">
 								<div class="form-group">
@@ -78,15 +55,14 @@
 									{% endfor %}
 									{% for field in form.visible_fields %}
 											<div class="form-group row">
-                                            	<label class="col-3 col-lg-2 col-form-label text-right">{{ field.label }}</label>
-												<div class="col-9 col-lg-10">
+												<div class="col-12 col-lg-12">
 													{{ field }}
 												</div>
 											</div>
 									{% endfor %}
 									<div class="col-sm-12">
 										<p class="text-right">
-											<button type="submit" class="btn btn-success"> Send </button>
+											<button type="submit" class="btn btn-success"> Надіслати </button>
 										</p>
 									</div>
 								</div>

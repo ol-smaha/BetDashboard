@@ -30,7 +30,7 @@ class AboutUsView(CreateView):
     model = AboutUs
     template_name = 'about_us/about_us.html'
     form_class = UserCreateMessageForm
-    success_url = reverse_lazy('about-us')
+    success_url = reverse_lazy('about')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()

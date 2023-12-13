@@ -434,9 +434,8 @@ DEFAULT_SPORT_KINDS = [
 
 
 DEFAULT_BETTING_SERVICES = [
-    'VBet',
-    'FavBet',
-    'Паріматч',
+    'VBET',
+    'Favbet',
 ]
 
 
@@ -662,9 +661,9 @@ COUNTRIES = {
         'flag_code': 'hu',
     },
     'Уельс': {
-        'code_2': 'gb wls',
-        'code_3': 'gb wls',
-        'flag_code': 'gb wls',
+        'code_2': '',
+        'code_3': '',
+        'flag_code': 'gb',
     },
     'Фінляндія': {
         'code_2': 'fi',
@@ -702,9 +701,9 @@ COUNTRIES = {
         'flag_code': 'se',
     },
     'Шотландія': {
-        'code_2': 'gb sct',
-        'code_3': 'gb sct',
-        'flag_code': 'gb sct',
+        'code_2': '',
+        'code_3': '',
+        'flag_code': 'gb',
     },
     'Вірменія': {
         'code_2': 'am',

@@ -24,7 +24,11 @@ class UserCreateMessageForm(ModelForm):
     class Meta:
         model = ContactUs
         fields = ['user', 'message']
+        labels = {
+            'message': 'Повідомлення',
+        }
         widgets = {
-            'message': forms.Textarea(attrs={'class': 'form-control'}),
+            'message': forms.Textarea(attrs={'class': 'form-control',
+                                             'placeholder': 'Напишіть своє повідомлення...'}),
         }
 

@@ -70,6 +70,7 @@ class CompetitionBase(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
                              related_name='competitions')
     name = models.CharField(max_length=128)
+    name_extended = models.CharField(max_length=256, blank=True, null=True)
     sport_kind = models.ForeignKey(to=SportKind, on_delete=models.SET_NULL,
                                    related_name='competitions', null=True, blank=True)
     country = models.ForeignKey(to=Country, on_delete=models.SET_NULL,
@@ -82,15 +83,24 @@ class CompetitionBase(models.Model):
 
     @classmethod
     def name_choices(cls):
-        qs = cls.objects.all().values_list('name', flat=True)
+        qs = cls.objects.all().values_list('name_extended', flat=True)
         try:
             if current_request and current_request.user:
                 qs = qs.filter(user=current_request.user)
 
         except:
             pass
-        choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name')])
+        choices = tuple([(_id, name) for _id, name in qs.values_list('id', 'name_extended')])
         return choices
+
+    def save(self, *args, **kwargs):
+        try:
+            if self.country:
+               self.name_extended = f"{self.name} ({self.country.name})"
+        except Exception as e:
+            self.name_extended = self.name
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name}"
