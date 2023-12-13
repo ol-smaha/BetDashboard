@@ -55,6 +55,13 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = ['name', 'id', 'name_extended', 'category', 'sport_kind', 'country']
 
 
+class TeamCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Team
+        fields = ['name', 'name_extended', 'category', 'sport_kind', 'country']
+
+
 class CompetitionSerializer(serializers.ModelSerializer):
     sport_kind = SportKindSerializer()
     country = CountrySerializer()
@@ -62,6 +69,13 @@ class CompetitionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompetitionBase
         fields = ['user', 'id', 'name', 'sport_kind', 'country']
+
+
+class CompetitionCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CompetitionBase
+        fields = ['user', 'name', 'sport_kind', 'country']
 
 
 class BetFootballSerializer(serializers.ModelSerializer):
@@ -77,3 +91,13 @@ class BetFootballSerializer(serializers.ModelSerializer):
                   'result', 'profit', 'date_game',
                   'is_favourite', 'live_type', 'sport_kind', 'betting_service', 'team_home', 'team_guest', 'prediction',
                   'bet_type', 'competition', 'game_status']
+
+
+class BetFootballCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BetFootball
+        fields = ['user', 'amount', 'coefficient',
+                  'result', 'profit', 'date_game',
+                  'is_favourite', 'live_type', 'sport_kind', 'betting_service', 'team_home', 'team_guest', 'prediction',
+                  'bet_type', 'competition', 'game_status']
+

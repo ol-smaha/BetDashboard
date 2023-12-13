@@ -1,8 +1,10 @@
 from django.urls import path
 
 from api.views import BetBaseApiListView, BetBaseApiDetailView, BetFootballApiDetailView, BetFootballApiListView, \
-   FootballTeamApiListView, FootballTeamApiDetailView, FootballCompetitionApiListView, FootballCompetitionApiDetailView, \
-   BetBaseApiCreateView, BetBaseApiDeleteView, BetBaseApiUpdateView
+   TeamApiListView, TeamApiDetailView, CompetitionApiListView, CompetitionApiDetailView, \
+   BetBaseApiCreateView, BetBaseApiDeleteView, BetBaseApiUpdateView, BetFootballApiCreateView, BetFootballApiUpdateView, \
+   BetFootballApiDeleteView, TeamApiCreateView, TeamApiUpdateView, TeamApiDeleteView, CompetitionApiCreateView, \
+   CompetitionApiUpdateView, CompetitionApiDeleteView
 
 urlpatterns = [
    path('bet/', BetBaseApiListView.as_view()),
@@ -13,11 +15,20 @@ urlpatterns = [
 
    path('bet-football/', BetFootballApiListView.as_view()),
    path('bet-football/<int:pk>/', BetFootballApiDetailView.as_view()),
+   path('bet-football/create/', BetFootballApiCreateView.as_view()),
+   path('bet-football/update/<int:pk>/', BetFootballApiUpdateView.as_view()),
+   path('bet-football/delete/<int:pk>/', BetFootballApiDeleteView.as_view()),
 
-   path('team/', FootballTeamApiListView.as_view()),
-   path('team/<int:pk>/', FootballTeamApiDetailView.as_view()),
+   path('team/', TeamApiListView.as_view()),
+   path('team/<int:pk>/', TeamApiDetailView.as_view()),
+   path('team/create/', TeamApiCreateView.as_view()),
+   path('team/update/<int:pk>/', TeamApiUpdateView.as_view()),
+   path('team/delete/<int:pk>/', TeamApiDeleteView.as_view()),
 
-   path('competition/', FootballCompetitionApiListView.as_view()),
-   path('competition/<int:pk>/', FootballCompetitionApiDetailView.as_view()),
+   path('competition/', CompetitionApiListView.as_view()),
+   path('competition/<int:pk>/', CompetitionApiDetailView.as_view()),
+   path('competition/create/', CompetitionApiCreateView.as_view()),
+   path('competition/update/<int:pk>/', CompetitionApiUpdateView.as_view()),
+   path('competition/delete/<int:pk>/', CompetitionApiDeleteView.as_view()),
 
 ]
