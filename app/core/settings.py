@@ -213,6 +213,6 @@ REST_FRAMEWORK = {
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-CSRF_TRUSTED_ORIGINS = ["https://104.152.49.179", "http://104.152.49.179"]
+CSRF_TRUSTED_ORIGINS = ["https://betoffice.fun", "https://104.152.49.179"]
 
 
