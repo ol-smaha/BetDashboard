@@ -1,6 +1,8 @@
 from rest_framework import generics
+from rest_framework.response import Response
 
-from api.serializers import BetBaseSerializer, BetFootballSerializer, TeamSerializer, CompetitionSerializer
+from api.serializers import BetBaseSerializer, BetFootballSerializer, TeamSerializer, CompetitionSerializer, \
+    BetBaseCreateSerializer
 from bet.models import BetBase, BetFootball, Team, CompetitionBase
 
 
@@ -12,6 +14,20 @@ class BetBaseApiListView(generics.ListAPIView):
 class BetBaseApiDetailView(generics.RetrieveAPIView):
     queryset = BetBase.objects.all().order_by('amount', 'id')
     serializer_class = BetBaseSerializer
+
+
+class BetBaseApiCreateView(generics.CreateAPIView):
+    queryset = BetBase.objects.all().order_by('amount', 'id')
+    serializer_class = BetBaseCreateSerializer
+
+
+class BetBaseApiUpdateView(generics.UpdateAPIView):
+    queryset = BetBase.objects.all().order_by('amount', 'id')
+    serializer_class = BetBaseCreateSerializer
+
+
+class BetBaseApiDeleteView(generics.DestroyAPIView):
+    queryset = BetBase.objects.all().order_by('amount', 'id')
 
 
 class BetFootballApiListView(generics.ListAPIView):

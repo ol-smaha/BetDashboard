@@ -25,6 +25,20 @@ class BetBaseSerializer(serializers.ModelSerializer):
                   'result', 'profit', 'date_game',
                   'is_favourite', 'live_type', 'sport_kind', 'betting_service']
 
+    def to_representation(self, instance):
+        """ Custom representation """
+        to_ret = super().to_representation(instance)
+        to_ret['roi '] = float(to_ret['profit']) * 100 // float(to_ret['amount']) or 0.00
+        return to_ret
+
+
+class BetBaseCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BetBase
+        fields = ['user', 'amount', 'coefficient',
+                  'result', 'profit', 'date_game',
+                  'is_favourite', 'live_type', 'sport_kind', 'betting_service']
+
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
