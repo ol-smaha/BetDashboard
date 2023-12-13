@@ -35,8 +35,8 @@ services:
       - ./nginx/logs:/var/log/nginx
       - ./nginx/ssl:/code/ssl
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     depends_on:
       - app
 
