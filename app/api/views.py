@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 
 from api.serializers import BetBaseSerializer, BetFootballSerializer, TeamSerializer, CompetitionSerializer, \
-    BetBaseCreateSerializer
+    BetBaseCreateSerializer, BetFootballCreateSerializer, TeamCreateSerializer, CompetitionCreateSerializer
 from bet.models import BetBase, BetFootball, Team, CompetitionBase
 
 
@@ -40,22 +40,64 @@ class BetFootballApiDetailView(generics.RetrieveAPIView):
     serializer_class = BetFootballSerializer
 
 
-class FootballTeamApiListView(generics.ListAPIView):
+class BetFootballApiCreateView(generics.CreateAPIView):
+    queryset = BetFootball.objects.all().order_by('amount', 'id')
+    serializer_class = BetFootballCreateSerializer
+
+
+class BetFootballApiUpdateView(generics.UpdateAPIView):
+    queryset = BetFootball.objects.all().order_by('amount', 'id')
+    serializer_class = BetFootballCreateSerializer
+
+
+class BetFootballApiDeleteView(generics.DestroyAPIView):
+    queryset = BetFootball.objects.all().order_by('amount', 'id')
+
+
+class TeamApiListView(generics.ListAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
 
-class FootballTeamApiDetailView(generics.RetrieveAPIView):
+class TeamApiDetailView(generics.RetrieveAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
 
-class FootballCompetitionApiListView(generics.ListAPIView):
+class TeamApiCreateView(generics.CreateAPIView):
+    queryset = Team.objects.all()
+    serializer_class = TeamCreateSerializer
+
+
+class TeamApiUpdateView(generics.UpdateAPIView):
+    queryset = Team.objects.all()
+    serializer_class = TeamCreateSerializer
+
+
+class TeamApiDeleteView(generics.DestroyAPIView):
+    queryset = Team.objects.all()
+
+
+class CompetitionApiListView(generics.ListAPIView):
     queryset = CompetitionBase.objects.all()
     serializer_class = CompetitionSerializer
 
 
-class FootballCompetitionApiDetailView(generics.RetrieveAPIView):
+class CompetitionApiDetailView(generics.RetrieveAPIView):
     queryset = CompetitionBase.objects.all()
     serializer_class = CompetitionSerializer
+
+
+class CompetitionApiCreateView(generics.CreateAPIView):
+    queryset = CompetitionBase.objects.all()
+    serializer_class = CompetitionCreateSerializer
+
+
+class CompetitionApiUpdateView(generics.UpdateAPIView):
+    queryset = CompetitionBase.objects.all()
+    serializer_class = CompetitionCreateSerializer
+
+
+class CompetitionApiDeleteView(generics.DestroyAPIView):
+    queryset = CompetitionBase.objects.all()
 
