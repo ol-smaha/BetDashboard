@@ -24,7 +24,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '104.152.49.179']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '104.152.49.179', 'betoffice.fun']
 
 
 # Application definition
