@@ -47,12 +47,10 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
-    sport_kind = SportKindSerializer()
-    country = CountrySerializer()
 
     class Meta:
         model = Team
-        fields = ['name', 'id', 'name_extended', 'category', 'sport_kind', 'country']
+        fields = ['name', 'id', 'name_extended']
 
 
 class TeamCreateSerializer(serializers.ModelSerializer):
@@ -68,7 +66,7 @@ class CompetitionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CompetitionBase
-        fields = ['user', 'id', 'name', 'sport_kind', 'country']
+        fields = ['user', 'id', 'name', 'name_extended', 'sport_kind', 'country']
 
 
 class CompetitionCreateSerializer(serializers.ModelSerializer):
