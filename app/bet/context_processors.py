@@ -18,6 +18,6 @@ def urls(request):
         'bet_create_url': request.build_absolute_uri(reverse_lazy('bet_create')),
         'bet_football_create_url': request.build_absolute_uri(reverse_lazy('bet_football_create')),
 
-        'json_bet_create_url': json.dumps(request.build_absolute_uri(reverse_lazy('bet_create'))),
+        'json_bet_create_url_for_calendar': json.dumps("https://betoffice.fun/bet/create/"),
         'json_bet_football_create_url': json.dumps(request.build_absolute_uri(reverse_lazy('bet_football_create'))),
     }
