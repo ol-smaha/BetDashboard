@@ -1,17 +1,23 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from api.views import BetBaseApiListView, BetBaseApiDetailView, BetFootballApiDetailView, BetFootballApiListView, \
    TeamApiListView, TeamApiDetailView, CompetitionApiListView, CompetitionApiDetailView, \
    BetBaseApiCreateView, BetBaseApiDeleteView, BetBaseApiUpdateView, BetFootballApiCreateView, BetFootballApiUpdateView, \
    BetFootballApiDeleteView, TeamApiCreateView, TeamApiUpdateView, TeamApiDeleteView, CompetitionApiCreateView, \
-   CompetitionApiUpdateView, CompetitionApiDeleteView
+   CompetitionApiUpdateView, CompetitionApiDeleteView, BetBaseViewSet
+
+router = DefaultRouter()
+router.register('bet', BetBaseViewSet, basename='bet')
+bet_urlpatterns = router.urls
+print(bet_urlpatterns)
 
 urlpatterns = [
-   path('bet/', BetBaseApiListView.as_view()),
-   path('bet/<int:pk>/', BetBaseApiDetailView.as_view()),
-   path('bet/create/', BetBaseApiCreateView.as_view()),
-   path('bet/update/<int:pk>/', BetBaseApiUpdateView.as_view()),
-   path('bet/delete/<int:pk>/', BetBaseApiDeleteView.as_view()),
+   # path('bet/', BetBaseApiListView.as_view()),
+   # path('bet/<int:pk>/', BetBaseApiDetailView.as_view()),
+   # path('bet/create/', BetBaseApiCreateView.as_view()),
+   # path('bet/update/<int:pk>/', BetBaseApiUpdateView.as_view()),
+   # path('bet/delete/<int:pk>/', BetBaseApiDeleteView.as_view()),
 
    path('bet-football/', BetFootballApiListView.as_view()),
    path('bet-football/<int:pk>/', BetFootballApiDetailView.as_view()),
@@ -32,3 +38,5 @@ urlpatterns = [
    path('competition/delete/<int:pk>/', CompetitionApiDeleteView.as_view()),
 
 ]
+
+urlpatterns.extend(bet_urlpatterns)

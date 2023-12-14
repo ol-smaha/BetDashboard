@@ -1,9 +1,28 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets, mixins
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from api.serializers import BetBaseSerializer, BetFootballSerializer, TeamSerializer, CompetitionSerializer, \
     BetBaseCreateSerializer, BetFootballCreateSerializer, TeamCreateSerializer, CompetitionCreateSerializer
 from bet.models import BetBase, BetFootball, Team, CompetitionBase
+
+
+class BetBaseViewSet(mixins.CreateModelMixin,
+                     mixins.DestroyModelMixin,
+                     mixins.ListModelMixin,
+                     GenericViewSet):
+    """
+    A simple ViewSet for viewing and editing bets.
+    """
+    queryset = BetBase.objects.all()
+    serializer_class = BetBaseSerializer
+
+    def get_serializer_class(self):
+        print(self.action)
+        if self.action in ['create', 'update', 'partial_update']:
+            return BetBaseCreateSerializer
+        else:
+            return self.serializer_class
 
 
 class BetBaseApiListView(generics.ListAPIView):
