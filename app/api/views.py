@@ -4,8 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from django_filters.rest_framework import DjangoFilterBackend
-
-
+from rest_framework.decorators import action
 from api.serializers import BetBaseSerializer, BetFootballSerializer, TeamSerializer, CompetitionSerializer, \
     BetBaseCreateSerializer, BetFootballCreateSerializer, TeamCreateSerializer, CompetitionCreateSerializer, \
     BettingServiceSerializer, SportKindSerializer
@@ -20,6 +19,7 @@ class BetBaseViewSet(mixins.CreateModelMixin,
     A simple ViewSet for viewing and editing bets.
     """
     queryset = BetBase.objects.all()
+    is_favourite = BetBase.is_favourite
     serializer_class = BetBaseSerializer
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -44,6 +44,16 @@ class BetBaseViewSet(mixins.CreateModelMixin,
             return BetBaseCreateSerializer
         else:
             return self.serializer_class
+
+    @action(detail=True, methods=['GET'])
+    def set_is_favourite(self, request, pk=None):
+        self.is_favourite = True
+        self.save()
+        return Response({'message': f'Custom GET action executed for instance {pk}.'})
+
+    def save(self):
+        if self.is_favourite is False:
+            self.is_favourite = self.set_is_favourite()
 
 
 class BetFootballViewSet(mixins.CreateModelMixin,
@@ -80,7 +90,6 @@ class BetFootballViewSet(mixins.CreateModelMixin,
     }
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action in ['create', 'update', 'partial_update']:
             return BetFootballCreateSerializer
         else:
