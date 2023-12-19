@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     'rest_framework',
+    'django_filters',
     'drf_yasg',
     # 'debug_toolbar',
 
@@ -205,9 +206,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10 ** 5
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-    ]
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50
+
 }
 
 USE_X_FORWARDED_HOST = True
