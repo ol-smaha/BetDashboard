@@ -19,7 +19,6 @@ class BetBaseViewSet(mixins.CreateModelMixin,
     A simple ViewSet for viewing and editing bets.
     """
     queryset = BetBase.objects.all()
-    is_favourite = BetBase.is_favourite
     serializer_class = BetBaseSerializer
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -39,21 +38,22 @@ class BetBaseViewSet(mixins.CreateModelMixin,
     }
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action in ['create', 'update', 'partial_update']:
             return BetBaseCreateSerializer
         else:
             return self.serializer_class
 
     @action(detail=True, methods=['GET'])
-    def set_is_favourite(self, request, pk=None):
-        self.is_favourite = True
-        self.save()
-        return Response({'message': f'Custom GET action executed for instance {pk}.'})
+    def change_is_favourite(self, request, pk=None):
+        try:
+            bet = self.get_object()
+        except BetBase.DoesNotExist:
+            return Response({"error": "Bet not found."}, status=404)
 
-    def save(self):
-        if self.is_favourite is False:
-            self.is_favourite = self.set_is_favourite()
+        bet.is_favourite = not bet.is_favourite
+        bet.save()
+
+        return Response({"message": "Bet marked as favorite."}, status=200)
 
 
 class BetFootballViewSet(mixins.CreateModelMixin,

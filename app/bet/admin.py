@@ -17,6 +17,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 class SportKindAdmin(admin.ModelAdmin):
     list_display = ['user', 'name']
+    list_filter = ["user"]
 
 
 class TeamAdmin(admin.ModelAdmin):
@@ -25,6 +26,7 @@ class TeamAdmin(admin.ModelAdmin):
 
 class CompetitionBaseAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'name_extended', 'sport_kind', 'country']
+    list_filter = ["user"]
     actions = ["user_data_setup"]
 
     @admin.action(description="Generate competitions and teams from csv")
@@ -35,6 +37,7 @@ class CompetitionBaseAdmin(admin.ModelAdmin):
 class BetBaseAdmin(admin.ModelAdmin):
     list_display = ['user', 'amount', 'coefficient', 'profit', 'result', 'live_type',
                     'date_game', 'sport_kind', 'is_favourite']
+    list_filter = ["user"]
     actions = ["generate_bet_base", "trigger_save"]
 
     @admin.action(description="Generate Bets")
@@ -51,6 +54,7 @@ class BetFootballAdmin(admin.ModelAdmin):
     list_display = ['user', 'prediction', 'amount', 'coefficient', 'result',
                     'team_home', 'team_guest', 'bet_type',
                     'competition', 'game_status']
+    list_filter = ["user"]
     actions = ["generate_bet_football", "trigger_save"]
 
     @admin.action(description="Generate Football Bets")
@@ -65,6 +69,7 @@ class BetFootballAdmin(admin.ModelAdmin):
 
 class BettingServiceAdmin(admin.ModelAdmin):
     list_display = ['user', 'name']
+    list_filter = ["user"]
 
 
 admin.site.register(Country, CountryAdmin)

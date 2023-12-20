@@ -78,7 +78,7 @@ class CompetitionBase(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'name'], name='competition name and user unique'),
+            models.UniqueConstraint(fields=['user', 'name', 'country'], name='competition name and user unique'),
         ]
 
     @classmethod
