@@ -31,4 +31,3 @@ class UserCreateMessageForm(ModelForm):
             'message': forms.Textarea(attrs={'class': 'form-control',
                                              'placeholder': 'Напишіть своє повідомлення...'}),
         }
-
