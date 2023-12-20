@@ -1230,7 +1230,14 @@ class RatingsView(BetFilterMixin, ListView):
               .values(field_name)
               .annotate(profit_avg=Avg('profit'), profit_sum=Sum('profit'), amount_sum=Sum('amount'), count=Count('pk'))
               .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+              .annotate(count_win=Count(Case(When(result=BetResultEnum.WIN, then=1),
+                                             output_field=IntegerField())))
+              .annotate(count_drawn=Count(Case(When(result=BetResultEnum.DRAWN, then=1),
+                                               output_field=IntegerField())))
+              .annotate(count_lose=Count(Case(When(result=BetResultEnum.LOSE, then=1),
+                                              output_field=IntegerField())))
               .order_by(ordering_tab))
+        print(qs)
         return qs
 
     def get_sport_kind_data(self):
@@ -1243,7 +1250,12 @@ class RatingsView(BetFilterMixin, ListView):
                 'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
                 'total_roi': round(float(obj.get('roi', 0.00)), 2),
                 'count': obj.get('count', 0),
+
+                'count_win': obj.get('count_win', 0),
+                'count_drawn': obj.get('count_drawn', 0),
+                'count_lose': obj.get('count_lose', 0),
             })
+            print(data)
         return data
 
     def base_queryset(self):
@@ -1296,6 +1308,12 @@ class RatingFootballView(BetFilterMixin, ListView):
               .values(field_name)
               .annotate(profit_avg=Avg('profit'), profit_sum=Sum('profit'), amount_sum=Sum('amount'), count=Count('pk'))
               .annotate(roi=F('profit_sum') * 100 / F('amount_sum'))
+              .annotate(count_win=Count(Case(When(result=BetResultEnum.WIN, then=1),
+                        output_field=IntegerField())))
+              .annotate(count_drawn=Count(Case(When(result=BetResultEnum.DRAWN, then=1),
+                        output_field=IntegerField())))
+              .annotate(count_lose=Count(Case(When(result=BetResultEnum.LOSE, then=1),
+                        output_field=IntegerField())))
               .order_by(ordering_tab))
         return qs
 
@@ -1313,6 +1331,11 @@ class RatingFootballView(BetFilterMixin, ListView):
                 'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
                 'total_roi': round(float(obj.get('roi', 0.00)), 2),
                 'count': obj.get('count', 0),
+
+                'count_win': obj.get('count_win', 0),
+                'count_drawn': obj.get('count_drawn', 0),
+                'count_lose': obj.get('count_lose', 0),
+
             })
         return data
 
@@ -1325,6 +1348,10 @@ class RatingFootballView(BetFilterMixin, ListView):
                 'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
                 'total_roi': round(float(obj.get('roi', 0.00)), 2),
                 'count': obj.get('count', 0),
+
+                'count_win': obj.get('count_win', 0),
+                'count_drawn': obj.get('count_drawn', 0),
+                'count_lose': obj.get('count_lose', 0),
             })
         return data
 
