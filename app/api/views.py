@@ -43,14 +43,14 @@ class BetBaseViewSet(mixins.CreateModelMixin,
         else:
             return self.serializer_class
 
-    @action(detail=True, methods=['POST'])
-    def mark_as_favorite(self, request, pk=None):
+    @action(detail=True, methods=['GET'])
+    def change_is_favourite(self, request, pk=None):
         try:
             bet = self.get_object()
         except BetBase.DoesNotExist:
             return Response({"error": "Bet not found."}, status=404)
 
-        bet.is_favorite = False
+        bet.is_favourite = not bet.is_favourite
         bet.save()
 
         return Response({"message": "Bet marked as favorite."}, status=200)
