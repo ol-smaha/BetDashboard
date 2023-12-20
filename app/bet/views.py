@@ -1319,14 +1319,19 @@ class RatingFootballView(BetFilterMixin, ListView):
 
     def get_competitions_data(self):
         data = []
-        for obj in self.annotate_qs(self.get_queryset(), 'competition__name', COMPETITION_RATING_TABLE_FIELD_NAMES):
+        for obj in self.annotate_qs(self.get_queryset(), 'competition__name_extended', COMPETITION_RATING_TABLE_FIELD_NAMES):
             try:
-                flag = CompetitionBase.objects.get(name=obj.get('competition__name')).country.flag_code
-            except:
+                flag = CompetitionBase.objects.get(
+                    user=self.request.user,
+                    name_extended=obj.get('competition__name_extended'),
+                ).country.flag_code
+            except Exception as e:
+                print(e)
                 flag = ''
+
             data.append({
                 'flag': flag,
-                'name': obj.get('competition__name') or 'Iнше',
+                'name': obj.get('competition__name_extended') or 'Iнше',
                 'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
                 'total_profit': round(float(obj.get('profit_sum', 0.00)), 2),
                 'total_roi': round(float(obj.get('roi', 0.00)), 2),

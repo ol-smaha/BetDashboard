@@ -372,9 +372,9 @@ class ChartDateType(str, Enum):
 
 
 COMPETITION_RATING_TABLE_FIELD_NAMES = {
-    'competition__name': 'Ліга',
-    'WDL': 'WDL',
+    'competition__name_extended': 'Ліга',
     'count': 'К-сть',
+    'WDL': 'WDL',
     'profit_avg': 'Прибуток за ставку',
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
@@ -383,8 +383,8 @@ COMPETITION_RATING_TABLE_FIELD_NAMES = {
 
 SPORT_KIND_RATING_TABLE_FIELD_NAMES = {
     'sport_kind__name': 'Спорт',
-    'WDL': 'WDL',
     'count': 'К-сть',
+    'WDL': 'WDL',
     'profit_avg': 'Прибуток за ставку',
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
@@ -393,8 +393,8 @@ SPORT_KIND_RATING_TABLE_FIELD_NAMES = {
 
 BET_TYPE_RATING_TABLE_FIELD_NAMES = {
     'bet_type': 'Прогноз',
-    'WDL': 'WDL',
     'count': 'К-сть',
+    'WDL': 'WDL',
     'profit_avg': 'Прибуток за ставку',
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
