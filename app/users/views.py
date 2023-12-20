@@ -1,6 +1,6 @@
 from django.forms import HiddenInput
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, FormView
 from django.views.generic.list import ListView
 
 from .forms import UserCreateMessageForm
@@ -48,7 +48,9 @@ class TermsConditionsView(TemplateView):
     template_name = 'terms/terms_and_conditions.html'
 
 
-class HomeView(TemplateView):
+class HomeView(TemplateView, FormView):
     template_name = 'landing/index.html'
+    form_class = UserCreateMessageForm
+    success_url = reverse_lazy('home')
 
 
