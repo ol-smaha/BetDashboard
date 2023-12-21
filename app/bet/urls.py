@@ -23,6 +23,7 @@ urlpatterns = [
     path('change-is-favourite/football/<int:id>/', login_required(BetFootballChangeFavouriteStatusView.as_view()),
          name='bet_football_change_is_favourite'),
 
+
     path('graphs/profit/', login_required(BetGraphsProfitView.as_view()), name='bet_graphs_profit'),
     path('graphs/roi/', login_required(BetGraphsRoiView.as_view()), name='bet_graphs_roi'),
     path('graphs/result/', login_required(BetGraphsResultView.as_view()), name='bet_graphs_result'),

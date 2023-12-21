@@ -70,7 +70,17 @@
 											<td>{{ bet.competition }}</td>
 											<td>{{ bet.team_home }}</td>
 											<td>{{ bet.team_guest }}</td>
-											<td>{{ bet.live_type }}</td>
+
+											{% if bet.is_live_type == True %}
+												<td>
+													<span><i class="fas fa-check-circle"></i></span>
+												</td>
+											{% else %}
+												<td>
+													<span><i class="far fa-circle"></i></span>
+												</td>
+											{% endif %}
+
 
 											{% if bet.is_favourite %}
 												<td>

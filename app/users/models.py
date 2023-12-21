@@ -62,3 +62,16 @@ class ContactUs(models.Model):
                              related_name='contact_messages')
     message = models.TextField(null=True, blank=True)
 
+
+class UnregisteredContact(models.Model):
+    unregistered_email = models.EmailField(max_length=128, null=True, blank=True)
+    message = models.TextField(null=True, blank=True)
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
+                             related_name='feedback')
+    full_name = models.CharField(max_length=128, null=True, blank=True)
+    comment = models.TextField(null=False, blank=False)
+    bet_count = models.IntegerField(null=True, blank=True)
+
