@@ -42,7 +42,38 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse " id="navbarSupportedContent">
-                        <ul class="navbar-nav ml-auto navbar-right-top">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+
+                        <li class="nav-item dropdown notification">
+                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-lg fa-bell"></i> <span class="{% if notifications %} indicator {% endif %}"></span></a>
+                            <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
+                                    <li>
+                                        <div class="notification-title"> Сповіщення </div>
+                                        <div class="notification-list">
+                                            <div class="list-group">
+                                                {% for notification in notifications %}
+
+                                                    <a href="#" class="list-group-item list-group-item-action active">
+                                                        <div class="notification-info">
+                                                            <div class="notification-list-user-block">{{ notification.message }}</div>
+                                                        </div>
+                                                    </a>
+                                                   {% if bet.is_favourite %}
+                                                        <a class="favorite active" href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
+                                                            <span><i class="mdi mdi-close-box-outline"></i></span>
+                                                        </a>
+                                                    {% else %}
+                                                        <a class="favorite" href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
+                                                            <span><i class="mdi mdi-close-box-outline"></i></span>
+                                                        </a>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </li>
+                            </ul>
+                        </li>
+
                             <li class="nav-item dropdown nav-user">
                                 <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/profile_avatar.png' %}" alt="" class="user-avatar-md rounded-circle"></a>
                                 <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
@@ -54,10 +85,10 @@
                                     <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fas fa-power-off mr-2"></i>Вийти</a>
                                 </div>
                             </li>
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
                 </nav>
-            </div>
+        </div>
         {% endblock header %}
 
         {% block menu %}
@@ -89,7 +120,7 @@
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link {% if 'ratings'|is_parent_menu_active:menu_key %} active {% endif %}" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4">
-                                        <i class="mdi mdi-view-dashboard"></i>Рейтинги <span class="badge badge-success">6</span>
+                                        <i class="mdi mdi-chart-bar"></i>Рейтинги <span class="badge badge-success">6</span>
                                     </a>
                                     <div id="submenu-4" class="collapse submenu {% if 'ratings'|is_parent_menu_active:menu_key %} show {% endif %}" style="">
                                         <ul class="nav flex-column">

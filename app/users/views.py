@@ -1,10 +1,11 @@
 from django.forms import HiddenInput
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, FormView
+from django.views.generic import TemplateView, CreateView, FormView, DetailView
 from django.views.generic.list import ListView
 
 from .forms import UserCreateMessageForm, UnregisteredUserCreateMessageForm
-from .models import TariffPlan, AboutUs, UnregisteredContact, Feedback
+from .models import TariffPlan, AboutUs, UnregisteredContact, Feedback, Notification
 
 
 class HomePageView(TemplateView):
@@ -63,4 +64,13 @@ class HomeView(CreateView):
         })
 
         return context
+
+
+class NotificationChangeActiveStatusView(DetailView):
+    model = Notification
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().change_is_active()
+        return redirect(reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}')
 

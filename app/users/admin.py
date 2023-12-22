@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, TariffPlan, AboutUs, ContactUs, Feedback
+from .models import CustomUser, TariffPlan, AboutUs, ContactUs, Feedback, Notification
 
 
 class CustomUserAdmin(UserAdmin):
@@ -48,9 +48,14 @@ class FeedbackAdmin(admin.ModelAdmin):
     list_display = ['user', 'full_name', 'comment', 'bet_count']
 
 
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'message', 'is_active']
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(TariffPlan, TariffPlanAdmin)
 admin.site.register(AboutUs, AboutUsAdmin)
 admin.site.register(ContactUs, ContactUsAdmin)
 admin.site.register(Feedback, FeedbackAdmin)
+admin.site.register(Notification, NotificationAdmin)
 

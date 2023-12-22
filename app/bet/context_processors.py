@@ -3,6 +3,7 @@ import json
 from django.urls import reverse_lazy
 
 from bet.constants import BET_RESULT_COLORS, CHART_ONE_LINE_WITH_COUNT_COLORS, CHART_ONE_LINE_COLORS
+from users.models import Notification
 
 
 def graph_colors(request):
@@ -21,3 +22,12 @@ def urls(request):
         'json_bet_create_url_for_calendar': json.dumps("https://betoffice.fun/bet/create/"),
         'json_bet_football_create_url': json.dumps(request.build_absolute_uri(reverse_lazy('bet_football_create'))),
     }
+
+
+def get_notification(request):
+    context = {}
+    objects = Notification.objects.filter(user=request.user.id, is_active=True)
+    context.update({
+        'notifications': objects
+    })
+    return context
