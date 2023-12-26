@@ -1,10 +1,11 @@
 from django.forms import HiddenInput
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, FormView
+from django.views.generic import TemplateView, CreateView, FormView, DetailView
 from django.views.generic.list import ListView
 
-from .forms import UserCreateMessageForm
-from .models import TariffPlan, AboutUs
+from .forms import UserCreateMessageForm, UnregisteredUserCreateMessageForm
+from .models import TariffPlan, AboutUs, UnregisteredContact, Feedback, Notification
 
 
 class HomePageView(TemplateView):
@@ -48,9 +49,28 @@ class TermsConditionsView(TemplateView):
     template_name = 'terms/terms_and_conditions.html'
 
 
-class HomeView(TemplateView, FormView):
+class HomeView(CreateView):
+    model = Feedback
     template_name = 'landing/index.html'
-    form_class = UserCreateMessageForm
+    form_class = UnregisteredUserCreateMessageForm
     success_url = reverse_lazy('home')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        feedbacks = self.model.objects.all()
+
+        context.update({
+            'feedbacks': feedbacks
+        })
+
+        return context
+
+
+class NotificationChangeActiveStatusView(DetailView):
+    model = Notification
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        self.get_object().change_is_active()
+        return redirect(reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}')
 

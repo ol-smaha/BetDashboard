@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django import forms
 
 
-from .models import CustomUser, ContactUs
+from .models import CustomUser, ContactUs, UnregisteredContact
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -28,6 +28,22 @@ class UserCreateMessageForm(ModelForm):
             'message': 'Повідомлення',
         }
         widgets = {
+            'message': forms.Textarea(attrs={'class': 'form-control',
+                                             'placeholder': 'Напишіть своє повідомлення...'}),
+        }
+
+
+class UnregisteredUserCreateMessageForm(ModelForm):
+    class Meta:
+        model = UnregisteredContact
+        fields = ['unregistered_email', 'message']
+        labels = {
+            'unregistered_email': 'Email:',
+            'message': 'Повідомлення',
+        }
+        widgets = {
+            'unregistered_email': forms.EmailInput(attrs={'class': 'form-control',
+                                                          'placeholder': 'Email:'}),
             'message': forms.Textarea(attrs={'class': 'form-control',
                                              'placeholder': 'Напишіть своє повідомлення...'}),
         }

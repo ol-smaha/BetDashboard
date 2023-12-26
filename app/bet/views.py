@@ -1528,3 +1528,7 @@ class BettingServiceDeleteView(DetailView):
     def get(self, request, *args, **kwargs):
         self.get_object().delete()
         return redirect(reverse_lazy('bet_profile') + f'?{self.request.GET.urlencode()}')
+
+
+
+

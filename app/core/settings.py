@@ -81,6 +81,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'bet.context_processors.graph_colors',
                 'bet.context_processors.urls',
+                'bet.context_processors.get_notification',
+
             ],
         },
     },
