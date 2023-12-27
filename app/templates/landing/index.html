@@ -13,7 +13,7 @@
 
   <!-- Favicons -->
 
-  <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'images/favicon3.png' %}">
   <link href="{% static 'landing/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -303,54 +303,27 @@
     <!-- ======= Testimonials Section ======= -->
     <section id="testimonials" class="testimonials">
       <div class="container" data-aos="fade-up">
-
         <div class="section-title">
           <h2>Відгуки</h2>
         </div>
-
         <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
           <div class="swiper-wrapper">
-
+              {% for feedback in feedbacks %}
             <div class="swiper-slide">
               <div class="testimonial-item">
                 <p>
                   <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Зручна платформа для аналізу своїх ставок. Подобаються автоматичні рейтинги найприбутковіших ліг та прогнозів.
+                  {{ feedback.comment }}
                   <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
-                <h3>Іван Б.</h3>
-                <h4>846 ставок</h4>
+                <h3>{{ feedback.full_name }}</h3>
+                <h4>{{ feedback.bet_count }}</h4>
               </div>
             </div><!-- End testimonial item -->
-
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Давно користуюсь сервісом. Відмічу дуже зручні графіки результатів які ще й додатково можна відфільтровувати, щоб побачити те, що тобі дійсно потрібно.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-                <h3>Андрій В.</h3>
-                <h4>1453 ставки</h4>
-              </div>
-            </div><!-- End testimonial item -->
-
-            <div class="swiper-slide">
-              <div class="testimonial-item">
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  За допомогою сайту побачив де найбільше втрачаю грошей та оптимізував свій підхід до ставок. Перестав ставити на мінусові другорядні чемпіонати і значно покращити свої доходи.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-                <h3>Ігор З.</h3>
-                <h4>421 ставка</h4>
-              </div>
-            </div><!-- End testimonial item -->
-
+            {% endfor %}
           </div>
           <div class="swiper-pagination"></div>
         </div>
-
       </div>
     </section><!-- End Testimonials Section -->
 
@@ -547,26 +520,19 @@
           </div>
 
           <div class="col-lg-8 mt-5 mt-lg-0">
-
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+             <form method="POST">
               <div class="row gy-2 gx-md-3">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Ім'я" required>
-                </div>
-                <div class="col-md-6 form-group">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Електронна пошта" required>
-                </div>
-                <div class="form-group col-12">
-                  <textarea class="form-control" name="message" rows="5" placeholder="Повідомлення" required></textarea>
-                </div>
-                <div class="text-center col-12"><button type="submit">Надіслати</button></div>
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                  <div class="col-md-12 form-group">
+                    {{ field }}
+                  </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary"> Надіслати </button>
               </div>
             </form>
-
           </div>
-
         </div>
-
       </div>
     </section><!-- End Contact Section -->
 

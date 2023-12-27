@@ -142,7 +142,7 @@ class BetBase(models.Model):
                                    related_name='bets', null=True, blank=True)
     date_game = models.DateField(null=True, blank=True)
     is_favourite = models.BooleanField(default=False)
-    live_type = models.CharField(max_length=32, blank=True, null=True, choices=LiveTypeEnum.choices())
+    is_live_type = models.BooleanField(default=False)
     betting_service = models.ForeignKey(to=BettingService, on_delete=models.SET_NULL,
                                         related_name='bets', null=True, blank=True)
 

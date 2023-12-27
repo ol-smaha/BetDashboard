@@ -39,9 +39,9 @@ class BetFilterMixin:
         if result_value:
             qs = qs.filter(result__in=result_value)
 
-        live_types = self.request.GET.getlist('live_type')
-        if live_types:
-            qs = qs.filter(live_type__in=live_types)
+        is_live_types = self.request.GET.getlist('is_live_type')
+        if is_live_types:
+            qs = qs.filter(is_live_type__in=is_live_types)
 
         bet_type = self.request.GET.getlist('bet_type')
         if bet_type:

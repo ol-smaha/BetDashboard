@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from bet.models import Country, SportKind, Team, CompetitionBase, BetBase, BetFootball, \
     BettingService
+from users.models import UnregisteredContact
 from bet.utils import generate_bets, generate_football_bets, user_data_setup, create_default_countries
 
 
@@ -35,7 +36,7 @@ class CompetitionBaseAdmin(admin.ModelAdmin):
 
 
 class BetBaseAdmin(admin.ModelAdmin):
-    list_display = ['user', 'amount', 'coefficient', 'profit', 'result', 'live_type',
+    list_display = ['user', 'amount', 'coefficient', 'profit', 'result', 'is_live_type',
                     'date_game', 'sport_kind', 'is_favourite']
     list_filter = ["user"]
     actions = ["generate_bet_base", "trigger_save"]
@@ -72,6 +73,11 @@ class BettingServiceAdmin(admin.ModelAdmin):
     list_filter = ["user"]
 
 
+class UnregisteredContactAdmin(admin.ModelAdmin):
+    list_display = ['unregistered_email', 'message']
+    list_filter = ["unregistered_email"]
+
+
 admin.site.register(Country, CountryAdmin)
 admin.site.register(SportKind, SportKindAdmin)
 admin.site.register(Team, TeamAdmin)
@@ -79,4 +85,5 @@ admin.site.register(CompetitionBase, CompetitionBaseAdmin)
 admin.site.register(BetBase, BetBaseAdmin)
 admin.site.register(BetFootball, BetFootballAdmin)
 admin.site.register(BettingService, BettingServiceAdmin)
+admin.site.register(UnregisteredContact, UnregisteredContactAdmin)
 
