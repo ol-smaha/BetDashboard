@@ -24,21 +24,20 @@ services:
     depends_on:
       - db
 
-#  nginx:
-#    build: ./nginx
-#    container_name: dashboard_nginx
-#    restart: always
-#    env_file: ./.env
-#    volumes:
-#      - ./app/static_root:/code/static_root
-#      - ./app/media:/code/media
-#      - ./nginx/logs:/var/log/nginx
-#      - ./nginx/ssl:/code/ssl
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    depends_on:
-#      - app
+  nginx:
+    build: ./nginx
+    container_name: dashboard_nginx
+    restart: always
+    env_file: ./.env
+    volumes:
+      - ./app/static_root:/code/static_root
+      - ./app/media:/code/media
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/ssl:/code/ssl
+    ports:
+      - "80:80"
+    depends_on:
+      - app
 
 volumes:
   db_data:
