@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+<div class="dashboard-influence">
+	<div class="container-fluid dashboard-content">
+		<div class="row">
+			<div class="col-xl-10 col-lg-6 col-md-6 col-sm-12 col-12">
+				<div class="alert alert-light text-dark" role="alert">Середній коефіцієнт:</div>
+				<div class="row">
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-inline-block">
+									<h3 class="text">Загальний:</h3>
+									<h2 class="mb-0" style="color:#236995">{{ coefficient_avg }}</h2>
+								</div>
+								<div class="float-right icon-circle-medium  icon-box-lg  bg-primary-light mt-1">
+									<i class="fa fa-handshake fa-fw fa-sm text-primary"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-inline-block">
+									<h3 class="text">По виграшах:</h3>
+									<h2 class="mb-0" style="color:#236995"> {{ coefficient_avg_win }} </h2>
+								</div>
+								<div class="float-right icon-circle-medium  icon-box-lg  bg-success-light mt-1">
+									<i class="mdi mdi-plus fa-fw fa-sm text-success"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-inline-block">
+									<h3 class="text">По поверненнях:</h3>
+									<h2 class="mb-0" style="color:#236995"> {{ coefficient_avg_drawn }} </h2>
+								</div>
+								<div class="float-right icon-circle-medium  icon-box-lg  bg-brand-light mt-1">
+									<i class="mdi mdi-equal fa-fw fa-sm text-brand"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-inline-block">
+									<h3 class="text">По програшах:</h3>
+									<h2 class="mb-0" style="color:#236995">{{ coefficient_avg_lose }} </h2>
+								</div>
+								<div class="float-right icon-circle-medium  icon-box-lg  bg-danger-light mt-1">
+									<i class="mdi mdi-minus fa-fw fa-sm text-danger"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-8 col-md-8 col-sm-12 col-12">
+				{% include 'addition/filter_form.html' %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock main %}

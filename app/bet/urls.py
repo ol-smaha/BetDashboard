@@ -7,7 +7,7 @@ from bet.views import (BetHistoryView, Statistic, BetGraphsProfitView, BetGraphs
                        BetBaseDeleteView, BetFootballChangeFavouriteStatusView, BetFootballDeleteView,
                        BetFootballCreateView, BetGraphsAvgAmountView, RatingsView, RatingFootballView, CalendarView,
                        ProfileView, CompetitionCreateView, ServiceCreateView, SportKindCreateView, SportKindDeleteView,
-                       BettingServiceDeleteView, CompetitionDeleteView)
+                       BettingServiceDeleteView, CompetitionDeleteView, CoefficientStatistic)
 
 
 urlpatterns = [
@@ -31,6 +31,8 @@ urlpatterns = [
 
     path('calendar/', login_required(CalendarView.as_view()), name='bet_calendar'),
     path('statistic/', login_required(Statistic.as_view()), name='bet_statistic'),
+    path('statistic/coefficient', login_required(CoefficientStatistic.as_view()), name='bet_coefficient_statistic'),
+
     path('ratings/', login_required(RatingsView.as_view()), name='bet_ratings'),
     path('ratings/football/', login_required(RatingFootballView.as_view()), name='bet_ratings_football'),
 
