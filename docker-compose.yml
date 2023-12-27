@@ -33,11 +33,20 @@ services:
       - ./app/static_root:/code/static_root
       - ./app/media:/code/media
       - ./nginx/logs:/var/log/nginx
-      - ./nginx/ssl:/code/ssl
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - app
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
 
 volumes:
   db_data:
