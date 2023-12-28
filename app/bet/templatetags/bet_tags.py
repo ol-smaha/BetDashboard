@@ -112,3 +112,9 @@ def is_parent_menu_active(parent, child):
         return parent in parents
     except:
         return False
+
+
+@register.filter
+def check_empty(value, default=''):
+    return value if value else default
+

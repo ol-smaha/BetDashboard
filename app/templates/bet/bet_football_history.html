@@ -53,8 +53,8 @@
 										{% for bet in page_obj %}
 										<tr>
 											<td>{{ bet.date_game|date:"d-m-Y" }}</td>
-											<td>{{ bet.betting_service }}</td>
-											<td>{{ bet.prediction }}</td>
+											<td>{{ bet.betting_service|check_empty:'' }}</td>
+											<td>{{ bet.prediction|check_empty:'' }}</td>
 											<td>{{ bet.amount }} $</td>
 											<td>{{ bet.coefficient }}</td>
 											<td>
@@ -67,9 +67,9 @@
 													{% if bet.profit > 0%}+{% endif %}{{ bet.profit }} $
 												</span>
 											</td>
-											<td>{{ bet.competition }}</td>
-											<td>{{ bet.team_home }}</td>
-											<td>{{ bet.team_guest }}</td>
+											<td>{{ bet.competition|check_empty:'' }}</td>
+											<td>{{ bet.team_home|check_empty:'' }}</td>
+											<td>{{ bet.team_guest|check_empty:'' }}</td>
 
 											{% if bet.is_live_type == True %}
 												<td>

@@ -118,12 +118,6 @@ class FootballBetHistoryFilterForm(BetBaseFilterForm, FootballSearchForm):
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
 
-    game_status = forms.MultipleChoiceField(
-        choices=GameStatusEnum.choices(),
-        required=False,
-        label='Статус',
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
-    )
 
     competition = forms.MultipleChoiceField(
         choices=CompetitionBase.name_choices(),
