@@ -411,7 +411,8 @@ MENU_TREE = {
 
     'bet_list': ['list'],
     'bet_football_list': ['list'],
-    'bet_create': ['list'],
+
+    'bet_create': ['bet_create'],
     # 'bet_football_create': ['list', 'add_bet'],
 
     'bet_graphs_profit': ['graphs'],
