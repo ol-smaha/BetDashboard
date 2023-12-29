@@ -404,6 +404,7 @@ BET_TYPE_RATING_TABLE_FIELD_NAMES = {
 MENU_TREE = {
     'bet_calendar': ['dashboard'],
     'bet_statistic': ['dashboard'],
+    'bet_coefficient_statistic': ['dashboard'],
 
     'bet_ratings': ['ratings'],
     'bet_ratings_football': ['ratings'],

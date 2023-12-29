@@ -380,7 +380,6 @@ class Statistic(BetFilterMixin, ListView):
         res_drawn = self.get_queryset().filter(result=BetResultEnum.DRAWN).count()
         res_lose = self.get_queryset().filter(result=BetResultEnum.LOSE).count()
         res_unknown = self.get_queryset().filter(result=BetResultEnum.UNKNOWN).count()
-
         context.update({
             'title': 'Статистика',
             'menu_key': 'bet_statistic',
@@ -1237,7 +1236,6 @@ class RatingsView(BetFilterMixin, ListView):
               .annotate(count_lose=Count(Case(When(result=BetResultEnum.LOSE, then=1),
                                               output_field=IntegerField())))
               .order_by(ordering_tab))
-        print(qs)
         return qs
 
     def get_sport_kind_data(self):
@@ -1255,7 +1253,6 @@ class RatingsView(BetFilterMixin, ListView):
                 'count_drawn': obj.get('count_drawn', 0),
                 'count_lose': obj.get('count_lose', 0),
             })
-            print(data)
         return data
 
     def base_queryset(self):
@@ -1437,9 +1434,7 @@ class ProfileView(BetFilterMixin, ListView):
         return int(self.request.GET.get('active_tab', 1))
 
     def ordered_qs(self, qs):
-        print(qs)
         ordering = self.request.GET.get('ordering')
-        print(ordering)
         if ordering:
             try:
                 qs = qs.order_by(ordering, '-id')
@@ -1484,7 +1479,6 @@ class ProfileView(BetFilterMixin, ListView):
 
             'active_tab': self.get_active_tab(),
         })
-        print(context['active_tab'])
         return context
 
 
@@ -1530,5 +1524,46 @@ class BettingServiceDeleteView(DetailView):
         return redirect(reverse_lazy('bet_profile') + f'?{self.request.GET.urlencode()}')
 
 
+class CoefficientStatistic(BetFilterMixin, ListView):
+    model = BetBase
+    template_name = 'bet/coefficient_statistic.html'
 
+    def base_queryset(self):
+        if self.request.user and not isinstance(self.request.user, AnonymousUser):
+            return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.none()
+
+    def get_queryset(self):
+        filtered_qs = self.filtered_queryset(self.base_queryset())
+        return filtered_qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        filter_form = StatisticFilterForm(self.request.GET)
+        filter_form.fields['sport_kind'].choices = SportKind.name_choices()
+        filter_form.fields['betting_service'].choices = BettingService.name_choices()
+
+        coefs = self.get_queryset().aggregate(
+            coefs_avg=Avg('coefficient'),
+            coefs_avg_win=Avg(Case(When(result=BetResultEnum.WIN, then='coefficient'))),
+            coefs_avg_drawn=Avg(Case(When(result=BetResultEnum.DRAWN, then='coefficient'))),
+            coefs_avg_lose=Avg(Case(When(result=BetResultEnum.LOSE, then='coefficient')))
+        )
+
+        coefs_avg = coefs.get('coefs_avg') or 0
+        coefs_avg_win = coefs.get('coefs_avg_win') or 0
+        coefs_avg_drawn = coefs.get('coefs_avg_drawn') or 0
+        coefs_avg_lose = coefs.get('coefs_avg_lose') or 0
+
+        context.update({
+            'title': 'Коефіцієнти',
+            'menu_key': 'bet_coefficient_statistic',
+            'filter_form': filter_form,
+            'coefficient_avg': round(float(coefs_avg), 2),
+            'coefficient_avg_win': round(float(coefs_avg_win), 2),
+            'coefficient_avg_drawn': round(float(coefs_avg_drawn), 2),
+            'coefficient_avg_lose': round(float(coefs_avg_lose), 2),
+
+        })
+        return context
 
