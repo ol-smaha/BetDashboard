@@ -44,47 +44,40 @@
                     <div class="collapse navbar-collapse " id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto navbar-right-top">
 
-                        <li class="nav-item dropdown notification">
+                        <li class="nav-item dropdown notification show">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-lg fa-bell"></i> <span class="{% if notifications %} indicator {% endif %}"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                     <li>
                                         <div class="notification-title"> Сповіщення </div>
                                         <div class="notification-list">
-                                            <div class="list-group">
-                                                {% for notification in notifications %}
-
-                                                    <a href="#" class="list-group-item list-group-item-action active">
-                                                        <div class="notification-info">
-                                                            <div class="notification-list-user-block">{{ notification.message }}</div>
-                                                        </div>
-                                                    </a>
-                                                   {% if bet.is_favourite %}
-                                                        <a class="favorite active" href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
-                                                            <span><i class="mdi mdi-close-box-outline"></i></span>
-                                                        </a>
-                                                    {% else %}
-                                                        <a class="favorite" href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
-                                                            <span><i class="mdi mdi-close-box-outline"></i></span>
-                                                        </a>
-                                                    {% endif %}
-                                                {% endfor %}
+                                        <div class="list-group">
+                                            {% for notification in notifications %}
+                                                <a href="#" class="list-group-item list-group-item-action active">
+                                                    <div class="notification-info">
+                                                        <div class="notification-list-user-block">{{ notification.message }}</div>
+                                                    </div>
+                                                </a>
+                                                <a class="favorite" href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
+                                                    <span><i class="mdi mdi-close-box-outline"></i></span>
+                                                </a>
+                                            {% endfor %}
                                             </div>
                                         </div>
                                     </li>
                             </ul>
                         </li>
 
-                            <li class="nav-item dropdown nav-user">
-                                <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/profile_avatar.png' %}" alt="" class="user-avatar-md rounded-circle"></a>
-                                <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
-                                    <div class="nav-user-info">
-                                        <h5 class="mb-0 text-white nav-user-name"> {{ user.username|title }} </h5>
-                                    </div>
-                                    <a class="dropdown-item" href="{% url 'bet_profile' %}"><i class="fas fa-user-circle mr-2"></i>Профіль</a>
-                                    <a class="dropdown-item" href="{% url 'about' %}"><i class="mdi mdi-message-reply-text mr-2"></i>Зворотній зв'язок</a>
-                                    <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fas fa-power-off mr-2"></i>Вийти</a>
+                        <li class="nav-item dropdown nav-user">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/profile_avatar.png' %}" alt="" class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                                <div class="nav-user-info">
+                                    <h5 class="mb-0 text-white nav-user-name"> {{ user.username }} </h5>
                                 </div>
-                            </li>
+                                <a class="dropdown-item" href="{% url 'bet_profile' %}"><i class="fas fa-user-circle mr-2"></i>Профіль</a>
+                                <a class="dropdown-item" href="{% url 'about' %}"><i class="mdi mdi-message-reply-text mr-2"></i>Зворотній зв'язок</a>
+                                <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fas fa-power-off mr-2"></i>Вийти</a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
                 </nav>
@@ -148,9 +141,6 @@
                                             <li class="nav-item">
                                                 <a class="nav-link {% if menu_key == 'bet_football_list' %} active {% endif %}" href="{% url 'bet_football_list' %}">Футбол</a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link {% if menu_key == 'bet_create' %} active {% endif %}" href="{% url 'bet_create' %}">Додати ставку</a>
-                                            </li>
                                         </ul>
                                     </div>
                                 </li>
@@ -176,6 +166,15 @@
                                         </ul>
                                     </div>
                                 </li>
+
+                                 <li class="nav-item">
+                                    <a class="nav-link {% if 'bet_create'|is_parent_menu_active:menu_key %} active {% endif %}" href="{% url 'bet_create' %}">
+                                        <i class="fas fa-plus"></i>Додати ставку
+                                    </a>
+                                 </li>
+
+
+
                             </ul>
                         </div>
                     </nav>

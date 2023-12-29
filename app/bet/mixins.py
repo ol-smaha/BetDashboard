@@ -73,10 +73,6 @@ class BetFilterMixin:
         if coefficient_max:
             qs = qs.filter(coefficient__lte=coefficient_max)
 
-        game_status = self.request.GET.getlist('game_status')
-        if game_status:
-            qs = qs.filter(game_status__in=game_status)
-
         competition_values = self.request.GET.getlist('competition')
         if competition_values:
             qs = qs.filter(competition__id__in=competition_values)
