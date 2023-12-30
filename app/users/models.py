@@ -86,3 +86,9 @@ class Notification(models.Model):
         self.is_active = not self.is_active
         if commit:
             self.save()
+
+
+class FQA(models.Model):
+    question = models.CharField(max_length=254, null=False, blank=False)
+    description = models.CharField(max_length=254, null=False, blank=False)
+    is_active = models.BooleanField(default=True)

@@ -419,6 +419,8 @@ MENU_TREE = {
     'bet_graphs_roi': ['graphs'],
     'bet_graphs_result': ['graphs'],
     'bet_graphs_amount': ['graphs'],
+
+    'FQA': ['FQA'],
 }
 
 
