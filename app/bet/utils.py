@@ -183,13 +183,13 @@ def create_default_competitions_teams(user):
                             sport_kind=sport_kind_obj,
                             country=country_obj,
                         )
-                        team_obj, _ = Team.objects.get_or_create(
-                            name=team_name,
-                            name_extended=f'{team_name} ({country_name})',
-                            category=TeamCategoryEnum.CLUB,
-                            sport_kind=sport_kind_obj,
-                            country=country_obj,
-                        )
+                        # team_obj, _ = Team.objects.get_or_create(
+                        #     name=team_name,
+                        #     name_extended=f'{team_name} ({country_name})',
+                        #     category=TeamCategoryEnum.CLUB,
+                        #     sport_kind=sport_kind_obj,
+                        #     country=country_obj,
+                        # )
                     except Exception as e:
                         print(e)
 

@@ -1,4 +1,5 @@
 {% load static %}
+{% load tariff_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -448,24 +449,16 @@
 
         <div class="faq-list">
           <ul>
+            {% for obj in fqa %}
             <li data-aos="fade-up">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1">Навіщо мені користуватись цим сервісом? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
-                <p>Платформа надає можливість зручно аналізувати свої ставки, та бачити їх сильні та слабкі сторони.</p>
-                <p>Ви зможете зкоригувати вашу стратегію та покращити свої результати та дохід.</p>
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-{{obj.id}}">{{obj.question}} <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-{{obj.id}}" class="collapse" data-bs-parent=".faq-list">
+                {% for text in obj.description|split_text:'|' %}
+                    <p>{{ text }}</p>
+                {% endfor %}
               </div>
             </li>
-
-            <li data-aos="fade-up" data-aos-delay="100">
-              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">Як додати ставку? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-              <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
-                <p>1. В лівому меню виберіть пункт "Додати ставку".</p>
-                <p>2. Виберіть який тип ставки Ви бажаєте додати та нажміть на відповідну кнопку.</p>
-                <p>3. Заповність форму та підтвердіть додавання ставки.</p>
-                <p>4. Вітаю, Ваша ставка успішно додана.</p>
-              </div>
-            </li>
-
+            {% endfor %}
           </ul>
         </div>
 

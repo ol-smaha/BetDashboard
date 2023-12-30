@@ -7,16 +7,13 @@
 
 
     <div class="container-fluid dashboard-content">
-        <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="page-header">
-                    <h2 class="pageheader-title"> Поширені питання </h2>
-                    <div class="page-breadcrumb">
-                        <nav aria-label="breadcrumb"></nav>
+            <div class="row">
+                <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="alert alert-light text-dark" role="alert">
+                        Поширені запитання:
                     </div>
                 </div>
             </div>
-        </div>
 
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
@@ -24,8 +21,6 @@
                     <div class="accrodion-regular">
                         <div id="accordion3">
                             {% for obj in fqa %}
-                                {% if obj.is_active %}
-
                                 <div class="card">
                                     <div class="card-header" id="{{oj.id}}">
                                         <h5 class="mb-0">
@@ -44,7 +39,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>

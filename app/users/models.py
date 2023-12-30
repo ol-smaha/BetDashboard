@@ -18,6 +18,17 @@ class TariffPlanVariant(str, Enum):
         return res
 
 
+class FQACategoryVariant(str, Enum):
+    ALL = 'ALL'
+    LANDING = 'LANDING'
+    SERVICE = 'SERVICE'
+
+    @classmethod
+    def choices(cls):
+        res = tuple([(e.value, e.value) for e in cls])
+        return res
+
+
 class TariffPlan(models.Model):
     name = models.CharField(max_length=16, choices=TariffPlanVariant.choices())
     description = models.TextField(null=True, blank=True)
@@ -70,7 +81,7 @@ class UnregisteredContact(models.Model):
 
 class Feedback(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
-                             related_name='feedback')
+                             related_name='feedback', null=True, blank=True)
     full_name = models.CharField(max_length=128, null=True, blank=True)
     comment = models.TextField(null=False, blank=False)
     bet_count = models.IntegerField(null=True, blank=True)
@@ -91,4 +102,5 @@ class Notification(models.Model):
 class FQA(models.Model):
     question = models.CharField(max_length=254, null=False, blank=False)
     description = models.TextField(null=False, blank=False)
+    category = models.CharField(choices=FQACategoryVariant.choices(), default=FQACategoryVariant.ALL)
     is_active = models.BooleanField(default=True)

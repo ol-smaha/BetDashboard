@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, CreateView, FormView, DetailView
 from django.views.generic.list import ListView
 
 from .forms import UserCreateMessageForm, UnregisteredUserCreateMessageForm
-from .models import TariffPlan, AboutUs, UnregisteredContact, Feedback, Notification, FQA
+from .models import TariffPlan, AboutUs, UnregisteredContact, Feedback, Notification, FQA, FQACategoryVariant
 
 
 class HomePageView(TemplateView):
@@ -58,11 +58,14 @@ class HomeView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         about_obj = AboutUs.objects.all().first()
-        feedbacks = self.model.objects.all()
+        feedbacks = Feedback.objects.all()
+        fqa = FQA.objects.filter(category__in=[FQACategoryVariant.ALL, FQACategoryVariant.LANDING],
+                                 is_active=True)
 
         context.update({
             'feedbacks': feedbacks,
             'object': about_obj,
+            'fqa': fqa,
         })
 
         return context
@@ -83,7 +86,8 @@ class FQAView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        fqa = self.model.objects.all()
+        fqa = self.model.objects.filter(category__in=[FQACategoryVariant.ALL, FQACategoryVariant.SERVICE],
+                                        is_active=True)
 
         context.update({
             'fqa': fqa,
