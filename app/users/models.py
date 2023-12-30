@@ -79,7 +79,7 @@ class Feedback(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
                              related_name='notifications', null=False, blank=False)
-    message = models.CharField(max_length=128, null=False, blank=False)
+    message = models.TextField(null=False, blank=False)
     is_active = models.BooleanField(default=True)
 
     def change_is_active(self, commit=True):

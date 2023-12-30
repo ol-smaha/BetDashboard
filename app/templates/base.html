@@ -47,23 +47,26 @@
                         <li class="nav-item dropdown notification show">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-lg fa-bell"></i> <span class="{% if notifications %} indicator {% endif %}"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
-                                    <li>
-                                        <div class="notification-title"> Сповіщення </div>
-                                        <div class="notification-list">
+                                <li>
+                                    <div class="notification-title"> Сповіщення </div>
+                                    <div class="notification-list">
                                         <div class="list-group">
                                             {% for notification in notifications %}
-                                                <a href="#" class="list-group-item list-group-item-action active">
-                                                    <div class="notification-info">
-                                                        <div class="notification-list-user-block">{{ notification.message }}</div>
+                                                <p></p>
+                                                <div class="row">
+                                                    <div class="col-xl-2 col-12">
+                                                        <a href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
+                                                            <i class="mdi mdi-close-box-outline" style="float:right"></i>
+                                                        </a>
                                                     </div>
-                                                </a>
-                                                <a class="favorite" href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
-                                                    <span><i class="mdi mdi-close-box-outline"></i></span>
-                                                </a>
+                                                    <div class="col-xl-9 col-12">
+                                                        {{ notification.message }}
+                                                    </div>
+                                                </div>
                                             {% endfor %}
-                                            </div>
                                         </div>
-                                    </li>
+                                    </div>
+                                </li>
                             </ul>
                         </li>
 
@@ -73,7 +76,7 @@
                                 <div class="nav-user-info">
                                     <h5 class="mb-0 text-white nav-user-name"> {{ user.username }} </h5>
                                 </div>
-                                <a class="dropdown-item" href="{% url 'bet_profile' %}"><i class="fas fa-user-circle mr-2"></i>Профіль</a>
+                                <a class="dropdown-item" href="{% url 'bet_profile' %}"><i class="mdi mdi-settings mr-2"></i>Налаштування</a>
                                 <a class="dropdown-item" href="{% url 'about' %}"><i class="mdi mdi-message-reply-text mr-2"></i>Зворотній зв'язок</a>
                                 <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fas fa-power-off mr-2"></i>Вийти</a>
                             </div>
