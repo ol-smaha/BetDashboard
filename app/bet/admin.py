@@ -38,7 +38,7 @@ class CompetitionBaseAdmin(admin.ModelAdmin):
 class BetBaseAdmin(admin.ModelAdmin):
     list_display = ['user', 'amount', 'coefficient', 'profit', 'result', 'is_live_type',
                     'date_game', 'sport_kind', 'is_favourite']
-    list_filter = ["user"]
+    list_filter = ["user", 'result']
     actions = ["generate_bet_base", "trigger_save"]
 
     @admin.action(description="Generate Bets")

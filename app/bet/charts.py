@@ -176,7 +176,7 @@ class CalendarDashboard:
                     'start': date,
                     'backgroundColor': get_result_color(obj.get('result')),
                     'borderColor': get_result_color(obj.get('result')),
-                    'title': f"{pre_title}{obj.get('profit')} ({obj.get('amount')} * {obj.get('coefficient')})",
+                    'title': f"{pre_title}{obj.get('profit')}",
                 }
                 data.append(row_dict)
 

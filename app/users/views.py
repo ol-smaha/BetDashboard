@@ -57,10 +57,12 @@ class HomeView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        about_obj = AboutUs.objects.all().first()
         feedbacks = self.model.objects.all()
 
         context.update({
-            'feedbacks': feedbacks
+            'feedbacks': feedbacks,
+            'object': about_obj,
         })
 
         return context

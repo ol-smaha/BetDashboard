@@ -43,7 +43,7 @@ class UnregisteredUserCreateMessageForm(ModelForm):
         }
         widgets = {
             'unregistered_email': forms.EmailInput(attrs={'class': 'form-control',
-                                                          'placeholder': 'Email:'}),
+                                                          'placeholder': 'Ваша електронна пошта...'}),
             'message': forms.Textarea(attrs={'class': 'form-control',
                                              'placeholder': 'Напишіть своє повідомлення...'}),
         }
