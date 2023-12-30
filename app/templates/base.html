@@ -52,7 +52,8 @@
                                     <div class="notification-list">
                                         <div class="list-group">
                                             {% for notification in notifications %}
-                                                <div class="row border-bottom">
+                                                <p></p>
+                                                <div class="row">
                                                     <div class="col-xl-2 col-12">
                                                         <a href="{% url 'notification_change_is_active' notification.id %}?{{ request.GET.urlencode }}">
                                                             <i class="mdi mdi-close-box-outline" style="float:right"></i>
@@ -62,7 +63,6 @@
                                                         {{ notification.message }}
                                                     </div>
                                                 </div>
-                                                <p></p>
                                             {% endfor %}
                                         </div>
                                     </div>
