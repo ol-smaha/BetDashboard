@@ -1,7 +1,8 @@
 from django import template
 
 from bet.constants import BET_FOOTBALL_FIELDS_NAMES, BET_BASE_TABLE_FIELD_NAMES, MENU_TREE, \
-    COMPETITION_ORDERING_FIELDS_NAMES, SPORT_KIND_ORDERING_FIELDS_NAMES, BETTING_SERVICE_ORDERING_FIELDS_NAMES
+    COMPETITION_ORDERING_FIELDS_NAMES, SPORT_KIND_ORDERING_FIELDS_NAMES, BETTING_SERVICE_ORDERING_FIELDS_NAMES, \
+    BetResultEnum
 from bet.utils import reverse_dict
 
 register = template.Library()
@@ -118,3 +119,12 @@ def is_parent_menu_active(parent, child):
 def check_empty(value, default=''):
     return value if value else default
 
+
+@register.filter
+def short_result(value):
+    mapper = {
+        BetResultEnum.WIN: 'WIN',
+        BetResultEnum.DRAWN: 'DRAWN',
+        BetResultEnum.LOSE: 'LOSE',
+    }
+    return mapper.get(value, '-')

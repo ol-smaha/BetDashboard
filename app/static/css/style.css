@@ -4534,7 +4534,12 @@ Pills vertical
     border: 1px solid #e6e6f2;
 }
 
-.table-bordered td,
+.table-bordered td {
+    border: 1px solid #e6e6f2;
+    font-family: 'Jura Bold';
+    font-size: 14px;
+}
+
 .table-bordered th {
     border: 1px solid #e6e6f2;
 }

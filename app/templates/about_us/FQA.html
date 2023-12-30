@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load tariff_tags %}
 
 {% block main %}
 
@@ -34,7 +35,13 @@
                                         </h5>
                                     </div>
                                     <div id="{{obj.id}}other" class="collapse" aria-labelledby="{{obj.id}}" data-parent="#accordion3">
-                                        <div class="card-body"> {{ obj.description }} </div>
+                                        <div class="card-body">
+                                            <ul class="list-unstyled font-14">
+                                                {% for text in obj.description|split_text:'|' %}
+                                                    <li>{{ text }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                                 {% endif %}

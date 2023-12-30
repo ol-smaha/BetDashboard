@@ -23,7 +23,7 @@ class BetBaseSerializer(serializers.ModelSerializer):
         model = BetBase
         fields = ['user', 'id', 'amount', 'coefficient',
                   'result', 'profit', 'date_game',
-                  'is_favourite', 'live_type', 'sport_kind', 'betting_service']
+                  'is_favourite', 'is_live_type', 'sport_kind', 'betting_service']
 
     def to_representation(self, instance):
         """ Custom representation """
@@ -37,7 +37,7 @@ class BetBaseCreateSerializer(serializers.ModelSerializer):
         model = BetBase
         fields = ['user', 'amount', 'coefficient',
                   'result', 'profit', 'date_game',
-                  'is_favourite', 'live_type', 'sport_kind', 'betting_service']
+                  'is_favourite', 'is_live_type', 'sport_kind', 'betting_service']
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -87,7 +87,7 @@ class BetFootballSerializer(serializers.ModelSerializer):
         model = BetFootball
         fields = ['user', 'id', 'amount', 'coefficient',
                   'result', 'profit', 'date_game',
-                  'is_favourite', 'live_type', 'sport_kind', 'betting_service', 'team_home', 'team_guest', 'prediction',
+                  'is_favourite', 'is_live_type', 'sport_kind', 'betting_service', 'team_home', 'team_guest', 'prediction',
                   'bet_type', 'competition', 'game_status']
 
 
@@ -96,6 +96,16 @@ class BetFootballCreateSerializer(serializers.ModelSerializer):
         model = BetFootball
         fields = ['user', 'amount', 'coefficient',
                   'result', 'profit', 'date_game',
-                  'is_favourite', 'live_type', 'sport_kind', 'betting_service', 'team_home', 'team_guest', 'prediction',
+                  'is_favourite', 'is_live_type', 'sport_kind', 'betting_service', 'team_home', 'team_guest', 'prediction',
                   'bet_type', 'competition', 'game_status']
 
+
+class BetStatisticSerializer(serializers.Serializer):
+    total_bets_count = serializers.FloatField(required=False, allow_null=True)
+    total_bets_profit = serializers.FloatField(required=False, allow_null=True)
+    total_bets_amount = serializers.FloatField(required=False, allow_null=True)
+    total_bets_roi = serializers.FloatField(required=False, allow_null=True)
+    res_win = serializers.FloatField(required=False, allow_null=True)
+    res_drawn = serializers.FloatField(required=False, allow_null=True)
+    res_lose = serializers.FloatField(required=False, allow_null=True)
+    res_unknown = serializers.FloatField(required=False, allow_null=True)

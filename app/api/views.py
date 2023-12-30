@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from rest_framework import generics, viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -11,7 +12,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from api.serializers import BetBaseSerializer, BetFootballSerializer, TeamSerializer, CompetitionSerializer, \
     BetBaseCreateSerializer, BetFootballCreateSerializer, TeamCreateSerializer, CompetitionCreateSerializer, \
-    BettingServiceSerializer, SportKindSerializer
+    BettingServiceSerializer, SportKindSerializer, BetStatisticSerializer
+from bet.constants import BetResultEnum
 from bet.models import BetBase, BetFootball, Team, CompetitionBase, BettingService, SportKind
 
 
@@ -27,13 +29,13 @@ class BetBaseViewSet(mixins.CreateModelMixin,
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = ['date_game', 'amount', 'coefficient', 'result', 'sport_kind__name', 'betting_service__name',
-                       'is_favourite', 'live_type', 'profit']
+                       'is_favourite', 'is_live_type', 'profit']
 
     filterset_fields = {
         'result': ["in", "exact"],
         'sport_kind': ["in", "exact"],
         'betting_service': ["in", "exact"],
-        'live_type': ["in", "exact"],
+        'is_live_type': ["in", "exact"],
         'is_favourite': ["in", "exact"],
         'date_game': ['gte', 'lte'],
         'amount': ['gte', 'lte'],
@@ -44,6 +46,8 @@ class BetBaseViewSet(mixins.CreateModelMixin,
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
             return BetBaseCreateSerializer
+        elif self.action in ['statistic']:
+            return BetStatisticSerializer
         else:
             return self.serializer_class
 
@@ -59,6 +63,35 @@ class BetBaseViewSet(mixins.CreateModelMixin,
 
         return Response({"message": "Bet marked as favorite."}, status=200)
 
+    @action(detail=False, methods=['GET'])
+    def statistic(self, request, pk=None):
+        data = {}
+
+        total_bets_count = self.get_queryset().count()
+        total_bets_profit = self.get_queryset().aggregate(Sum('profit')).get('profit__sum') or 0.00
+        total_bets_amount = self.get_queryset().aggregate(Sum('amount')).get('amount__sum') or 0.00
+        if total_bets_amount > 0:
+            total_bets_roi = round(float(total_bets_profit) * 100 / float(total_bets_amount), 2)
+        else:
+            total_bets_roi = 0.00
+        res_win = self.get_queryset().filter(result=BetResultEnum.WIN).count()
+        res_drawn = self.get_queryset().filter(result=BetResultEnum.DRAWN).count()
+        res_lose = self.get_queryset().filter(result=BetResultEnum.LOSE).count()
+        res_unknown = self.get_queryset().filter(result=BetResultEnum.UNKNOWN).count()
+
+        data.update({
+            'total_bets_count': total_bets_count,
+            'total_bets_profit': float(total_bets_profit),
+            'total_bets_amount': float(total_bets_amount),
+            'total_bets_roi': total_bets_roi,
+            'res_win': res_win,
+            'res_drawn': res_drawn,
+            'res_lose': res_lose,
+            'res_unknown': res_unknown,
+        })
+
+        return Response(data, status=200)
+
 
 class BetFootballViewSet(mixins.CreateModelMixin,
                          mixins.DestroyModelMixin,
@@ -73,13 +106,13 @@ class BetFootballViewSet(mixins.CreateModelMixin,
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     search_fields = ['team_home__name', 'team_guest__name']
     ordering_fields = ['date_game', 'amount', 'coefficient', 'result', 'sport_kind__name', 'betting_service__name',
-                       'is_favourite', 'live_type', 'profit', 'team_home__name', 'team_guest__name', 'prediction',
+                       'is_favourite', 'is_live_type', 'profit', 'team_home__name', 'team_guest__name', 'prediction',
                        'competition']
     filterset_fields = {
         'result': ["in", "exact"],
         'sport_kind': ["in", "exact"],
         'betting_service': ["in", "exact"],
-        'live_type': ["in", "exact"],
+        'is_live_type': ["in", "exact"],
         'is_favourite': ["in", "exact"],
         'date_game': ['gte', 'lte'],
         'amount': ['gte', 'lte'],

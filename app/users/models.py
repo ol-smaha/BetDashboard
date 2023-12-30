@@ -90,5 +90,5 @@ class Notification(models.Model):
 
 class FQA(models.Model):
     question = models.CharField(max_length=254, null=False, blank=False)
-    description = models.CharField(max_length=254, null=False, blank=False)
+    description = models.TextField(null=False, blank=False)
     is_active = models.BooleanField(default=True)

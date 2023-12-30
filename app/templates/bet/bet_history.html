@@ -57,7 +57,7 @@
 										<td>{{ bet.coefficient }}</td>
 										<td>
 											<span class="ml-1 text{% if bet.result == 'Виграш' %}-success{% elif bet.result == 'Повернення' %}-warning{% elif bet.result == 'Програш' %}-danger{% else %}{% endif %}">
-												{{ bet.result }}
+												{{ bet.result|short_result }}
 											</span>
 										</td>
 										<td>
