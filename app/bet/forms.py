@@ -3,8 +3,7 @@ from datetime import datetime
 from django import forms
 from django.forms import ModelForm
 
-from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetFootballTypeEnum, \
-    GameStatusEnum, BetFootballPredictionEnum, LiveTypeEnum
+from bet.constants import BetResultEnum, BET_BASE_ORDERING_FIELDS_CHOICES, BOOL_FIELD_CHOICES, BetFootballTypeEnum
 from bet.models import SportKind, CompetitionBase, BetBase, BetFootball, BettingService
 
 
@@ -28,14 +27,14 @@ class BetBaseFilterForm(forms.Form):
         required=False,
         min_value='0.00',
         decimal_places=2,
-        step_size='10.0',
+        step_size='1.0',
         label='Сума з',
         widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
     amount_max = forms.DecimalField(
         required=False,
         min_value='0.00',
-        step_size='10.0',
+        step_size='1.0',
         decimal_places=2,
         label='Сума по',
         widget=forms.NumberInput(attrs={'class': 'form-control'})

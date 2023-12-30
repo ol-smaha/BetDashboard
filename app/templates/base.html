@@ -11,7 +11,7 @@
         {% if title %}
             {{ title }}
         {% else %}
-            Bet Dashboard
+            Bet Office
         {% endif%}
     {% endblock title %}
     </title>
@@ -43,8 +43,7 @@
                     </button>
                     <div class="collapse navbar-collapse " id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto navbar-right-top">
-
-                        <li class="nav-item dropdown notification show">
+                        <li class="nav-item dropdown notification" style="display: flex; justify-content: center; align-items: center;">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-lg fa-bell"></i> <span class="{% if notifications %} indicator {% endif %}"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>

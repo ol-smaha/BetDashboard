@@ -14,7 +14,7 @@
 					<div class="card">
 						<div class="email-filters">
 							<div class="email-filters-left">
-								<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 									{% include 'addition/create_form_modal.html' with create_form=create_form create_form_action='bet_football_create' %}
 								</div>
 							</div>
@@ -42,11 +42,22 @@
 											{% for field in football_bet_fields %}
 											<th>
 												{{ field }}
-												{% if field not in '☒,bar'%}
+												{% if field not in '☒'%}
 													<a href="?{% query_transform ordering=field|bet_football_ordering_value ordering_type='Asc'%}"><i class="fas fa-sort-up" style="float: right;"></i></a>
 													<a href="?{% query_transform ordering=field|bet_football_ordering_value ordering_type='Desc'%}"><i class="fas fa-sort-down" style="float: right;"></i></a>												{% endif %}
 											</th>
 											{% endfor %}
+											<th>
+												<span><i class="far fa-star"></i></span>
+												<a href="?{% query_transform ordering='is_favourite' ordering_type='Asc'%}"><i class="fas fa-sort-up" style="float: right;"></i></a>
+												<a href="?{% query_transform ordering='is_favourite' ordering_type='Desc'%}"><i class="fas fa-sort-down" style="float: right;"></i></a>
+											</th>
+	<!--										<th>-->
+	<!--											<span><i class="mdi mdi-pencil-box-outline"></i></span>-->
+	<!--										</th>-->
+											<th>
+												<span><i class="mdi mdi-close-box-outline"></i></span>
+											</th>
 										</tr>
 									</thead>
 									<tbody>

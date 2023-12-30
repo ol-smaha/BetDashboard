@@ -20,13 +20,17 @@ class BetResultEnum(str, Enum):
 
 class BetFootballPredictionEnum(str, Enum):
     EXPRESS = 'Експрес'
+
     W1 = 'П1'
     X = 'Нічия'
     W2 = 'П2'
+
     WX1 = '1-Х'
     NOT_X = '1-2'
     WX2 = '2-Х'
+
     O_Z = 'ОЗ'
+
     TO_0_5 = 'ТБ 0.5'
     TO_1_0 = 'ТБ 1.0'
     TO_1_5 = 'ТБ 1.5'
@@ -38,6 +42,7 @@ class BetFootballPredictionEnum(str, Enum):
     TO_4_5 = 'ТБ 4.5'
     TO_5_0 = 'ТБ 5.0'
     TO_5_5 = 'ТБ 5.5'
+
     TU_0_5 = 'ТМ 0.5'
     TU_1_0 = 'ТМ 1.0'
     TU_1_5 = 'ТМ 1.5'
@@ -49,6 +54,53 @@ class BetFootballPredictionEnum(str, Enum):
     TU_4_5 = 'ТМ 4.5'
     TU_5_0 = 'ТМ 5.0'
     TU_5_5 = 'ТМ 5.5'
+
+    I1TO_0_5 = 'ІТ1Б 0.5'
+    I1TO_1_0 = 'ІТ1Б 1.0'
+    I1TO_1_5 = 'ІТ1Б 1.5'
+    I1TO_2_0 = 'ІТ1Б 2.0'
+    I1TO_2_5 = 'ІТ1Б 2.5'
+    I1TO_3_0 = 'ІТ1Б 3.0'
+    I1TO_3_5 = 'ІТ1Б 3.5'
+    I1TO_4_0 = 'ІТ1Б 4.0'
+    I1TO_4_5 = 'ІТ1Б 4.5'
+    I1TO_5_0 = 'ІТ1Б 5.0'
+    I1TO_5_5 = 'ІТ1Б 5.5'
+    I1TU_0_5 = 'ІТ1М 0.5'
+    I1TU_1_0 = 'ІТ1М 1.0'
+    I1TU_1_5 = 'ІТ1М 1.5'
+    I1TU_2_0 = 'ІТ1М 2.0'
+    I1TU_2_5 = 'ІТ1М 2.5'
+    I1TU_3_0 = 'ІТ1М 3.0'
+    I1TU_3_5 = 'ІТ1М 3.5'
+    I1TU_4_0 = 'ІТ1М 4.0'
+    I1TU_4_5 = 'ІТ1М 4.5'
+    I1TU_5_0 = 'ІТ1М 5.0'
+    I1TU_5_5 = 'ІТ1М 5.5'
+
+    I2TO_0_5 = 'ІТ2Б 0.5'
+    I2TO_1_0 = 'ІТ2Б 1.0'
+    I2TO_1_5 = 'ІТ2Б 1.5'
+    I2TO_2_0 = 'ІТ2Б 2.0'
+    I2TO_2_5 = 'ІТ2Б 2.5'
+    I2TO_3_0 = 'ІТ2Б 3.0'
+    I2TO_3_5 = 'ІТ2Б 3.5'
+    I2TO_4_0 = 'ІТ2Б 4.0'
+    I2TO_4_5 = 'ІТ2Б 4.5'
+    I2TO_5_0 = 'ІТ2Б 5.0'
+    I2TO_5_5 = 'ІТ2Б 5.5'
+    I2TU_0_5 = 'ІТ2М 0.5'
+    I2TU_1_0 = 'ІТ2М 1.0'
+    I2TU_1_5 = 'ІТ2М 1.5'
+    I2TU_2_0 = 'ІТ2М 2.0'
+    I2TU_2_5 = 'ІТ2М 2.5'
+    I2TU_3_0 = 'ІТ2М 3.0'
+    I2TU_3_5 = 'ІТ2М 3.5'
+    I2TU_4_0 = 'ІТ2М 4.0'
+    I2TU_4_5 = 'ІТ2М 4.5'
+    I2TU_5_0 = 'ІТ2М 5.0'
+    I2TU_5_5 = 'ІТ2М 5.5'
+
     F1_0_0 = 'Ф1 (0)'
     F1_MINUS_0_5 = 'Ф1 (-0.5)'
     F1_MINUS_1_0 = 'Ф1 (-1.0)'
@@ -75,6 +127,7 @@ class BetFootballPredictionEnum(str, Enum):
     F2_PLUS_2_0 = 'Ф2 (+2.0)'
     F2_PLUS_2_5 = 'Ф2 (+2.5)'
     F2_PLUS_3_0 = 'Ф2 (+3.0)'
+
     OTHER = 'Інше'
 
     @classmethod
@@ -98,13 +151,12 @@ class BetFootballTypeEnum(str, Enum):
     WX = '1Х-12-Х2'
     FORA = 'Фора'
     TOTAL = 'Тотал'
+    IND_TOTAL = 'Індив. Тотал'
     EXPRESS = 'Експрес'
     UNKNOWN = 'Інше'
 
     @classmethod
     def get_value_by_bet(cls, prediction):
-        print(prediction)
-        print(cls.prediction_type_dict().get(prediction, cls.UNKNOWN))
         return cls.prediction_type_dict().get(prediction, cls.UNKNOWN)
 
     @classmethod
@@ -172,6 +224,52 @@ class BetFootballTypeEnum(str, Enum):
                 BetFootballPredictionEnum.TU_5_0,
                 BetFootballPredictionEnum.TU_5_5,
             ),
+            cls.IND_TOTAL: {
+                BetFootballPredictionEnum.I1TO_0_5,
+                BetFootballPredictionEnum.I1TO_1_0,
+                BetFootballPredictionEnum.I1TO_1_5,
+                BetFootballPredictionEnum.I1TO_2_0,
+                BetFootballPredictionEnum.I1TO_2_5,
+                BetFootballPredictionEnum.I1TO_3_0,
+                BetFootballPredictionEnum.I1TO_3_5,
+                BetFootballPredictionEnum.I1TO_4_0,
+                BetFootballPredictionEnum.I1TO_4_5,
+                BetFootballPredictionEnum.I1TO_5_0,
+                BetFootballPredictionEnum.I1TO_5_5,
+                BetFootballPredictionEnum.I1TU_0_5,
+                BetFootballPredictionEnum.I1TU_1_0,
+                BetFootballPredictionEnum.I1TU_1_5,
+                BetFootballPredictionEnum.I1TU_2_0,
+                BetFootballPredictionEnum.I1TU_2_5,
+                BetFootballPredictionEnum.I1TU_3_0,
+                BetFootballPredictionEnum.I1TU_3_5,
+                BetFootballPredictionEnum.I1TU_4_0,
+                BetFootballPredictionEnum.I1TU_4_5,
+                BetFootballPredictionEnum.I1TU_5_0,
+                BetFootballPredictionEnum.I1TU_5_5,
+                BetFootballPredictionEnum.I2TO_0_5,
+                BetFootballPredictionEnum.I2TO_1_0,
+                BetFootballPredictionEnum.I2TO_1_5,
+                BetFootballPredictionEnum.I2TO_2_0,
+                BetFootballPredictionEnum.I2TO_2_5,
+                BetFootballPredictionEnum.I2TO_3_0,
+                BetFootballPredictionEnum.I2TO_3_5,
+                BetFootballPredictionEnum.I2TO_4_0,
+                BetFootballPredictionEnum.I2TO_4_5,
+                BetFootballPredictionEnum.I2TO_5_0,
+                BetFootballPredictionEnum.I2TO_5_5,
+                BetFootballPredictionEnum.I2TU_0_5,
+                BetFootballPredictionEnum.I2TU_1_0,
+                BetFootballPredictionEnum.I2TU_1_5,
+                BetFootballPredictionEnum.I2TU_2_0,
+                BetFootballPredictionEnum.I2TU_2_5,
+                BetFootballPredictionEnum.I2TU_3_0,
+                BetFootballPredictionEnum.I2TU_3_5,
+                BetFootballPredictionEnum.I2TU_4_0,
+                BetFootballPredictionEnum.I2TU_4_5,
+                BetFootballPredictionEnum.I2TU_5_0,
+                BetFootballPredictionEnum.I2TU_5_5,
+            },
             cls.EXPRESS: (
                 BetFootballPredictionEnum.EXPRESS,
             ),
