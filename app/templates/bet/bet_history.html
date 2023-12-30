@@ -46,6 +46,17 @@
 											{% endif %}
 										</th>
 										{% endfor %}
+										<th>
+											<span><i class="far fa-star"></i></span>
+											<a href="?{% query_transform ordering='is_favourite' ordering_type='Asc'%}"><i class="fas fa-sort-up" style="float: right;"></i></a>
+											<a href="?{% query_transform ordering='is_favourite' ordering_type='Desc'%}"><i class="fas fa-sort-down" style="float: right;"></i></a>
+										</th>
+										<th>
+											<span><i class="mdi mdi-pencil-box-outline"></i></span>
+										</th>
+										<th>
+											<span><i class="mdi mdi-close-box-outline"></i></span>
+										</th>
 									</tr>
 								</thead>
 								<tbody>

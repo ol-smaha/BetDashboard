@@ -239,8 +239,8 @@ BET_BASE_TABLE_FIELD_NAMES = {
     'profit': '+/-',
     'sport_kind__name': 'Спорт',
     'is_live_type': 'Лайв',
-    'is_favourite': '⭐',
-    'action_delete': '☒',
+    # 'is_favourite': '⭐',
+    # 'action_delete': '☒',
 }
 
 BET_FOOTBALL_FIELDS_NAMES = {
@@ -255,8 +255,8 @@ BET_FOOTBALL_FIELDS_NAMES = {
     'team_home': 'Ком. 1',
     'team_guest': 'Ком. 2',
     'is_live_type': 'Лайв',
-    'is_favourite': '⭐',
-    'action_delete': '☒',
+    # 'is_favourite': '⭐',
+    # 'action_delete': '☒',
 }
 
 
