@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+
+
+
+    <div class="container-fluid dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h2 class="pageheader-title"> Поширені питання </h2>
+                    <div class="page-breadcrumb">
+                        <nav aria-label="breadcrumb"></nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                    <div class="section-block"></div>
+                    <div class="accrodion-regular">
+                        <div id="accordion3">
+                            {% for obj in fqa %}
+                                {% if obj.is_active %}
+
+                                <div class="card">
+                                    <div class="card-header" id="{{oj.id}}">
+                                        <h5 class="mb-0">
+                                           <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#{{obj.id}}other" aria-expanded="false" aria-controls="{{obj.id}}other">
+                                             <span class="fas fa-angle-down mr-3"></span> {{ obj.question }}
+                                           </button>
+                                        </h5>
+                                    </div>
+                                    <div id="{{obj.id}}other" class="collapse" aria-labelledby="{{obj.id}}" data-parent="#accordion3">
+                                        <div class="card-body"> {{ obj.description }} </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+{% endblock main %}
+

@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, CreateView, FormView, DetailView
 from django.views.generic.list import ListView
 
 from .forms import UserCreateMessageForm, UnregisteredUserCreateMessageForm
-from .models import TariffPlan, AboutUs, UnregisteredContact, Feedback, Notification
+from .models import TariffPlan, AboutUs, UnregisteredContact, Feedback, Notification, FQA
 
 
 class HomePageView(TemplateView):
@@ -73,4 +73,20 @@ class NotificationChangeActiveStatusView(DetailView):
     def get(self, request, *args, **kwargs):
         self.get_object().change_is_active()
         return redirect(reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}')
+
+
+class FQAView(ListView):
+    model = FQA
+    template_name = 'about_us/FQA.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        fqa = self.model.objects.all()
+
+        context.update({
+            'fqa': fqa,
+            'title': 'Довідка'
+        })
+
+        return context
 
