@@ -173,7 +173,7 @@ def create_default_competitions_teams(user):
             teams = row.get('teams', '').split('\n')
 
             for team_name in teams:
-                if country_name and competition_name and team_name and sport_kind_obj:
+                if country_name and competition_name and sport_kind_obj:
                     try:
                         country_obj, _ = Country.objects.get_or_create(name=country_name)
                         competition_obj, _ = CompetitionBase.objects.get_or_create(
