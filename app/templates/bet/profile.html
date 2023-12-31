@@ -51,7 +51,11 @@
                                                 {% for obj in competition_objects %}
                                                 <tr>
                                                     <td>
-                                                        <span class="mr-2" ><i class="flag-icon flag-icon-{{obj.country.flag_code}}" title="{{obj.country.name}}" id="{{obj.country.name}}"></i></span>
+                                                        {% if obj.country.flag_code %}
+                                                            <span class="mr-2" ><i class="flag-icon flag-icon-{{obj.country.flag_code}}" title="{{obj.country.name}}" id="{{obj.country.name}}"></i></span>
+                                                        {% else %}
+                                                            <span class="mr-2" >[&nbsp;&nbsp;&nbsp;]</span>
+                                                        {% endif %}
                                                         <span class="traffic-sales-name">{{obj.country.name}}</span>
                                                     </td>
                                                     <td>
