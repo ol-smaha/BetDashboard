@@ -43,12 +43,12 @@
       <h1 class="logo"><a href="">Bet Office</a></h1>
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#services">Опис</a></li>
           <li><a class="nav-link scrollto" href="#testimonials">Відгуки</a></li>
 <!--          <li><a class="nav-link scrollto" href="#team">Команда</a></li>-->
           <li><a class="nav-link scrollto" href="#pricing">Тарифи</a></li>
           <li><a class="nav-link scrollto" href="#contact">Контакти</a></li>
-          <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+          <li><a class="nav-link scrollto" href="#faq">Довідка</a></li>
           <li><a class="nav-link scrollto" href="{% url 'terms' %}">Правила та Умови</a></li>
           <li><a class="getstarted" href="{% url 'account_signup' %}">Розпочати</a></li>
         </ul>
@@ -114,53 +114,59 @@
 
   <main id="main">
     <!-- ======= Counts Section ======= -->
-    <section id="counts" class="counts section-bg">
-      <div class="container">
+<!--    <section id="counts" class="counts section-bg">-->
+<!--      <div class="container">-->
 
-        <div class="row justify-content-end">
+<!--        <div class="row justify-content-end">-->
 
-          <div class="col-lg-4 col-md-5 col-6 d-md-flex align-items-md-stretch">
-            <div class="count-box">
-              <span data-purecounter-start="0" data-purecounter-end="162" data-purecounter-duration="2" class="purecounter"></span>
-              <p>Користувачів</p>
-            </div>
-          </div>
+<!--          <div class="col-lg-4 col-md-5 col-6 d-md-flex align-items-md-stretch">-->
+<!--            <div class="count-box">-->
+<!--              <span data-purecounter-start="0" data-purecounter-end="162" data-purecounter-duration="2" class="purecounter"></span>-->
+<!--              <p>Користувачів</p>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="col-lg-4 col-md-5 col-6 d-md-flex align-items-md-stretch">
-            <div class="count-box">
-              <span data-purecounter-start="0" data-purecounter-end="6" data-purecounter-duration="2" class="purecounter"></span>
-              <p>Зручних сервісів</p>
-            </div>
-          </div>
+<!--          <div class="col-lg-4 col-md-5 col-6 d-md-flex align-items-md-stretch">-->
+<!--            <div class="count-box">-->
+<!--              <span data-purecounter-start="0" data-purecounter-end="6" data-purecounter-duration="2" class="purecounter"></span>-->
+<!--              <p>Зручних сервісів</p>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="col-lg-4 col-md-5 col-6 d-md-flex align-items-md-stretch">
-            <div class="count-box">
-              <span data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="2" class="purecounter"></span>
-              <p>Детальних графіків</p>
-            </div>
-          </div>
+<!--          <div class="col-lg-4 col-md-5 col-6 d-md-flex align-items-md-stretch">-->
+<!--            <div class="count-box">-->
+<!--              <span data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="2" class="purecounter"></span>-->
+<!--              <p>Детальних графіків</p>-->
+<!--            </div>-->
+<!--          </div>-->
 
-        </div>
+<!--        </div>-->
 
-      </div>
-    </section><!-- End Counts Section -->
+<!--      </div>-->
+<!--    </section>&lt;!&ndash; End Counts Section &ndash;&gt;-->
 
     <!-- ======= About Video Section ======= -->
-    <section id="about-video" class="about-video">
+    <section id="services" class="about-video">
       <div class="container" data-aos="fade-up">
+        <div class="row justify-content-center">
+          <div class="col-xl-10 col-lg-10 text-center">
+            <h2>Ці та ще багато інших можливостей створені для Вас!</h2>
+            <p></p>
+          </div>
+        </div>
         <div class="row">
 
           <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
-            <img src="{% static 'landing/assets/img/about-video.jpg' %}" class="img-fluid" alt="">
+            <img src="{% static 'images/examples/calendar_example.png' %}" class="img-fluid" alt="">
 <!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
           </div>
 
           <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
             <h3>Календар</h3>
             <ul>
-              <li><i class="bx bx-check-double"></i> Легке відслідковування Ваших ставок по днях, тижнях, місяцях.</li>
-              <li><i class="bx bx-check-double"></i> Можливість додати ставку зразу тут.</li>
-              <li><i class="bx bx-check-double"></i> Зручний інтерфейс.</li>
+              <li><i class="bx bx-check-double"></i> Зручне відображення ваших результатів в форматі календаря.</li>
+              <li><i class="bx bx-check-double"></i> Загальний/детальний формати перегляду.</li>
+              <li><i class="bx bx-check-double"></i> Зручний та продуманий інтерфейс.</li>
             </ul>
           </div>
         </div>
@@ -171,16 +177,16 @@
         <div class="row">
 
           <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
-            <img src="{% static 'landing/assets/img/about-video.jpg' %}" class="img-fluid" alt="">
+            <img src="{% static 'images/examples/stats_example.png' %}" class="img-fluid" alt="">
 <!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
           </div>
 
           <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
             <h3>Статистика</h3>
             <ul>
-              <li><i class="bx bx-check-double"></i> Статистика Ваших ставок, прибутку, рентабельності та іншого.</li>
-              <li><i class="bx bx-check-double"></i> Можливість фільтрації по Ваших запитах.</li>
-              <li><i class="bx bx-check-double"></i> Кількість перемог та невдач тут і зараз.</li>
+              <li><i class="bx bx-check-double"></i> Статистика ставок, прибутку, рентабельності та інших показників.</li>
+              <li><i class="bx bx-check-double"></i> Можливість деталізувати вибірку за допомогою зручної фільтрації.</li>
+              <li><i class="bx bx-check-double"></i> Підраховані показники виграшів та програшів.</li>
             </ul>
           </div>
         </div>
@@ -191,57 +197,17 @@
         <div class="row">
 
           <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
-            <img src="{% static 'landing/assets/img/about-video.jpg' %}" class="img-fluid" alt="">
+            <img src="{% static 'images/examples/graph_profit_example.png' %}" class="img-fluid" alt="">
 <!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
           </div>
 
           <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
-            <h3>Рейтинг</h3>
+            <h3>Графіки та гістограми</h3>
             <ul>
-              <li><i class="bx bx-check-double"></i> Рейтинги по турнірах, видах спорту та типах ставки.</li>
-              <li><i class="bx bx-check-double"></i> Числові покази, які допоможуть краще зрозуміти Ваші вдалі рішення.</li>
-              <li><i class="bx bx-check-double"></i> Можливість фільтрації за Вашими запитами.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <p></p>
-
-      <div class="container" data-aos="fade-up">
-        <div class="row">
-
-          <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
-            <img src="{% static 'landing/assets/img/about-video.jpg' %}" class="img-fluid" alt="">
-<!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
-          </div>
-
-          <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
-            <h3>Історія</h3>
-            <ul>
-              <li><i class="bx bx-check-double"></i> Вся інформація в загальній історії.</li>
-              <li><i class="bx bx-check-double"></i> Зручне відслідковування Ваших ставок.</li>
-              <li><i class="bx bx-check-double"></i> Можливіть додати стаку тут і зараз.</li>
-              <li><i class="bx bx-check-double"></i> Фільтрація за Вашими запитами.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <p></p>
-
-      <div class="container" data-aos="fade-up">
-        <div class="row">
-
-          <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
-            <img src="{% static 'landing/assets/img/about-video.jpg' %}" class="img-fluid" alt="">
-<!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
-          </div>
-
-          <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
-            <h3>Графік прибутковості</h3>
-            <ul>
-              <li><i class="bx bx-check-double"></i> Зручний графік Вашої прибутковості.</li>
+              <li><i class="bx bx-check-double"></i> Лінійний графік прибутку, рентабельності та інших показників.</li>
+              <li><i class="bx bx-check-double"></i> Гістрограми з даними про окремі періоди (дні, місяці, роки).</li>
               <li><i class="bx bx-check-double"></i> Можливість простежити та проаналізувати свої ставки.</li>
-              <li><i class="bx bx-check-double"></i> Можливість фільтрації за Вашими запитами.</li>
+              <li><i class="bx bx-check-double"></i> Зручна фільтрація для максимальної зручності.</li>
             </ul>
           </div>
         </div>
@@ -252,16 +218,59 @@
         <div class="row">
 
           <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
-            <img src="{% static 'landing/assets/img/about-video.jpg' %}" class="img-fluid" alt="">
+            <img src="{% static 'images/examples/ratings_football_example.png' %}" class="img-fluid" alt="">
+<!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
+          </div>
+
+          <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
+            <h3>Рейтинги</h3>
+            <ul>
+              <li><i class="bx bx-check-double"></i> Рейтинг прибутку по змаганнях, видах спорту та типах ставки.</li>
+              <li><i class="bx bx-check-double"></i> Рейтинг рентабельності та результатів.</li>
+              <li><i class="bx bx-check-double"></i> Числові показникии, які допоможуть краще зрозуміти Ваші вдалі рішення.</li>
+              <li><i class="bx bx-check-double"></i> Зручна фільтрація для максимальної зручності.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p></p>
+
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+
+          <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
+            <img src="{% static 'images/examples/bet_history_example.png' %}" class="img-fluid" alt="">
+<!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
+          </div>
+
+          <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
+            <h3>Історія ставок</h3>
+            <ul>
+              <li><i class="bx bx-check-double"></i> Вся інформація про ваші ставки.</li>
+              <li><i class="bx bx-check-double"></i> Зручне відслідковування та перегляд..</li>
+              <li><i class="bx bx-check-double"></i> Можливіть додавати ставки тут і зараз.</li>
+              <li><i class="bx bx-check-double"></i> Зручна фільтрація для максимальної зручності.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p></p>
+
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+
+          <div class="col-lg-6 video-box align-self-baseline" data-aos="fade-right" data-aos-delay="100">
+            <img src="{% static 'images/examples/result_example.png' %}" class="img-fluid" alt="">
 <!--            <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>-->
           </div>
 
           <div class="col-lg-6 pt-3 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
             <h3>Результати</h3>
             <ul>
-              <li><i class="bx bx-check-double"></i> Ваші результати у зручному графіку.</li>
-              <li><i class="bx bx-check-double"></i> Аналіз Ваших результатів за різні періоди.</li>
-              <li><i class="bx bx-check-double"></i> Можливість фільтрації за Вашими запитами.</li>
+              <li><i class="bx bx-check-double"></i> Лінійний графік виграшів, поразок та повернень.</li>
+              <li><i class="bx bx-check-double"></i> Гістрограми з даними про окремі періоди (дні, місяці, роки).</li>
+              <li><i class="bx bx-check-double"></i> Можливість простежити та проаналізувати свої результати.</li>
+              <li><i class="bx bx-check-double"></i> Зручна фільтрація для максимальної зручності.</li>
             </ul>
           </div>
         </div>
