@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, date
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import AnonymousUser
@@ -8,8 +8,9 @@ from django.db.models import Count, Sum, F, Avg, Min, Case, Window, When, Intege
 from django.db.models.functions import TruncMonth, TruncYear
 from django.forms import HiddenInput
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.urls import reverse_lazy, reverse
+from django.utils.http import urlencode
+from django.views.generic import CreateView, DetailView, UpdateView
 from django.views.generic.list import ListView
 from django.utils.timezone import now
 
@@ -941,6 +942,41 @@ class BetCreateView(CreateView):
         return context
 
 
+class BetUpdateView(UpdateView):
+    model = BetBase
+    form_class = BetCreateForm
+    template_name = 'bet/bet_update.html'
+    success_url = reverse_lazy('bet_list')
+    pk_url_kwarg = 'id'
+
+    # def get_success_url(self):
+    #     base_url = reverse('bet_list') + f'?{urlencode(self.request.GET)}'
+    #     print(self.request.GET)
+    #     print(base_url)
+    #     return base_url
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        menu_key = self.request.GET.get('menu_key')
+
+        form = self.form_class(instance=self.get_object())
+        form.fields['user'].initial = self.request.user.pk
+        form.fields['user'].widget = HiddenInput()
+        form.fields['sport_kind'].choices = SportKind.name_choices()
+        form.fields['betting_service'].choices = BettingService.name_choices()
+
+        context.update({
+            'title': 'Редагування ставки',
+            'menu_key': menu_key,
+            'form': form,
+        })
+
+        return context
+
+
 class BetBaseChangeFavouriteStatusView(DetailView):
     model = BetBase
     pk_url_kwarg = 'id'
@@ -980,6 +1016,41 @@ class BetFootballCreateView(CreateView):
 
     def render_to_response(self, context, **response_kwargs):
         return redirect(reverse_lazy('bet_create'))
+
+
+class BetFootballUpdateView(UpdateView):
+    model = BetFootball
+    form_class = BetFootballCreateForm
+    template_name = 'bet/bet_update.html'
+    success_url = reverse_lazy('bet_football_list')
+    pk_url_kwarg = 'id'
+
+    # def get_success_url(self):
+    #     base_url = reverse('bet_football_list')
+    #     if self.request.GET:
+    #         return '{}?{}'.format(base_url, urlencode(self.request.GET))
+    #     return base_url
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        menu_key = self.request.GET.get('menu_key')
+
+        form = self.form_class(instance=self.get_object())
+        form.fields['user'].initial = self.request.user.pk
+        form.fields['user'].widget = HiddenInput()
+        form.fields['competition'].choices = CompetitionBase.name_choices()
+        form.fields['betting_service'].choices = BettingService.name_choices()
+
+        context.update({
+            'title': 'Редагування ставки',
+            'menu_key': menu_key,
+            'form': form,
+        })
+
+        return context
 
 
 class BetFootballChangeFavouriteStatusView(DetailView):

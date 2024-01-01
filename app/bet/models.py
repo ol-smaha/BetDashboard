@@ -132,6 +132,16 @@ class BettingService(models.Model):
 
 
 class BetBase(models.Model):
+    __original_result = None
+    __original_amount = None
+    __original_coefficient = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_result = self.result
+        self.__original_amount = self.amount
+        self.__original_coefficient = self.coefficient
+
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE,
                              related_name='bets')
     amount = models.DecimalField(max_digits=20, decimal_places=2)
@@ -177,7 +187,12 @@ class BetBase(models.Model):
 
     def save(self, *args, **kwargs):
         is_saved = kwargs.get('is_saved', False)
-        if self.profit is None:
+
+        if (self.profit is None or
+                self.amount != self.__original_amount or
+                self.coefficient != self.__original_coefficient or
+                self.result != self.__original_result):
+
             self.profit = self.calculate_profit()
 
         if not getattr(self, 'betfootball', None) and self.sport_kind and self.sport_kind.name == 'Футбол' and not is_saved:
@@ -187,11 +202,21 @@ class BetBase(models.Model):
                 kwargs.pop('is_saved')
             super().save(*args, **kwargs)
 
+        self.__original_result = self.result
+        self.__original_amount = self.amount
+        self.__original_coefficient = self.coefficient
+
     def __str__(self):
         return f"{self.result} - {self.coefficient} - {self.amount}"
 
 
 class BetFootball(BetBase):
+    __original_prediction = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_prediction = self.prediction
+
     team_home = models.ForeignKey(to=Team, on_delete=models.SET_NULL,
                                   related_name='home_bets', null=True, blank=True)
     team_guest = models.ForeignKey(to=Team, on_delete=models.SET_NULL,
@@ -207,11 +232,17 @@ class BetFootball(BetBase):
 
     def save(self, *args, **kwargs):
         self.sport_kind, _ = SportKind.objects.get_or_create(user=self.user, name='Футбол')
-        if self.bet_type == BetFootballTypeEnum.UNKNOWN or not self.bet_type:
+
+        if (self.prediction != self.__original_prediction or
+                self.bet_type == BetFootballTypeEnum.UNKNOWN or
+                not self.bet_type):
+
             if self.prediction:
                 self.bet_type = BetFootballTypeEnum.get_value_by_bet(self.prediction)
+
         super().save(*args, **kwargs)
 
+        self.__original_prediction = self.prediction
 
 
 

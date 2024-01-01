@@ -16,6 +16,7 @@ class BetFilterMixin:
             qs = qs.filter(sport_kind__id__in=sport_kind_values)
 
         betting_service_values = self.request.GET.getlist('betting_service')
+        print(betting_service_values)
         if betting_service_values:
             qs = qs.filter(betting_service__id__in=betting_service_values)
 

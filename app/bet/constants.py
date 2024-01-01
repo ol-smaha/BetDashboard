@@ -472,7 +472,7 @@ class ChartDateType(str, Enum):
 COMPETITION_RATING_TABLE_FIELD_NAMES = {
     'competition__name_extended': 'Ліга',
     'count': 'К-сть',
-    'WDL': 'WDL',
+    'WDL': 'Win/Drawn/Lose',
     'profit_avg': 'Прибуток за ставку',
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
@@ -482,7 +482,7 @@ COMPETITION_RATING_TABLE_FIELD_NAMES = {
 SPORT_KIND_RATING_TABLE_FIELD_NAMES = {
     'sport_kind__name': 'Спорт',
     'count': 'К-сть',
-    'WDL': 'WDL',
+    'WDL': 'Win/Drawn/Lose',
     'profit_avg': 'Прибуток за ставку',
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
@@ -492,7 +492,7 @@ SPORT_KIND_RATING_TABLE_FIELD_NAMES = {
 BET_TYPE_RATING_TABLE_FIELD_NAMES = {
     'bet_type': 'Прогноз',
     'count': 'К-сть',
-    'WDL': 'WDL',
+    'WDL': 'Win/Drawn/Lose',
     'profit_avg': 'Прибуток за ставку',
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
@@ -783,7 +783,7 @@ COUNTRIES = {
     'Європа': {
         'code_2': '-',
         'code_3': '-',
-        'flag_code': '-',
+        'flag_code': '',
     },
     'Чехія': {
         'code_2': 'cz',
@@ -818,11 +818,11 @@ COUNTRIES = {
     'Світ': {
         'code_2': '-',
         'code_3': '-',
-        'flag_code': '-',
+        'flag_code': '',
     },
     'Інше': {
         'code_2': '-',
         'code_3': '-',
-        'flag_code': '-',
+        'flag_code': '',
     },
 }

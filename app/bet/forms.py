@@ -136,16 +136,16 @@ class BetCreateForm(ModelForm):
 
     class Meta:
         model = BetBase
-        fields = ['user', 'amount', 'coefficient', 'result', 'is_live_type', 'sport_kind',
-                  'date_game', 'betting_service', 'is_favourite']
+        fields = ['user', 'amount', 'coefficient', 'result', 'date_game',
+                  'sport_kind', 'betting_service', 'is_live_type', 'is_favourite']
         labels = {
             'amount': 'Сума',
             'coefficient': 'Коефіцієнт',
             'result': 'Результат',
-            'is_live_type': 'Лайв',
+            'date_game': 'Дата події',
             'sport_kind': 'Вид спорту',
             'betting_service': 'Сервіс',
-            'date_game': 'Дата події',
+            'is_live_type': 'Лайв',
             'is_favourite': 'Улюблене?',
         }
         widgets = {
@@ -176,19 +176,20 @@ class BetCreateForm(ModelForm):
 class BetFootballCreateForm(ModelForm):
     class Meta:
         model = BetFootball
-        fields = ['user', 'prediction', 'amount', 'coefficient', 'result', 'competition', 'team_home', 'team_guest',
-                  'date_game', 'is_live_type', 'betting_service', 'is_favourite']
+        fields = ['user', 'amount', 'coefficient', 'result', 'date_game',
+                  'prediction', 'competition', 'team_home', 'team_guest',
+                  'betting_service', 'is_live_type', 'is_favourite']
         labels = {
             'prediction': 'Прогноз',
             'amount': 'Сума',
             'coefficient': 'Коефіцієнт',
             'result': 'Результат',
-            'is_live_type': 'Лайв',
+            'date_game': 'Дата події',
             'competition': 'Змагання',
             'betting_service': 'Сервіс',
             'team_home': 'Команда 1',
             'team_guest': 'Команда 2',
-            'date_game': 'Дата події',
+            'is_live_type': 'Лайв',
             'is_favourite': 'Улюблене?',
         }
         widgets = {

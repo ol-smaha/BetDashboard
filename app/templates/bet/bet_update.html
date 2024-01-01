@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bet_tags %}
+
+{% block main %}
+    <div class="container-fluid dashboard-content">
+        <div class="row">
+            <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="card-header bg-primary text-center p-3">
+                    <h1 class="mb-0 text-white btn-sm">Редагування ставки</h1>
+                </div>
+                <div class="card-body bg-white">
+                    <form method="POST" action="{{ request.get_full_path }}">
+                        <div class="form-group">
+                            {% csrf_token %}
+
+                            {% for field in form.hidden_fields %}
+                                {{ field }}
+                            {% endfor %}
+
+                            {% for field in form.visible_fields %}
+                                {% if field.name in 'date_game' %}
+                                    <div class="form-group row">
+                                        <label class="col-3 col-lg-2 col-form-label text-right">
+                                            {{ field.label }} {% if field.field.required %} <span style="color: red">*</span> {% endif %}
+                                        </label>
+                                        <div class="col-9 col-lg-10">
+                                            <div class="input-group date" id="date_gamedatepicker" data-target-input="nearest">
+                                            {{ field }}
+                                            <div class="input-group-append" data-target="#date_gamedatepicker" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif field.name in 'is_favourite,is_live_type' %}
+                                    <div class="form-group row">
+                                        <label class="col-3 col-lg-2 col-form-label text-right">
+                                            {{ field.label }} {% if field.field.required %} <span style="color: red">*</span> {% endif %}
+                                        </label>
+                                        <div class="col-9 col-lg-3">
+                                            {{ field }}
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="form-group row">
+                                        <label class="col-3 col-lg-2 col-form-label text-right">
+                                            {{ field.label }} {% if field.field.required %} <span style="color: red">*</span> {% endif %}
+                                        </label>
+                                        <div class="col-9 col-lg-10">
+                                            {{ field }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            {% endfor %}
+                            <div class="col-sm-12">
+                                <p class="text-right">
+                                    <button type="submit" class="btn btn-primary">Редагувати</button>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

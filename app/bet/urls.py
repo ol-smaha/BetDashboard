@@ -7,18 +7,21 @@ from bet.views import (BetHistoryView, Statistic, BetGraphsProfitView, BetGraphs
                        BetBaseDeleteView, BetFootballChangeFavouriteStatusView, BetFootballDeleteView,
                        BetFootballCreateView, BetGraphsAvgAmountView, RatingsView, RatingFootballView, CalendarView,
                        ProfileView, CompetitionCreateView, ServiceCreateView, SportKindCreateView, SportKindDeleteView,
-                       BettingServiceDeleteView, CompetitionDeleteView, CoefficientStatistic)
+                       BettingServiceDeleteView, CompetitionDeleteView, CoefficientStatistic, BetUpdateView,
+                       BetFootballUpdateView)
 
 
 urlpatterns = [
     path('list/', login_required(BetHistoryView.as_view()), name='bet_list'),
     path('create/', login_required(BetCreateView.as_view()), name='bet_create'),   # use modal form on bet_list
+    path('update/<int:id>/', login_required(BetUpdateView.as_view()), name='bet_update'),
     path('delete/<int:id>/', login_required(BetBaseDeleteView.as_view()), name='bet_delete'),
     path('change-is-favourite/<int:id>/', login_required(BetBaseChangeFavouriteStatusView.as_view()),
          name='bet_change_is_favourite'),
 
     path('list/football/', login_required(FootballBetHistoryView.as_view()), name='bet_football_list'),
     path('create/football/', login_required(BetFootballCreateView.as_view()), name='bet_football_create'),   # use modal form on bet_football_list
+    path('update/football/<int:id>/', login_required(BetFootballUpdateView.as_view()), name='bet_football_update'),
     path('delete/football/<int:id>/', login_required(BetFootballDeleteView.as_view()), name='bet_football_delete'),
     path('change-is-favourite/football/<int:id>/', login_required(BetFootballChangeFavouriteStatusView.as_view()),
          name='bet_football_change_is_favourite'),
