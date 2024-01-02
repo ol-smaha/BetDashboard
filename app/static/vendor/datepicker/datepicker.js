@@ -31,42 +31,42 @@ jQuery(document).ready(function($) {
 
     if ($("#datetimepicker4").length) {
         $('#datetimepicker4').datetimepicker({
-            format: 'L'
+            format: 'L',
         });
 
     }
 
     if ($("#date_game_startdatepicker").length) {
         $('#date_game_startdatepicker').datetimepicker({
-            format: 'L'
+            format: 'L',
         });
 
     }
 
     if ($("#date_game_enddatepicker").length) {
         $('#date_game_enddatepicker').datetimepicker({
-            format: 'L'
+            format: 'L',
         });
 
     }
 
     if ($("#date_gamedatepicker").length) {
         $('#date_gamedatepicker').datetimepicker({
-            format: 'L'
+            format: 'L',
         });
 
     }
 
     if ($("#bet_create_datepicker").length) {
         $('#bet_create_datepicker').datetimepicker({
-            format: 'L'
+            format: 'L',
         });
 
     }
 
     if ($("#bet_football_create_datepicker").length) {
         $('#bet_football_create_datepicker').datetimepicker({
-            format: 'L'
+            format: 'L',
         });
 
     }

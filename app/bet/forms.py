@@ -75,14 +75,14 @@ class BetBaseFilterForm(forms.Form):
     )
     date_game_start = forms.DateField(
         required=False,
-        input_formats='%m/%d/%Y',
+        input_formats='%d-%m-%Y',
         label='Дата з',
         widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input',
                                       'pattern': "\d{2}/\d{2}/\d{4}"})
     )
     date_game_end = forms.DateField(
         required=False,
-        input_formats='%m/%d/%Y',
+        input_formats='%d-%m-%Y',
         label='Дата по',
         widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input',
                                       'pattern': "\d{2}/\d{2}/\d{4}"})
@@ -133,6 +133,16 @@ class BetProfitGraphFilterForm(BetBaseFilterForm):
 
 
 class BetCreateForm(ModelForm):
+    date_game = forms.DateField(
+        input_formats=['%d-%m-%Y'],
+        label='Дата події',
+        widget=forms.DateInput(
+            attrs={'class': 'form-control',
+                   'placeholder': f'{datetime.now().strftime("%d-%m-%Y")}',
+                   'pattern': "\d{2}-\d{2}-\d{4}"},
+            format='%d-%m-%Y'
+        )
+    )
 
     class Meta:
         model = BetBase
@@ -165,15 +175,23 @@ class BetCreateForm(ModelForm):
                                               'placeholder': 'Виберіть значення...'}),
             'betting_service': forms.Select(attrs={'class': 'selectize-control single',
                                                    'placeholder': 'Виберіть значення...'}),
-            'date_game': forms.DateInput(attrs={'class': 'form-control',
-                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}',
-                                                'pattern': "\d{2}/\d{2}/\d{4}"}),
             'is_favourite': forms.Select(attrs={'class': 'selectize-control single'},
                                          choices=BOOL_FIELD_CHOICES),
         }
 
 
 class BetFootballCreateForm(ModelForm):
+    date_game = forms.DateField(
+        input_formats=['%d-%m-%Y'],
+        label='Дата події',
+        widget=forms.DateInput(
+            attrs={'class': 'form-control',
+                   'placeholder': f'{datetime.now().strftime("%d-%m-%Y")}',
+                   'pattern': "\d{2}-\d{2}-\d{4}"},
+            format='%d-%m-%Y'
+        )
+    )
+
     class Meta:
         model = BetFootball
         fields = ['user', 'amount', 'coefficient', 'result', 'date_game',
@@ -215,9 +233,6 @@ class BetFootballCreateForm(ModelForm):
                                              'placeholder': 'Виберіть значення...'}),
             'team_guest': forms.Select(attrs={'class': 'selectize-control single',
                                               'placeholder': 'Виберіть значення...'}),
-            'date_game': forms.DateInput(attrs={'class': 'form-control',
-                                                'placeholder': f'{datetime.now().strftime("%m/%d/%Y")}',
-                                                'pattern': "\d{2}/\d{2}/\d{4}"}),
             'is_favourite': forms.Select(attrs={'class': 'selectize-control single'},
                                          choices=BOOL_FIELD_CHOICES),
         }

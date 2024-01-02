@@ -16,17 +16,16 @@ class BetFilterMixin:
             qs = qs.filter(sport_kind__id__in=sport_kind_values)
 
         betting_service_values = self.request.GET.getlist('betting_service')
-        print(betting_service_values)
         if betting_service_values:
             qs = qs.filter(betting_service__id__in=betting_service_values)
 
         date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%m/%d/%Y'))
+            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%d/%m/%Y'))
 
         date_game_end = self.request.GET.get('date_game_end')
         if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%m/%d/%Y'))
+            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%d/%m/%Y'))
 
         amount_min = self.request.GET.get('amount_min')
         if amount_min:
