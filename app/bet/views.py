@@ -949,11 +949,8 @@ class BetUpdateView(UpdateView):
     success_url = reverse_lazy('bet_list')
     pk_url_kwarg = 'id'
 
-    # def get_success_url(self):
-    #     base_url = reverse('bet_list') + f'?{urlencode(self.request.GET)}'
-    #     print(self.request.GET)
-    #     print(base_url)
-    #     return base_url
+    def get_success_url(self):
+        return reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}'
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
@@ -1025,11 +1022,8 @@ class BetFootballUpdateView(UpdateView):
     success_url = reverse_lazy('bet_football_list')
     pk_url_kwarg = 'id'
 
-    # def get_success_url(self):
-    #     base_url = reverse('bet_football_list')
-    #     if self.request.GET:
-    #         return '{}?{}'.format(base_url, urlencode(self.request.GET))
-    #     return base_url
+    def get_success_url(self):
+        return reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}'
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
