@@ -21,11 +21,11 @@ class BetFilterMixin:
 
         date_game_start = self.request.GET.get('date_game_start')
         if date_game_start:
-            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%d/%m/%Y'))
+            qs = qs.filter(date_game__gte=datetime.strptime(date_game_start, '%d-%m-%Y'))
 
         date_game_end = self.request.GET.get('date_game_end')
         if date_game_end:
-            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%d/%m/%Y'))
+            qs = qs.filter(date_game__lte=datetime.strptime(date_game_end, '%d-%m-%Y'))
 
         amount_min = self.request.GET.get('amount_min')
         if amount_min:
