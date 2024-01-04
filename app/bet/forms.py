@@ -78,14 +78,14 @@ class BetBaseFilterForm(forms.Form):
         input_formats='%d-%m-%Y',
         label='Дата з',
         widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input',
-                                      'pattern': "\d{2}/\d{2}/\d{4}"})
+                                      'pattern': "\d{2}-\d{2}-\d{4}"})
     )
     date_game_end = forms.DateField(
         required=False,
         input_formats='%d-%m-%Y',
         label='Дата по',
         widget=forms.DateInput(attrs={'class': 'form-control datetimepicker-input',
-                                      'pattern': "\d{2}/\d{2}/\d{4}"})
+                                      'pattern': "\d{2}-\d{2}-\d{4}"})
     )
     is_favourite = forms.MultipleChoiceField(
         choices=BOOL_FIELD_CHOICES,
