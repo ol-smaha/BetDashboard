@@ -289,6 +289,24 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
 
         return qs
 
+    @staticmethod
+    def _add_default_points(data, chart_type=ChartType.LINE, date_format='%Y-%m-%d'):
+        start_date = datetime(year=2000, month=1, day=1)
+        end_date = datetime.now()
+
+        if chart_type == ChartType.LINE:
+            if len(data.keys()) == 0:
+                data.update({
+                    start_date.strftime(date_format): {'Прибуток': 0, 'count': 0},
+                    end_date.strftime(date_format): {'Прибуток': 0, 'count': 0}
+                })
+            elif len(data.keys()) == 1:
+                data.update({
+                    start_date.strftime(date_format): {'Прибуток': 0, 'count': 0},
+                })
+
+        return data
+
     def _get_chart_data(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW, date_format='%Y-%m-%d'):
         data = {}
         qs = self._get_chart_queryset(chart_type, date_type)
@@ -307,6 +325,8 @@ class BetGraphsProfitView(BetFilterMixin, ListView):
             profit = elem.get('profit_sum', 0.00)
             count = elem.get('count', 0)
             data.update({date_str: {'Прибуток': round(float(profit), 2), 'count': count}})
+
+        data = self._add_default_points(data, chart_type, date_format)
         return data
 
     def base_queryset(self):
@@ -502,6 +522,24 @@ class BetGraphsResultView(BetFilterMixin, ListView):
             })
         return data
 
+    @staticmethod
+    def _add_default_points(data, chart_type=ChartType.LINE, date_format='%Y-%m-%d'):
+        start_date = datetime(year=2000, month=1, day=1)
+        end_date = datetime.now()
+
+        if chart_type == ChartType.LINE:
+            if len(data.keys()) == 0:
+                data.update({
+                    start_date.strftime(date_format): {BetResultEnum.WIN: 0, BetResultEnum.DRAWN: 0, BetResultEnum.LOSE: 0},
+                    end_date.strftime(date_format): {BetResultEnum.WIN: 0, BetResultEnum.DRAWN: 0, BetResultEnum.LOSE: 0}
+                })
+            elif len(data.keys()) == 1:
+                data.update({
+                    start_date.strftime(date_format): {BetResultEnum.WIN: 0, BetResultEnum.DRAWN: 0, BetResultEnum.LOSE: 0},
+                })
+
+        return data
+
     def _get_chart_queryset(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW):
         qs_now_line_raw = (self.get_queryset()
                            .filter(date_game__lte=now().date())
@@ -623,6 +661,7 @@ class BetGraphsResultView(BetFilterMixin, ListView):
                 data.update({date_str: {BetResultEnum.WIN: 0, BetResultEnum.DRAWN: 0, BetResultEnum.LOSE: 0}})
             data[date_str].update({elem.get('result'): elem.get('count')})
 
+        data = self._add_default_points(data, chart_type, date_format)
         return data
 
     def base_queryset(self):
@@ -852,6 +891,24 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
 
         return qs
 
+    @staticmethod
+    def _add_default_points(data, chart_type=ChartType.LINE, date_format='%Y-%m-%d'):
+        start_date = datetime(year=2000, month=1, day=1)
+        end_date = datetime.now()
+
+        if chart_type == ChartType.LINE:
+            if len(data.keys()) == 0:
+                data.update({
+                    start_date.strftime(date_format): {'Рентабельність (%)': 0, 'count': 0},
+                    end_date.strftime(date_format): {'Рентабельність (%)': 0, 'count': 0}
+                })
+            elif len(data.keys()) == 1:
+                data.update({
+                    start_date.strftime(date_format): {'Рентабельність (%)': 0, 'count': 0},
+                })
+
+        return data
+
     def _get_chart_data(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW, date_format='%Y-%m-%d'):
         data = {}
         qs = self._get_chart_queryset(chart_type, date_type)
@@ -870,6 +927,8 @@ class BetGraphsRoiView(BetFilterMixin, ListView):
             roi = elem.get('roi', 0.00)
             count = elem.get('count', 0)
             data.update({date_str: {'Рентабельність (%)': round(float(roi), 2), 'count': count}})
+
+        data = self._add_default_points(data, chart_type, date_format)
         return data
 
     def base_queryset(self):
@@ -1209,6 +1268,24 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
 
         return qs
 
+    @staticmethod
+    def _add_default_points(data, chart_type=ChartType.LINE, date_format='%Y-%m-%d'):
+        start_date = datetime(year=2000, month=1, day=1)
+        end_date = datetime.now()
+
+        if chart_type == ChartType.LINE:
+            if len(data.keys()) == 0:
+                data.update({
+                    start_date.strftime(date_format): {'Середня ставка': 0, 'count': 0},
+                    end_date.strftime(date_format): {'Середня ставка': 0, 'count': 0}
+                })
+            elif len(data.keys()) == 1:
+                data.update({
+                    start_date.strftime(date_format): {'Середня ставка': 0, 'count': 0},
+                })
+
+        return data
+
     def _get_chart_data(self, chart_type=ChartType.LINE, date_type=ChartDateType.NOW, date_format='%Y-%m-%d'):
         data = {}
         qs = self._get_chart_queryset(chart_type, date_type)
@@ -1227,6 +1304,8 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
             amount_avg = elem.get('amount_avg', 0.00)
             count = elem.get('count', 0)
             data.update({date_str: {'Середня ставка': round(float(amount_avg), 2), 'count': count}})
+
+        data = self._add_default_points(data, chart_type, date_format)
         return data
 
     def base_queryset(self):
@@ -1250,7 +1329,7 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
             'amount_month_line_data': MorrisChartLine.to_json_data(
                 self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'amount_year_line_data': MorrisChartLine.to_json_data(
-                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.YEARS, date_format='%Y-%m')),
+                self._get_chart_data(chart_type=ChartType.LINE, date_type=ChartDateType.YEARS, date_format='%Y')),
             'amount_line_ykeys': json.dumps(["Середня ставка"]),
             'amount_line_labels': json.dumps(["Середня ставка"]),
 
@@ -1259,7 +1338,7 @@ class BetGraphsAvgAmountView(BetFilterMixin, ListView):
             'amount_month_bar_data': MorrisChartBar.to_json_data(
                 self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.MONTHS, date_format='%Y-%m')),
             'amount_year_bar_data': MorrisChartBar.to_json_data(
-                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.YEARS, date_format='%Y-%m')),
+                self._get_chart_data(chart_type=ChartType.BAR, date_type=ChartDateType.YEARS, date_format='%Y')),
             'amount_bar_ykeys': json.dumps(["Середня ставка"]),
             'amount_bar_labels': json.dumps(["Середня ставка"]),
 

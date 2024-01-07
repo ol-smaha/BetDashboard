@@ -245,11 +245,6 @@ class RatingFilterForm(BetBaseFilterForm):
 
 
 class StatisticFilterForm(BetBaseFilterForm):
-    amount_min = None
-    amount_max = None
-    coefficient_min = None
-    coefficient_max = None
-    result = None
     is_favourite = None
 
 

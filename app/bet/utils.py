@@ -8,6 +8,7 @@ from bet.constants import BetFootballPredictionEnum, BetResultEnum, BetFootballT
     TeamCategoryEnum, LiveTypeEnum, COUNTRIES, DEFAULT_SPORT_KINDS, DEFAULT_BETTING_SERVICES, \
     DEFAULT_COMPETITIONS_FOOTBALL
 from bet.models import SportKind, BetBase, BetFootball, Team, Country, BettingService, CompetitionBase
+from users.models import Notification
 
 UserModel = get_user_model()
 
@@ -192,6 +193,20 @@ def create_default_competitions_teams(user):
                         # )
                     except Exception as e:
                         print(e)
+
+
+def create_registration_notifications(user):
+    try:
+        message = ('Вітаємо у Bet Office.|Щоб дізнатись як користуватись сервісом скористайтесь розділом "Довідка".|'
+                   'Рекомендуємо спочатку зайти в розділ "Налаштування"|(іконка "Користувач" вверху справа)| та відредагувати перелік своїх варіантів.|'
+                   'Залишились питання - пишіть нам через форму "Зворотній зв`язок" або в Телеграм."')
+        Notification.objects.create(
+            user=user,
+            message=message,
+            is_active=True,
+        )
+    except Exception as e:
+        print(e)
 
 
 def user_data_setup(user):

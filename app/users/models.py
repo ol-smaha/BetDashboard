@@ -48,14 +48,14 @@ class CustomUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         created = self.pk is None
-        super(CustomUser, self).save(*args, **kwargs)
-        if created:
-            from bet.utils import user_data_setup
+        super().save()
 
-            print(" === 1111 ")
+        if created:
+            from bet.utils import user_data_setup, create_registration_notifications
+
+            create_registration_notifications(user=self)
             thread = Thread(target=user_data_setup, args=(self,))
             thread.start()
-            print(" === 2222 ")
 
     def __str__(self):
         return self.email or self.username
