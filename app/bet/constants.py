@@ -528,6 +528,7 @@ class ChartType(str, Enum):
 
 
 DEFAULT_SPORT_KINDS = [
+    '-'
     'Футбол',
     'Баскетбол',
     'Теніс',
@@ -539,12 +540,14 @@ DEFAULT_SPORT_KINDS = [
 
 
 DEFAULT_BETTING_SERVICES = [
+    '-'
     'VBET',
     'Favbet',
 ]
 
 
 DEFAULT_COMPETITIONS_FOOTBALL = [
+    ('-', '-'),
     ("АПЛ", "Англія"),
     ("Ла Ліга", "Іспанія"),
     ("Серія А", "Італія"),

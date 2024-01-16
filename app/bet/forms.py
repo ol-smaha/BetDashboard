@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django import forms
 from django.forms import ModelForm
 
@@ -117,7 +115,6 @@ class FootballBetHistoryFilterForm(BetBaseFilterForm, FootballSearchForm):
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control-checkbox'})
     )
 
-
     competition = forms.MultipleChoiceField(
         choices=CompetitionBase.name_choices(),
         required=False,
@@ -138,7 +135,6 @@ class BetCreateForm(ModelForm):
         label='Дата події',
         widget=forms.DateInput(
             attrs={'class': 'form-control',
-                   'placeholder': f'{datetime.now().strftime("%d-%m-%Y")}',
                    'pattern': "\d{2}-\d{2}-\d{4}"},
             format='%d-%m-%Y'
         )
@@ -186,7 +182,6 @@ class BetFootballCreateForm(ModelForm):
         label='Дата події',
         widget=forms.DateInput(
             attrs={'class': 'form-control',
-                   'placeholder': f'{datetime.now().strftime("%d-%m-%Y")}',
                    'pattern': "\d{2}-\d{2}-\d{4}"},
             format='%d-%m-%Y'
         )

@@ -1082,7 +1082,7 @@ class BetFootballUpdateView(UpdateView):
     pk_url_kwarg = 'id'
 
     def get_success_url(self):
-        return reverse_lazy('bet_list') + f'?{self.request.GET.urlencode()}'
+        return reverse_lazy('bet_football_list') + f'?{self.request.GET.urlencode()}'
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
