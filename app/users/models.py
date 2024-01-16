@@ -53,8 +53,8 @@ class CustomUser(AbstractUser):
         if created:
             from bet.utils import user_data_setup, create_registration_notifications
 
-            create_registration_notifications(user=self)
-            thread = Thread(target=user_data_setup, args=(self,))
+            create_registration_notifications(user_pk=self.pk)
+            thread = Thread(target=user_data_setup, args=(self.pk,))
             thread.start()
 
     def __str__(self):

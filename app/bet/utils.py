@@ -5,8 +5,7 @@ import random
 from django.contrib.auth import get_user_model
 
 from bet.constants import BetFootballPredictionEnum, BetResultEnum, BetFootballTypeEnum, GameStatusEnum, \
-    TeamCategoryEnum, LiveTypeEnum, COUNTRIES, DEFAULT_SPORT_KINDS, DEFAULT_BETTING_SERVICES, \
-    DEFAULT_COMPETITIONS_FOOTBALL
+    TeamCategoryEnum, LiveTypeEnum, COUNTRIES, DEFAULT_SPORT_KINDS, DEFAULT_BETTING_SERVICES
 from bet.models import SportKind, BetBase, BetFootball, Team, Country, BettingService, CompetitionBase
 from users.models import Notification
 
@@ -144,30 +143,30 @@ def create_default_countries():
         print(e)
 
 
-def create_default_sport_kind(user):
+def create_default_sport_kind(user_pk):
     try:
         objs = []
         for name in DEFAULT_SPORT_KINDS:
-            objs.append(SportKind(user=user, name=name))
+            objs.append(SportKind(user_id=user_pk, name=name))
         SportKind.objects.bulk_create(objs, ignore_conflicts=True)
     except Exception as e:
         print(e)
 
 
-def create_default_betting_services(user):
+def create_default_betting_services(user_pk):
     try:
         objs = []
         for name in DEFAULT_BETTING_SERVICES:
-            objs.append(BettingService(user=user, name=name))
+            objs.append(BettingService(user_id=user_pk, name=name))
         BettingService.objects.bulk_create(objs, ignore_conflicts=True)
     except Exception as e:
         print(e)
 
 
-def create_default_competitions_teams(user):
+def create_default_competitions_teams(user_pk):
     with open('teams.csv') as csv_file:
         data = csv.DictReader(csv_file)
-        sport_kind_obj, _ = SportKind.objects.get_or_create(user=user, name='Футбол')
+        sport_kind_obj, _ = SportKind.objects.get_or_create(user_id=user_pk, name='Футбол')
         for row in data:
             country_name = row.get('country')
             competition_name = row.get('competition')
@@ -178,7 +177,7 @@ def create_default_competitions_teams(user):
                     try:
                         country_obj, _ = Country.objects.get_or_create(name=country_name)
                         competition_obj, _ = CompetitionBase.objects.get_or_create(
-                            user=user,
+                            user_id=user_pk,
                             name=competition_name,
                             name_extended=f'{competition_name} ({country_name})',
                             sport_kind=sport_kind_obj,
@@ -195,13 +194,13 @@ def create_default_competitions_teams(user):
                         print(e)
 
 
-def create_registration_notifications(user):
+def create_registration_notifications(user_pk):
     try:
         message = ('Вітаємо у Bet Office.|Щоб дізнатись як користуватись сервісом скористайтесь розділом "Довідка".|'
                    'Рекомендуємо спочатку зайти в розділ "Налаштування"|(іконка "Користувач" вверху справа)| та відредагувати перелік своїх варіантів.|'
                    'Залишились питання - пишіть нам через форму "Зворотній зв`язок" або в Телеграм.')
         Notification.objects.create(
-            user=user,
+            user_id=user_pk,
             message=message,
             is_active=True,
         )
@@ -209,12 +208,12 @@ def create_registration_notifications(user):
         print(e)
 
 
-def user_data_setup(user):
+def user_data_setup(user_pk):
     print('--- START user_data_setup')
     print('--- START create_default_betting_services')
-    create_default_betting_services(user)
+    create_default_betting_services(user_pk)
     print('--- START create_default_sport_kind')
-    create_default_sport_kind(user)
+    create_default_sport_kind(user_pk)
     print('--- START create_default_competitions_teams')
-    create_default_competitions_teams(user)
+    create_default_competitions_teams(user_pk)
     print('--- FINISH user_data_setup')
