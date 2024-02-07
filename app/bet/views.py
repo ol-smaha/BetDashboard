@@ -19,14 +19,13 @@ from .models import BetBase, BetFootball, CompetitionBase, SportKind, BettingSer
 from .charts import MorrisChartDonut, MorrisChartLine, MorrisChartStacked, MorrisChartBar, CalendarDashboard
 from .constants import BET_BASE_TABLE_FIELD_NAMES, ChartDateType, BET_FOOTBALL_FIELDS_NAMES, \
     COMPETITION_RATING_TABLE_FIELD_NAMES, BetFootballTypeEnum, SPORT_KIND_RATING_TABLE_FIELD_NAMES, \
-    BET_TYPE_RATING_TABLE_FIELD_NAMES, ChartType
+    BET_TYPE_RATING_TABLE_FIELD_NAMES, ChartType, COEFFICIENT_RANGE_TABLE_FIELD_NAMES
 from .forms import BetHistoryFilterForm, BetProfitGraphFilterForm, FootballBetHistoryFilterForm, BetCreateForm, \
     BetFootballCreateForm, RatingFilterForm, StatisticFilterForm, CompetitionCreateForm, ServiceCreateForm, \
     SportKindCreateForm
 from bet.constants import BetResultEnum
 from .utils import reverse_dict
-
-
+from django.db.models import CharField, Value
 class BetHistoryView(BetFilterMixin, ListView):
     model = BetBase
     paginate_by = 50
@@ -1353,6 +1352,7 @@ class RatingsView(BetFilterMixin, ListView):
     model = BetBase
     template_name = 'bet/rating.html'
 
+
     def get_active_tab(self):
         return int(self.request.GET.get('active_tab', 1))
 
@@ -1360,6 +1360,7 @@ class RatingsView(BetFilterMixin, ListView):
         ordering_tab = '-profit_sum'
         ordering_tab_raw_value = self.request.GET.get('ordering_tab')
         desc = True if self.request.GET.get('ordering_type') == 'Desc' else False
+
 
         if ordering_tab_raw_value:
             ordering_tab_value = reverse_dict(fields_dict).get(ordering_tab_raw_value)
@@ -1377,15 +1378,69 @@ class RatingsView(BetFilterMixin, ListView):
                                              output_field=IntegerField())))
               .annotate(count_drawn=Count(Case(When(result=BetResultEnum.DRAWN, then=1),
                                                output_field=IntegerField())))
-              .annotate(count_lose=Count(Case(When(result=BetResultEnum.LOSE, then=1),
-                                              output_field=IntegerField())))
+              .annotate(count_lose=Count(Case(When(result=BetResultEnum.LOSE, then=1), output_field=IntegerField())))
+
               .order_by(ordering_tab))
+
         return qs
+
+    def get_coefficient_data(self):
+        data = []
+        coefficient = {
+            '1.0 - 1.1': (1.0, 1.1),
+            '1.1 - 1.2': (1.1, 1.2),
+            '1.2 - 1.3': (1.2, 1.3),
+            '1.3 - 1.4': (1.3, 1.4),
+            '1.4 - 1.5': (1.4, 1.5),
+            '1.5 - 1.6': (1.5, 1.6),
+            '1.6 - 1.7': (1.6, 1.7),
+            '1.7 - 1.8': (1.7, 1.8),
+            '1.8 - 1.9': (1.8, 1.9),
+            '1.9 - 2.0': (1.9, 2.0),
+            '2.0 - 2.2': (2.0, 2.2),
+            '2.2 - 2.4': (2.2, 2.4),
+            '2.4 - 2.6': (2.4, 2.6),
+            '2.6 - 2.8': (2.6, 2.8),
+            '2.8 - 3.0': (2.8, 3.0),
+            '3.0+': (3.0, 1000.0),
+
+        }
+
+        for range_name, range_values in coefficient.items():
+            min_value, max_value = range_values
+            print(range_values)
+
+            filtered_qs = self.base_queryset().filter(coefficient__gte=min_value, coefficient__lt=max_value)
+
+            aggregated_qs = filtered_qs.aggregate(
+                profit_avg=Avg('profit'),
+                profit_sum=Sum('profit'),
+                amount_sum=Sum('amount'),
+                count=Count('pk'),
+                roi=Sum(F('profit') * 100) / Sum('amount'),
+                count_win=Count(Case(When(result=BetResultEnum.WIN, then=1), output_field=IntegerField())),
+                count_drawn=Count(Case(When(result=BetResultEnum.DRAWN, then=1), output_field=IntegerField())),
+                count_lose=Count(Case(When(result=BetResultEnum.LOSE, then=1), output_field=IntegerField()))
+            )
+            print(aggregated_qs)
+
+            data.append({
+                'coefficient_range': range_name,
+                'avg_profit': round(float(aggregated_qs.get('profit_avg', 0.00)), 2)  if aggregated_qs['profit_avg'] is not None else 0,
+                'total_profit': round(float(aggregated_qs.get('profit_sum', 0.00)), 2) if aggregated_qs['profit_sum'] is not None else 0,
+                'total_roi': round(float(aggregated_qs.get('roi', 0.00)), 2) if aggregated_qs['roi'] is not None else 0,
+                'count': aggregated_qs.get('count', 0),
+                'count_win': aggregated_qs.get('count_win', 0),
+                'count_drawn': aggregated_qs.get('count_drawn', 0),
+                'count_lose': aggregated_qs.get('count_lose', 0),
+            })
+
+        return data
 
     def get_sport_kind_data(self):
         data = []
+        for obj in self.annotate_qs(self.get_queryset(), 'sport_kind__name', COEFFICIENT_RANGE_TABLE_FIELD_NAMES):
 
-        for obj in self.annotate_qs(self.get_queryset(), 'sport_kind__name', SPORT_KIND_RATING_TABLE_FIELD_NAMES):
             data.append({
                 'name': obj.get('sport_kind__name') or 'Iнше',
                 'avg_profit': round(float(obj.get('profit_avg', 0.00)), 2),
@@ -1396,6 +1451,7 @@ class RatingsView(BetFilterMixin, ListView):
                 'count_win': obj.get('count_win', 0),
                 'count_drawn': obj.get('count_drawn', 0),
                 'count_lose': obj.get('count_lose', 0),
+
             })
         return data
 
@@ -1407,6 +1463,7 @@ class RatingsView(BetFilterMixin, ListView):
     def get_queryset(self):
         filtered_qs = self.filtered_queryset(self.base_queryset())
         return filtered_qs
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
@@ -1420,6 +1477,9 @@ class RatingsView(BetFilterMixin, ListView):
             'active_tab': self.get_active_tab(),
             'sport_kind_objects': self.get_sport_kind_data(),
             'sport_kind_fields': SPORT_KIND_RATING_TABLE_FIELD_NAMES.values(),
+            'coefficient_range_objects': self.get_coefficient_data(),
+            'coefficient_range_fields': COEFFICIENT_RANGE_TABLE_FIELD_NAMES.values(),
+
         })
 
         return context

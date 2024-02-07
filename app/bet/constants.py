@@ -497,7 +497,15 @@ BET_TYPE_RATING_TABLE_FIELD_NAMES = {
     'profit_sum': 'Загальний Прибуток',
     'roi': 'Рентабельність',
 }
+COEFFICIENT_RANGE_TABLE_FIELD_NAMES = {
+    'coefficient': 'Діапазон',
+    'count': 'К-сть',
+    'WDL': 'Win/Drawn/Lose',
+    'profit_avg': 'Прибуток за ставку',
+    'profit_sum': 'Загальний Прибуток',
+    'roi': 'Рентабельність',
 
+}
 
 MENU_TREE = {
     'bet_calendar': ['dashboard'],
